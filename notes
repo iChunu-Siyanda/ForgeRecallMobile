@@ -1,0 +1,60 @@
+SHELL ROURE:
+Outside ShellRoute:
+Splash
+→ Onboarding
+→ Auth
+→ ShellRoute Area
+
+Inside ShellRoute:
+Dashboard
+Projects
+Recall
+Analytics
+Profile
+
+----------------------------------------------------------------------
+
+RECALL SECTION:
+Let it be the most visible button in the BottomBar.
+[ Dashboard ]
+[ Projects ]
+   [ RECALL ]
+[ Analytics ]
+[ Profile ]
+
+It has:
+most visually intense tab
+center navigation item
+primary glowing action
+strongest animation point
+
+-----------------------------------------------------------------------
+
+PROJECT SECTION:
+Each project must have this architecture:
+Project
+ ├── Modules
+ ├── Topics
+ ├── Questions
+ ├── Sessions
+ ├── Weaknesses
+ ├── Analytics
+ ├── AI Generated Content
+ └── Uploaded Materials
+
+----------------------------------------------------------------------
+
+CURRENT MVP NAVIGATION:
+Top-Level:
+-> Dashboard
+-> Projects
+-> Recall
+-> Analytics
+-> Profile
+
+Nested Inside Project:
+-> Upload Material
+-> Weaknesses
+-> Project Analytics
+-> Modules
+-> Recall Sessions
