@@ -107,7 +107,6 @@ class MainNavigation extends StatelessWidget {
             // RECALL BUTTON
             GestureDetector(
               onTap: () => _onTap(context, 2),
-
               child:
                   Container(
                         width: 76,
@@ -164,6 +163,7 @@ class MainNavigation extends StatelessWidget {
                       .shimmer(duration: 2800.ms, color: Colors.white24),
             ),
 
+            //ANALYTICS
             NavItem(
               icon: Icons.analytics_rounded,
               label: "Analytics",
