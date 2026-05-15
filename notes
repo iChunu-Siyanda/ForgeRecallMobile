@@ -42,6 +42,26 @@ Project
  ├── AI Generated Content
  └── Uploaded Materials
 
+ProjectFlow:
+Create Project
+   ↓
+Store in Firestore
+   ↓
+Display Projects
+   ↓
+Open Project Details 
+
+Project Data Flow:
+UI
+ ↓
+BLoC
+ ↓
+Repository
+ ↓
+Datasource
+ ↓
+Firebase
+
 ----------------------------------------------------------------------
 
 CURRENT MVP NAVIGATION:

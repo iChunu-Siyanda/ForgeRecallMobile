@@ -4,7 +4,7 @@ import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
-import 'package:forge_recall/shared/navigation/main_navigation.dart';
+import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/features/dashboard/presentation/pages/dashboard.dart';
 import 'package:go_router/go_router.dart';
 

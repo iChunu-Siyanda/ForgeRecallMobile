@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forge_recall/shared/widgets/forge_card.dart';
+import 'package:forge_recall/core/widgets/forge_card.dart';
 import 'package:forge_recall/theme/app_colours.dart';
 import 'package:forge_recall/theme/app_typography.dart';
 
