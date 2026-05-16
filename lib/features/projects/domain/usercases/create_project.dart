@@ -1,8 +1,11 @@
-import 'package:forge_recall/features/projects/domain/respositories/project_respository.dart';
+import 'package:forge_recall/features/projects/domain/repositories/project_repository.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 
 class CreateProject {
-  final ProjectRespository respository;
-  CreateProject(this.respository);
+  final ProjectRepository repository;
+  CreateProject(this.repository);
 
-  //Create Project Logic Here
+   Future<void> call(ProjectEntity project) async {
+    await repository.createProject(project);
+  }
 }

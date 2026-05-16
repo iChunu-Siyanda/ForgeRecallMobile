@@ -1,6 +1,6 @@
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 
-abstract class ProjectRespository {
+abstract class ProjectRepository {
   // Create project
   Future<void> createProject(ProjectEntity project);
 

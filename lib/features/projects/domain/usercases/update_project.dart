@@ -1,8 +1,11 @@
-import 'package:forge_recall/features/projects/domain/respositories/project_respository.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
+import 'package:forge_recall/features/projects/domain/repositories/project_repository.dart';
 
 class UpdateProject {
-  final ProjectRespository respository;
-  UpdateProject(this.respository);
+  final ProjectRepository repository;
+  UpdateProject(this.repository);
 
-  //Update logic here
+  Future<void> call(ProjectEntity project) async {
+    await repository.updateProject(project);
+  }
 }
