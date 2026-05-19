@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/widgets/forge_card.dart';
-import 'package:forge_recall/theme/app_colours.dart';
-import 'package:forge_recall/theme/app_typography.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/core/theme/app_typography.dart';
 
 class RecallHeroCard extends StatelessWidget {
   const RecallHeroCard({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/metric_card.dart';
-import 'package:forge_recall/theme/app_typography.dart';
+import 'package:forge_recall/core/theme/app_typography.dart';
 
 class RecallSessionStats extends StatelessWidget {
   const RecallSessionStats({super.key});

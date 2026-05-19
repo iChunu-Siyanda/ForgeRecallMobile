@@ -1,5 +1,8 @@
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase.dart';
+import 'package:forge_recall/features/auth/presentation/page/forgot_password_page.dart';
+import 'package:forge_recall/features/auth/presentation/page/login_page.dart';
+import 'package:forge_recall/features/auth/presentation/page/register_page.dart';
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
@@ -13,22 +16,34 @@ class AppRouter {
     initialLocation: '/',
 
     routes: [
+      GoRoute(path: '/', builder: (context, state) => const Splash()),
+
+      GoRoute(path: '/auth', builder: (context, state) => const AuthFirebase()),
+
+      GoRoute(
+        path: '/login_page',
+        builder: (context, state) => const LoginPage(),
+      ),
+
+      GoRoute(
+        path: '/register_page',
+        builder: (context,state) => const RegisterPage(),
+      ),
+
+      GoRoute(
+        path: 'forgot_password_page',
+        builder: (context, state) => const ForgotPasswordPage(),
+      ),
+
       ShellRoute(
         builder: (context, state, child) {
           return MainNavigation(child: child);
         },
 
         routes: [
-          GoRoute(path: '/', builder: (context, state) => const Splash()),
-
           GoRoute(
             path: '/dashboard',
             builder: (context, state) => const Dashboard(),
-          ),
-
-          GoRoute(
-            path: '/auth',
-            builder: (context, state) => const AuthFirebase(),
           ),
 
           GoRoute(

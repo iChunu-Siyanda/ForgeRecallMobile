@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:forge_recall/core/widgets/nav_item.dart';
-import 'package:forge_recall/theme/app_colours.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:go_router/go_router.dart';
 
 class MainNavigation extends StatelessWidget {

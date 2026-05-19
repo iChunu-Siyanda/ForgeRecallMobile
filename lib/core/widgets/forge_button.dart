@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:forge_recall/theme/app_colours.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 
 class ForgeButton extends StatelessWidget {
   final String text;

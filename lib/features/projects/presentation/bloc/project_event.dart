@@ -1,32 +1,34 @@
 // Events:
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
+
 abstract class ProjectEvent {
   const ProjectEvent();
 }
 
 // CreateProject
 class CreateProjectEvent extends ProjectEvent {
-  //requirements
-
-  const CreateProjectEvent();
-}
-
-// LoadProjects
-class LoadProjectsEvent extends ProjectEvent {
-  //requirements
-
-  const LoadProjectsEvent();
-}
-
-// DeleteProject
-class DeleteProjectEvent extends ProjectEvent {
-  //requirements
-
-  const DeleteProjectEvent();
+  final ProjectEntity project;
+  CreateProjectEvent(this.project);
 }
 
 // UpdateProject
 class UpdateProjectEvent extends ProjectEvent {
-  //requirements
+  final ProjectEntity project;
 
-  const UpdateProjectEvent();
+  UpdateProjectEvent(this.project);
 }
+
+// LoadProjects
+class LoadProjectsEvent extends ProjectEvent {
+  final String userId;
+
+  LoadProjectsEvent(this.userId);
+}
+
+// DeleteProject
+class DeleteProjectEvent extends ProjectEvent {
+  final String projectId;
+
+  DeleteProjectEvent(this.projectId);
+}
+

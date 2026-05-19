@@ -1,4 +1,6 @@
 // States:
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
+
 abstract class ProjectState {
   const ProjectState();
 }
@@ -15,9 +17,8 @@ class ProjectLoadingState extends ProjectState{
 
 // ProjectLoaded
 class ProjectLoadedState extends ProjectState{
- //requirements
-
-  const ProjectLoadedState();
+  final List<ProjectEntity> projects;
+  ProjectLoadedState(this.projects);
 }
 
 // ProjectError

@@ -1,5 +1,6 @@
 class ProjectEntity{
   final String id;
+  final String title;
   final String description;
   final double masteryPercentage;
   final DateTime createdAt;
@@ -10,6 +11,7 @@ class ProjectEntity{
 
   const ProjectEntity({
     required this.id,
+    required this.title,
     required this.description,
     required this.masteryPercentage,
     required this.createdAt,

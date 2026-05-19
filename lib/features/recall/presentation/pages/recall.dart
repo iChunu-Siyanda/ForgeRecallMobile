@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_modes.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_hero_card.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_session_stats.dart';
-import 'package:forge_recall/theme/app_colours.dart';
-import 'package:forge_recall/theme/app_typography.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/core/theme/app_typography.dart';
 
 
 class Recall extends StatelessWidget {

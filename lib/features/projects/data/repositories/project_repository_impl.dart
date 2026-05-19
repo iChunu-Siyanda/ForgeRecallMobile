@@ -1,37 +1,36 @@
+import 'package:forge_recall/features/projects/data/model/project_model.dart';
+import 'package:forge_recall/features/projects/data/repositories/project_remote_data_source_impl.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/projects/domain/repositories/project_repository.dart';
 
-class ProjectRepositoryImpl implements ProjectRepository{
-  //final ProjectData localProjectData or projectData;
-  //ProjectRespositoryImpl(this.localProjectData);
+class ProjectRepositoryImpl implements ProjectRepository {
+  final ProjectRemoteDataSourceImpl projectRemoteDataSource;
+  ProjectRepositoryImpl(this.projectRemoteDataSource);
 
   @override
-  Future<void> createProject(ProjectEntity project) {
-    // TODO: implement createProject
-    throw UnimplementedError();
+  Future<void> createProject(ProjectEntity project) async {
+    final model = ProjectModel.fromEntity(project);
+    await projectRemoteDataSource.createProject(model);
   }
 
   @override
-  Future<void> deleteProject(String projectId) {
-    // TODO: implement deleteProject
-    throw UnimplementedError();
+  Future<void> updateProject(ProjectEntity project) async {
+    final model = ProjectModel.fromEntity(project);
+    return projectRemoteDataSource.updateProject(model);
   }
 
   @override
-  Future<ProjectEntity?> fetchProjectById(String projectId) {
-    // TODO: implement fetchProjectById
-    throw UnimplementedError();
+  Future<void> deleteProject(String projectId) async {
+    await projectRemoteDataSource.deleteProject(projectId);
+  }
+
+  @override
+  Future<ProjectEntity?> fetchProjectById(String projectId) async {
+    return await projectRemoteDataSource.fetchProjectById(projectId);
   }
 
   @override
   Stream<List<ProjectEntity>> getProjects(String userId) {
-    // TODO: implement getProjects
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateProject(ProjectEntity project) {
-    // TODO: implement updateProject
-    throw UnimplementedError();
+    return projectRemoteDataSource.getProjects(userId);
   }
 }

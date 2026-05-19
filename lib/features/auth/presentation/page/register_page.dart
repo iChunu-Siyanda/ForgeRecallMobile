@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/auth_background.dart';
@@ -17,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final nameController = TextEditingController();
 
   bool isLoading = false;
 
@@ -29,10 +31,24 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => isLoading = true);
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
+            'uid': userCredential.user!.uid,
+            'name': nameController.text.trim(),
+            'email': emailController.text.trim(),
+            'createdAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+
+      if (mounted) {
+        _showMessage("Registration Successful");
+      }
     } on FirebaseAuthException catch (e) {
       _showMessage(e.message ?? "Registration failed");
     } finally {
@@ -41,9 +57,16 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _showMessage(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg)),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    nameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,7 +76,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('', height: 80),
+            Image.asset('MathMatricLogoTrans.png', height: 80),
 
             const SizedBox(height: 24),
             Text(
@@ -73,6 +96,14 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
 
             const SizedBox(height: 28),
+
+            MyTextField(
+              controller: nameController,
+              hint: "Name",
+              obscure: false,
+            ),
+
+            const SizedBox(height: 16),
 
             MyTextField(
               controller: emailController,

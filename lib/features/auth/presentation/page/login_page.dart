@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/auth_background.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/my_button.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/my_text_field.dart';
-import 'forgot_password_page.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? onRegisterTap;
@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             /// LOGO
             Center(
               child: Image.asset(
-                '',
+                'MathMatricLogoTrans.png',
                 height: 80,
               ),
             ),
@@ -103,12 +103,7 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const ForgotPasswordPage(),
-                    ),
-                  );
+                  context.go('/forgot_password_page');
                 },
                 child: const Text(
                   "Forgot password?",

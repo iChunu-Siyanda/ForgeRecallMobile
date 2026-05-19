@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/widgets/forge_card.dart';
-import 'package:forge_recall/theme/app_colours.dart';
-import 'package:forge_recall/theme/app_typography.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/core/theme/app_typography.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class ForgeScoreCard extends StatelessWidget {
