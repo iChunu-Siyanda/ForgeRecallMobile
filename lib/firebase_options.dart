@@ -3,7 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
-import 'package:flutter_dotenv/flutter_dotenv.dart' show dotenv;    
+import 'package:flutter_dotenv/flutter_dotenv.dart';    
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -26,20 +26,11 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+      return web;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -50,26 +41,27 @@ class DefaultFirebaseOptions {
   static final FirebaseOptions web = FirebaseOptions(
     apiKey: dotenv.env['WEB_API_KEY'] ?? '',
     appId: dotenv.env['WEB_APP_ID'] ?? '',
-    messagingSenderId: '972627043675',
-    projectId: 'forgerecall',
-    authDomain: 'forgerecall.firebaseapp.com',
-    storageBucket: 'forgerecall.firebasestorage.app',
-  );
-
-  static final FirebaseOptions android = FirebaseOptions(
-    apiKey: dotenv.env['ANDROID_API_KEY'] ?? '',
-    appId: dotenv.env['ANDROID_APP_ID'] ?? '',
-    messagingSenderId: '972627043675',
-    projectId: 'forgerecall',
-    storageBucket: 'forgerecall.firebasestorage.app',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
+    authDomain: dotenv.env['FIREBASE_AUTH_DOMAIN']!,
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
   );
 
   static final FirebaseOptions ios = FirebaseOptions(
     apiKey: dotenv.env['IOS_API_KEY'] ?? '',
     appId: dotenv.env['IOS_APP_ID'] ?? '',
-    messagingSenderId: '972627043675',
-    projectId: 'forgerecall',
-    storageBucket: 'forgerecall.firebasestorage.app',
-    iosBundleId: 'com.example.forgeRecall',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
+    iosBundleId: dotenv.env['IOS_BUNDLE_ID']!,
   );
+
+  static final FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['ANDROID_API_KEY'] ?? '',
+    appId: dotenv.env['ANDROID_APP_ID'] ?? '',
+    messagingSenderId: dotenv.env['FIREBASE_MESSAGING_SENDER_ID']!,
+    projectId: dotenv.env['FIREBASE_PROJECT_ID']!,
+    storageBucket: dotenv.env['FIREBASE_STORAGE_BUCKET']!,
+  );
+
 }
