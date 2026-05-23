@@ -42,7 +42,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: 'forgot_password_page',
+        path: '/forgot_password_page',
         builder: (context, state) => const ForgotPasswordPage(),
       ),
 

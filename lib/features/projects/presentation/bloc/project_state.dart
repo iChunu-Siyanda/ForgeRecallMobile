@@ -23,7 +23,7 @@ class ProjectLoadedState extends ProjectState{
 
 // ProjectError
 class ProjectErrorState extends ProjectState{
-  final String msg;
+  final String message;
 
-  const ProjectErrorState(this.msg);
+  const ProjectErrorState(this.message);
 }

@@ -77,17 +77,35 @@ class _ProjectsState extends State<Projects> {
                     const ProjectSectionTitle(title: 'Your Projects'),
                     const SizedBox(height: 10),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: projects.length,
-                        itemBuilder: (context, index) {
-                          final project = projects[index];
-                          return ProjectCard(
-                            title: project.title, 
-                            mastery: project.masteryPercentage, 
-                            topics: project.totalTopics, 
-                            due: project.createdAt.difference(DateTime.now()).inDays,
-                            accentColor: Colors.greenAccent,);
-                        },
+                      child: projects.isEmpty
+                          ? const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.folder_off_rounded, size: 64, color: Colors.grey),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "You don't have any projects yet.",
+                                    style: TextStyle(color: Colors.grey, fontSize: 16),
+                                  ),
+                                  Text(
+                                    "Tap below to create your first one!",
+                                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            )
+                        :ListView.builder(
+                          itemCount: projects.length,
+                          itemBuilder: (context, index) {
+                            final project = projects[index];
+                            return ProjectCard(
+                              title: project.title, 
+                              mastery: project.masteryPercentage, 
+                              topics: project.totalTopics, 
+                              due: project.createdAt.difference(DateTime.now()).inDays,
+                              accentColor: Colors.greenAccent,);
+                          },
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -100,7 +118,20 @@ class _ProjectsState extends State<Projects> {
               }
 
               if (state is ProjectErrorState) {
-                return const Center(child: Text('Error loading projects'),);
+                // Print it to your debug console so you can read the full trace
+                debugPrint('🔥 PROJECT BLOC ERROR: ${state.message}'); 
+                
+                // Show it on the screen temporarily so you can see it
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Error: ${state.message}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                );
               }
 
               return const SizedBox.shrink();

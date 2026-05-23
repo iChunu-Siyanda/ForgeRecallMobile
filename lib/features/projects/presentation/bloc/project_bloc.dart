@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:forge_recall/features/projects/domain/usercases/create_project.dart';
 import 'package:forge_recall/features/projects/domain/usercases/delete_project.dart';
 import 'package:forge_recall/features/projects/domain/usercases/get_projects.dart';
@@ -33,7 +34,10 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     await emit.forEach(
       getProjects(event.userId),
       onData: (projects) => ProjectLoadedState(projects),
-      onError: (_, _) => ProjectErrorState('Failed to load projects'),
+      onError: (error, stackTrace) {
+        debugPrint('🔥 ACTUAL FIREBASE ERROR: $error'); 
+        return ProjectErrorState(error.toString()); 
+      },
     );
   }
 
