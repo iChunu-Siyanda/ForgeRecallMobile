@@ -5,8 +5,8 @@ class ProjectEntity{
   final double masteryPercentage;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final List<String> totalQuestions;
-  final List<String> totalTopics;
+  final int totalQuestions;
+  final int totalTopics;
   final String userId; 
 
   const ProjectEntity({

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ProjectButton extends StatelessWidget {
-  const ProjectButton({super.key});
+  const ProjectButton({super.key, required this.projectBtnText, required this.projectBtnOnTap});
+  final String projectBtnText;
+  final VoidCallback projectBtnOnTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: projectBtnOnTap,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
@@ -26,12 +28,12 @@ class ProjectButton extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.add_rounded, color: Colors.white),
-            SizedBox(width: 10),
+          children: [
+            const Icon(Icons.add_rounded, color: Colors.white),
+            const SizedBox(width: 10),
             Text(
-              'CREATE PROJECT',
-              style: TextStyle(
+              projectBtnText,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15,
                 fontWeight: FontWeight.w700,

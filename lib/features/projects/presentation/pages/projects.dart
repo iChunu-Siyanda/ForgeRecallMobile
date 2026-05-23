@@ -1,80 +1,110 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_card.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_section_title.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/projects_header.dart';
+import 'package:uuid/uuid.dart';
 
-class Projects extends StatelessWidget {
+class Projects extends StatefulWidget {
   const Projects({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final projects = [
-      {
-        'title': 'Flutter Development',
-        'mastery': 72,
-        'topics': 48,
-        'due': 12,
-        'color': const Color(0xFF4D8DFF),
-      },
-      {
-        'title': 'Calculus',
-        'mastery': 41,
-        'topics': 27,
-        'due': 19,
-        'color': const Color(0xFFFF7A00),
-      },
-      {
-        'title': 'Thermodynamics',
-        'mastery': 63,
-        'topics': 33,
-        'due': 7,
-        'color': const Color(0xFF2ECC71),
-      },
-    ];
+  State<Projects> createState() => _ProjectsState();
+}
 
+class _ProjectsState extends State<Projects> {
+  final User? user = FirebaseAuth.instance.currentUser;
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProjectBloc>().add(LoadProjectsEvent(user!.uid));
+  }
+
+  void _createProject(BuildContext context){
+    final project = ProjectEntity(
+      id: const Uuid().v4(),
+      title: titleController.text,
+      description: descriptionController.text,
+      masteryPercentage: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      totalQuestions: 0,
+      totalTopics: 0,
+      userId: user!.uid,
+    );
+
+    context.read<ProjectBloc>().add(
+      CreateProjectEvent(project),
+    );
+
+    _dispose();
+  }
+ 
+  void _dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF0B0B0F),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 24),
+          child: BlocBuilder<ProjectBloc,ProjectState>(
+            builder:(context, state) {
+              if (state is ProjectLoadingState) {
+                return const Center(child: CircularProgressIndicator(),);
+              }
 
-              // HEADER
-              const ProjectsHeader(),
-              const SizedBox(height: 30),
+              if (state is ProjectLoadedState) {
+                final projects = state.projects;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ProjectsHeader(),
+                    const SizedBox(height: 20),
+                    const ProjectSectionTitle(title: 'Your Projects'),
+                    const SizedBox(height: 10),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: projects.length,
+                        itemBuilder: (context, index) {
+                          final project = projects[index];
+                          return ProjectCard(
+                            title: project.title, 
+                            mastery: project.masteryPercentage, 
+                            topics: project.totalTopics, 
+                            due: project.createdAt.difference(DateTime.now()).inDays,
+                            accentColor: Colors.greenAccent,);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ProjectButton(
+                      projectBtnText: 'Create New Project',
+                      projectBtnOnTap: () => _createProject(context),
+                    ),
+                  ],
+                );
+              }
 
-              // CREATE PROJECT BUTTON
-              const ProjectButton(),
-              const SizedBox(height: 30),
+              if (state is ProjectErrorState) {
+                return const Center(child: Text('Error loading projects'),);
+              }
 
-              // SECTION TITLE
-              const ProjectSectionTitle(),
-              const SizedBox(height: 20),
-
-              // PROJECTS LIST
-              Expanded(
-                child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: projects.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 22),
-                  itemBuilder: (context, index) {
-                    final project = projects[index];
-
-                    return ProjectCard(
-                      title: project['title'] as String,
-                      mastery: project['mastery'] as int,
-                      topics: project['topics'] as int,
-                      due: project['due'] as int,
-                      accentColor: project['color'] as Color,
-                    );
-                  },
-                ),
-              ),
-            ],
+              return const SizedBox.shrink();
+            },
           ),
         ),
       ),

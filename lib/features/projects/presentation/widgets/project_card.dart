@@ -4,7 +4,7 @@ import 'package:forge_recall/features/projects/presentation/widgets/project_stat
 
 class ProjectCard extends StatelessWidget {
   final String title;
-  final int mastery;
+  final double mastery;
   final int topics;
   final int due;
   final Color accentColor;

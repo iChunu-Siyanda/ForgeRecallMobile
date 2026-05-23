@@ -1,6 +1,7 @@
 import 'package:forge_recall/features/projects/domain/usercases/create_project.dart';
 import 'package:forge_recall/features/projects/domain/usercases/delete_project.dart';
 import 'package:forge_recall/features/projects/domain/usercases/get_projects.dart';
+import 'package:forge_recall/features/projects/domain/usercases/update_project.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,14 +10,17 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   final CreateProject createProject;
   final GetProjects getProjects;
   final DeleteProject deleteProject;
+  final UpdateProject updateProject;
 
   ProjectBloc({
     required this.createProject,
     required this.getProjects,
     required this.deleteProject,
+    required this.updateProject,
   }) : super(ProjectInitialState()) {
     on<LoadProjectsEvent>(_onLoadProjects);
     on<CreateProjectEvent>(_onCreateProject);
+    on<UpdateProjectEvent>(_onUpdateProject);
     on<DeleteProjectEvent>(_onDeleteProject);
   }
 
@@ -44,7 +48,18 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     }
   }
 
-   Future<void> _onDeleteProject(
+  Future<void> _onUpdateProject(
+    UpdateProjectEvent event,
+    Emitter<ProjectState> emit,
+  ) async {
+    try {
+      await updateProject(event.project);
+    } catch (e) {
+      emit(ProjectErrorState(e.toString()));
+    }
+  }
+
+  Future<void> _onDeleteProject(
     DeleteProjectEvent event,
     Emitter<ProjectState> emit,
   ) async {

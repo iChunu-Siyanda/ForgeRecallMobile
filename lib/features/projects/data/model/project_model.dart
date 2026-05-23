@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 
 class ProjectModel extends ProjectEntity {
@@ -22,8 +23,8 @@ class ProjectModel extends ProjectEntity {
       totalTopics: json['totalTopics'],
       totalQuestions: json['totalQuestions'],
       userId: json['userId'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      createdAt: (json['createdAt'] as Timestamp).toDate(),
+      updatedAt: (json['updatedAt'] as Timestamp).toDate(),
     );
   }
 

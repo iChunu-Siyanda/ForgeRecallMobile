@@ -1,3 +1,4 @@
+//Only the remote data source impl must communicate with Firestore.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:forge_recall/features/projects/data/model/project_model.dart';
 import 'package:forge_recall/features/projects/domain/repositories/project_remote_data_source.dart';
@@ -10,12 +11,12 @@ class ProjectRemoteDataSourceImpl implements ProjectRemoteDataSource {
 
   @override
   Future<void> createProject(ProjectModel project) async {
-    await projectsCollection.doc(project.id).set(project.toJson());
+    await projectsCollection.doc(project.id).set({...project.toJson(), 'createdAt': FieldValue.serverTimestamp(), 'updatedAt': FieldValue.serverTimestamp()});
   }
 
   @override
   Future<void> updateProject(ProjectModel project) async {
-    await projectsCollection.doc(project.id).update(project.toJson());
+    await projectsCollection.doc(project.id).update({...project.toJson(), 'updatedAt': FieldValue.serverTimestamp()});
   }
 
   @override
