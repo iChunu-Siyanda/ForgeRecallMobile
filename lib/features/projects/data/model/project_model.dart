@@ -23,8 +23,12 @@ class ProjectModel extends ProjectEntity {
       totalTopics: json['totalTopics'],
       totalQuestions: json['totalQuestions'],
       userId: json['userId'],
-      createdAt: (json['createdAt'] as Timestamp).toDate(),
-      updatedAt: (json['updatedAt'] as Timestamp).toDate(),
+      createdAt: json['createdAt'] != null
+        ? json['createdAt'].toDate()
+        : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+        ? json['updatedAt'].toDate()
+        : DateTime.now(),
     );
   }
 
@@ -51,8 +55,8 @@ class ProjectModel extends ProjectEntity {
       'totalTopics': totalTopics,
       'totalQuestions': totalQuestions,
       'userId': userId,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
     };
   }
 }

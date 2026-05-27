@@ -35,7 +35,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       getProjects(event.userId),
       onData: (projects) => ProjectLoadedState(projects),
       onError: (error, stackTrace) {
-        debugPrint('🔥 ACTUAL FIREBASE ERROR: $error'); 
+        debugPrint('ACTUAL FIREBASE ERROR: $error'); 
         return ProjectErrorState(error.toString()); 
       },
     );

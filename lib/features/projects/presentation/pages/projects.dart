@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
+import 'package:forge_recall/features/projects/presentation/widgets/create_project_modal.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_card.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_section_title.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/projects_header.dart';
-import 'package:uuid/uuid.dart';
 
 class Projects extends StatefulWidget {
   const Projects({super.key});
@@ -29,33 +28,9 @@ class _ProjectsState extends State<Projects> {
     context.read<ProjectBloc>().add(LoadProjectsEvent(user!.uid));
   }
 
-  void _createProject(BuildContext context){
-    final project = ProjectEntity(
-      id: const Uuid().v4(),
-      title: titleController.text,
-      description: descriptionController.text,
-      masteryPercentage: 0,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      totalQuestions: 0,
-      totalTopics: 0,
-      userId: user!.uid,
-    );
-
-    context.read<ProjectBloc>().add(
-      CreateProjectEvent(project),
-    );
-
-    _dispose();
-  }
- 
-  void _dispose() {
-    titleController.dispose();
-    descriptionController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final projectBloc = context.read<ProjectBloc>();
     return Scaffold(
       backgroundColor: const Color(0xFF0B0B0F),
       body: SafeArea(
@@ -103,7 +78,7 @@ class _ProjectsState extends State<Projects> {
                               title: project.title, 
                               mastery: project.masteryPercentage, 
                               topics: project.totalTopics, 
-                              due: project.createdAt.difference(DateTime.now()).inDays,
+                              due: 5,
                               accentColor: Colors.greenAccent,);
                           },
                       ),
@@ -111,7 +86,25 @@ class _ProjectsState extends State<Projects> {
                     const SizedBox(height: 20),
                     ProjectButton(
                       projectBtnText: 'Create New Project',
-                      projectBtnOnTap: () => _createProject(context),
+                      projectBtnOnTap: (){
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          useRootNavigator: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) {
+                            return DraggableScrollableSheet(
+                              initialChildSize: 0.65,
+                              minChildSize: 0.45,
+                              maxChildSize: 0.9,
+                              expand: false,
+                              builder: (context, scrollController) {
+                                return CreateProjectModal(projectBloc: projectBloc,);
+                              },
+                            );
+                          },
+                        );
+                      },
                     ),
                   ],
                 );
@@ -119,7 +112,7 @@ class _ProjectsState extends State<Projects> {
 
               if (state is ProjectErrorState) {
                 // Print it to your debug console so you can read the full trace
-                debugPrint('🔥 PROJECT BLOC ERROR: ${state.message}'); 
+                debugPrint('PROJECT ERROR: ${state.message}'); 
                 
                 // Show it on the screen temporarily so you can see it
                 return Center(
