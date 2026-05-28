@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:forge_recall/features/Topics/presentation/widgets/topic_empty_state.dart';
-import 'package:forge_recall/features/Topics/presentation/widgets/topic_section_header.dart';
-import 'package:forge_recall/features/Topics/presentation/widgets/topic_tile.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/topic_empty_state.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/topic_section_header.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/topic_tile.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/add_topic_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_detail_hero_section.dart';
@@ -13,6 +13,7 @@ class ProjectDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Entered ProjectDetailScreen with project: ${project.title}');
     return Scaffold(
       backgroundColor: const Color(0xFF070B14),
       body: CustomScrollView(
@@ -72,6 +73,7 @@ class ProjectDetailScreen extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             sliver: SliverList(
+              //physics: const BouncingScrollPhysics(),
               delegate: SliverChildListDelegate(
                 [
                   const SizedBox(height: 18),

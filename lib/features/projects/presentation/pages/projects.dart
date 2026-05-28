@@ -77,14 +77,15 @@ class _ProjectsState extends State<Projects> {
                             final project = projects[index];
                             return GestureDetector(
                               onTap: () {
-                                context.push('/project/${project.id}', extra: project);
+                                context.go('/projectDetail', extra: project);
+                                //context.go('/project/${project.id}', extra: project);
                               },
                               child: ProjectCard(
                                 title: project.title, 
                                 mastery: project.masteryPercentage, 
                                 topics: project.totalTopics, 
                                 due: 5,
-                                accentColor: Colors.greenAccent,),
+                                accentColor: Colors.deepPurple,),
                             );
                           },
                       ),

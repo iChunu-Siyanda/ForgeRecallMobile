@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:forge_recall/features/Topics/presentation/widgets/topic_metric.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/topic_metric.dart';
 
 class TopicTile extends StatelessWidget {
   final String title;

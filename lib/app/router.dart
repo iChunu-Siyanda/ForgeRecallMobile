@@ -49,7 +49,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/projects/:id',
+        path: '/projectDetail',
         builder: (context, state) {
           final project = state.extra as ProjectEntity;
 
