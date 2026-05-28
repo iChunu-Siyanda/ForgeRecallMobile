@@ -9,12 +9,14 @@ import 'package:forge_recall/features/auth/presentation/page/register_page.dart'
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/data/repositories/project_remote_data_source_impl.dart';
 import 'package:forge_recall/features/projects/data/repositories/project_repository_impl.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/projects/domain/usercases/create_project.dart';
 import 'package:forge_recall/features/projects/domain/usercases/delete_project.dart';
 import 'package:forge_recall/features/projects/domain/usercases/get_projects.dart';
 import 'package:forge_recall/features/projects/domain/usercases/update_project.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
+import 'package:forge_recall/features/projects/presentation/pages/project_detail_screen.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
@@ -44,6 +46,17 @@ class AppRouter {
       GoRoute(
         path: '/forgot_password_page',
         builder: (context, state) => const ForgotPasswordPage(),
+      ),
+
+      GoRoute(
+        path: '/projects/:id',
+        builder: (context, state) {
+          final project = state.extra as ProjectEntity;
+
+          return ProjectDetailScreen(
+            project: project,
+          );
+        },
       ),
 
       ShellRoute(

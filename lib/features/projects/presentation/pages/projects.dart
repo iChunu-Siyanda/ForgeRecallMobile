@@ -9,6 +9,7 @@ import 'package:forge_recall/features/projects/presentation/widgets/project_butt
 import 'package:forge_recall/features/projects/presentation/widgets/project_card.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_section_title.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/projects_header.dart';
+import 'package:go_router/go_router.dart';
 
 class Projects extends StatefulWidget {
   const Projects({super.key});
@@ -74,12 +75,17 @@ class _ProjectsState extends State<Projects> {
                           itemCount: projects.length,
                           itemBuilder: (context, index) {
                             final project = projects[index];
-                            return ProjectCard(
-                              title: project.title, 
-                              mastery: project.masteryPercentage, 
-                              topics: project.totalTopics, 
-                              due: 5,
-                              accentColor: Colors.greenAccent,);
+                            return GestureDetector(
+                              onTap: () {
+                                context.push('/project/${project.id}', extra: project);
+                              },
+                              child: ProjectCard(
+                                title: project.title, 
+                                mastery: project.masteryPercentage, 
+                                topics: project.totalTopics, 
+                                due: 5,
+                                accentColor: Colors.greenAccent,),
+                            );
                           },
                       ),
                     ),
