@@ -46,7 +46,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     Emitter<ProjectState> emit,
   ) async {
     try {
-      await createProject(event.project);
+      await createProject(event.projectParams);
     } catch (e) {
       emit(ProjectErrorState(e.toString()));
     }

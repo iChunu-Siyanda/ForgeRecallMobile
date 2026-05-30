@@ -6,6 +6,7 @@ import 'package:forge_recall/features/projects/domain/entities/project_entity.da
 import 'package:forge_recall/features/projects/presentation/widgets/add_topic_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_detail_hero_section.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_mastery_card.dart';
+import 'package:go_router/go_router.dart';
 
 class ProjectDetailScreen extends StatelessWidget {
   const ProjectDetailScreen({super.key, required this.project});
@@ -24,6 +25,19 @@ class ProjectDetailScreen extends StatelessWidget {
             pinned: true,
             backgroundColor: Colors.transparent,
             elevation: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/projects');
+                }
+              },
+            ),
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(
                 left: 24,

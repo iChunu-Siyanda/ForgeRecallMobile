@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-
-import '../../domain/entities/project_entity.dart';
+import 'package:forge_recall/features/projects/domain/entities/create_project_params.dart';
 import '../bloc/project_bloc.dart';
 import '../bloc/project_event.dart';
 
@@ -41,21 +39,11 @@ class _CreateProjectModalState
       return;
     }
 
-    final project = ProjectEntity(
-      id: const Uuid().v4(),
-      title: titleController.text.trim(),
-      description: descriptionController.text.trim(),
-      masteryPercentage: 0,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      totalQuestions: 0,
-      totalTopics: 0,
-      userId: user!.uid,
-    );
-
     widget.projectBloc.add(
-          CreateProjectEvent(project),
-        );
+      CreateProjectEvent(
+        CreateProjectParams(title: titleController.text.trim(), description: descriptionController.text.trim(),),
+      ),
+    );
 
     Navigator.pop(context);
   }

@@ -5,13 +5,12 @@ import 'package:forge_recall/features/topics/data/models/topic_model.dart';
 class TopicRemoteDatasourceImpl
     implements TopicRemoteDatasource {
   final FirebaseFirestore firestore;
-
   TopicRemoteDatasourceImpl(this.firestore);
 
-  CollectionReference<Map<String, dynamic>>
-      _topicsRef(String projectId) {
-    return firestore
-        .collection('projects')
+  final projectsCollection = FirebaseFirestore.instance.collection('projects');
+
+  CollectionReference<Map<String, dynamic>>_topicsRef(String projectId) {
+    return projectsCollection
         .doc(projectId)
         .collection('topics');
   }
@@ -25,9 +24,12 @@ class TopicRemoteDatasourceImpl
         .snapshots()
         .map(
       (snapshot) {
-        return snapshot.docs
-            .map(TopicModel.fromFirestore)
-            .toList();
+        return snapshot.docs.map((doc){
+          return TopicModel.fromJson({
+            'id': doc.id,
+            ...doc.data(),
+          });
+        }).toList();  
       },
     );
   }
@@ -38,15 +40,9 @@ class TopicRemoteDatasourceImpl
   ) async {
     final docRef = _topicsRef(
       topic.projectId,
-    ).doc();
-
-    final topicWithId = topic.copyWith(
-      id: docRef.id,
-    );
-
-    await docRef.set(
-      topicWithId.toMap(),
-    );
+    ).doc(topic.id);
+    
+    await docRef.set(topic.toJson());
   }
 
   @override
@@ -56,7 +52,7 @@ class TopicRemoteDatasourceImpl
     await _topicsRef(topic.projectId)
         .doc(topic.id)
         .update(
-          topic.toMap(),
+          topic.toJson(),
         );
   }
 

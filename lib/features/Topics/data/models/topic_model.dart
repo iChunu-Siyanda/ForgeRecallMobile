@@ -15,13 +15,11 @@ class TopicModel extends TopicEntity {
     required super.updatedAt,
   });
 
-  factory TopicModel.fromFirestore(
-    DocumentSnapshot<Map<String, dynamic>> doc,
+  factory TopicModel.fromJson(
+    Map<String, dynamic> data,
   ) {
-    final data = doc.data()!;
-
     return TopicModel(
-      id: doc.id,
+      id: data['id'],
       projectId: data['projectId'] ?? '',
 
       title: data['title'] ?? '',
@@ -47,7 +45,22 @@ class TopicModel extends TopicEntity {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  factory TopicModel.fromEntity(TopicEntity topic){
+    return TopicModel(
+      id: topic.id, 
+      projectId: topic.projectId, 
+      title: topic.title, 
+      content: topic.content, 
+      masteryScore: topic.masteryScore, 
+      questionCount: topic.questionCount, 
+      estimatedReadTime: topic.estimatedReadTime, 
+      cognitiveDifficulty: topic.cognitiveDifficulty, 
+      createdAt: topic.createdAt, 
+      updatedAt: topic.updatedAt,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
     return {
       'projectId': projectId,
 
@@ -66,36 +79,5 @@ class TopicModel extends TopicEntity {
       'updatedAt': updatedAt,
     };
   }
-
-  TopicModel copyWith({
-    String? id,
-    String? projectId,
-    String? title,
-    String? content,
-    double? masteryScore,
-    int? questionCount,
-    int? estimatedReadTime,
-    double? cognitiveDifficulty,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) {
-    return TopicModel(
-      id: id ?? this.id,
-      projectId: projectId ?? this.projectId,
-      title: title ?? this.title,
-      content: content ?? this.content,
-      masteryScore:
-          masteryScore ?? this.masteryScore,
-      questionCount:
-          questionCount ?? this.questionCount,
-      estimatedReadTime:
-          estimatedReadTime ??
-              this.estimatedReadTime,
-      cognitiveDifficulty:
-          cognitiveDifficulty ??
-              this.cognitiveDifficulty,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
-  }
+  
 }

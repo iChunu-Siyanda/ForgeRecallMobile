@@ -1,4 +1,5 @@
 // Events:
+import 'package:forge_recall/features/projects/domain/entities/create_project_params.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 
 abstract class ProjectEvent {
@@ -7,8 +8,8 @@ abstract class ProjectEvent {
 
 // CreateProject
 class CreateProjectEvent extends ProjectEvent {
-  final ProjectEntity project;
-  CreateProjectEvent(this.project);
+  final CreateProjectParams projectParams;
+  CreateProjectEvent(this.projectParams);
 }
 
 // UpdateProject
