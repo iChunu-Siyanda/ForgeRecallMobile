@@ -1,7 +1,7 @@
 //Only the remote data source impl must communicate with Firestore.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:forge_recall/features/projects/data/model/project_model.dart';
-import 'package:forge_recall/features/projects/domain/repositories/project_remote_data_source.dart';
+import 'package:forge_recall/features/projects/data/datasources/project_remote_data_source.dart';
 
 class ProjectRemoteDataSourceImpl implements ProjectRemoteDataSource {
   final FirebaseFirestore firestore;

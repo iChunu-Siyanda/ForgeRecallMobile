@@ -13,7 +13,7 @@ abstract class ProjectRepository {
   // Get all projects
   Stream<List<ProjectEntity>> getProjects(String userId);
 
-  // Fetch project by id
+  // Fetch single project by id
   Future<ProjectEntity?> fetchProjectById(String projectId); 
 }
 

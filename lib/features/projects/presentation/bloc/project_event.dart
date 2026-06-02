@@ -19,6 +19,13 @@ class UpdateProjectEvent extends ProjectEvent {
   UpdateProjectEvent(this.project);
 }
 
+//Fetch single project by Id
+class GetSingleProjectEvent extends ProjectEvent{
+  final String projectId;
+
+  GetSingleProjectEvent(this.projectId);
+}
+
 // LoadProjects
 class LoadProjectsEvent extends ProjectEvent {
   final String userId;

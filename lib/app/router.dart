@@ -1,21 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase.dart';
 import 'package:forge_recall/features/auth/presentation/page/forgot_password_page.dart';
 import 'package:forge_recall/features/auth/presentation/page/login_page.dart';
 import 'package:forge_recall/features/auth/presentation/page/register_page.dart';
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
-import 'package:forge_recall/features/projects/data/repositories/project_remote_data_source_impl.dart';
-import 'package:forge_recall/features/projects/data/repositories/project_repository_impl.dart';
-import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
-import 'package:forge_recall/features/projects/domain/usercases/create_project.dart';
-import 'package:forge_recall/features/projects/domain/usercases/delete_project.dart';
-import 'package:forge_recall/features/projects/domain/usercases/get_projects.dart';
-import 'package:forge_recall/features/projects/domain/usercases/update_project.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
 import 'package:forge_recall/features/projects/presentation/pages/project_detail_screen.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
@@ -27,7 +15,6 @@ import 'package:go_router/go_router.dart';
 class AppRouter {
   static final router = GoRouter(
     initialLocation: '/',
-
     routes: [
       GoRoute(path: '/', builder: (context, state) => const Splash()),
 
@@ -49,12 +36,12 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/projectDetail',
+        path: '/projectDetail/:id',
         builder: (context, state) {
-          final project = state.extra as ProjectEntity;
+          final projectId = state.pathParameters['id']!;
 
           return ProjectDetailScreen(
-            project: project,
+            projectId: projectId,
           );
         },
       ),
@@ -73,23 +60,7 @@ class AppRouter {
           GoRoute(
             path: '/projects',
             builder: (context, state) {
-              final firestore = FirebaseFirestore.instance;
-              final datasource = ProjectRemoteDataSourceImpl(firestore);
-              final projectRepository = ProjectRepositoryImpl(datasource);
-              final createProject = CreateProject(projectRepository);
-              final updateProject = UpdateProject(projectRepository);
-              final deleteProject = DeleteProject(projectRepository);
-              final getProjects = GetProjects(projectRepository);
-
-              return BlocProvider(
-                create: (context) => ProjectBloc(
-                  createProject: createProject,
-                  updateProject: updateProject,
-                  deleteProject: deleteProject, 
-                  getProjects: getProjects,
-                )..add(LoadProjectsEvent(FirebaseAuth.instance.currentUser!.uid)),
-                child: const Projects(),
-              );
+                return const Projects();
             },
           ),
 

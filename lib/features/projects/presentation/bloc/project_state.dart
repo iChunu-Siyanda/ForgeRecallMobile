@@ -15,10 +15,16 @@ class ProjectLoadingState extends ProjectState{
   const ProjectLoadingState();
 }
 
-// ProjectLoaded
-class ProjectLoadedState extends ProjectState{
+// ProjectsLoaded
+class ProjectsLoadedState extends ProjectState{
   final List<ProjectEntity> projects;
-  ProjectLoadedState(this.projects);
+  ProjectsLoadedState(this.projects);
+}
+
+//Project Loaded
+class ProjectLoadedState extends ProjectState{
+  final ProjectEntity project;
+  ProjectLoadedState(this.project);
 }
 
 // ProjectError

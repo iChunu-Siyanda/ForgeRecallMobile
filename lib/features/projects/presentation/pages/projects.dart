@@ -43,7 +43,7 @@ class _ProjectsState extends State<Projects> {
                 return const Center(child: CircularProgressIndicator(),);
               }
 
-              if (state is ProjectLoadedState) {
+              if (state is ProjectsLoadedState) {
                 final projects = state.projects;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,8 +77,7 @@ class _ProjectsState extends State<Projects> {
                             final project = projects[index];
                             return GestureDetector(
                               onTap: () {
-                                context.go('/projectDetail', extra: project);
-                                //context.go('/project/${project.id}', extra: project);
+                                context.go('/projectDetail/${project.id}');
                               },
                               child: ProjectCard(
                                 title: project.title, 
@@ -119,7 +118,7 @@ class _ProjectsState extends State<Projects> {
 
               if (state is ProjectErrorState) {
                 // Print it to your debug console so you can read the full trace
-                debugPrint('PROJECT ERROR: ${state.message}'); 
+                debugPrint('PROJECTS ERROR: ${state.message}'); 
                 
                 // Show it on the screen temporarily so you can see it
                 return Center(
