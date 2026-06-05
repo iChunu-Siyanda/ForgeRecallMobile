@@ -1,11 +1,27 @@
-import 'package:forge_recall/features/topics/data/models/topic_model.dart';
+import 'package:forge_recall/features/topics/domain/entities/update_topic_param.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
 
-abstract class UpdateTopic {
+class UpdateTopicUseCase {
   final TopicRepository repository;
-  UpdateTopic(this.repository);
 
-  Future<void> call(TopicModel topic) async {
-    return repository.updateTopics(topic);
+  UpdateTopicUseCase(this.repository);
+
+  Future<void> call(
+    UpdateTopicParams params,
+  ) async {
+    final existingTopic =
+        await repository.fetchTopicById(
+      params.topicId, params.projectId,
+    );
+
+    final updatedTopic =
+        existingTopic.copyWith(
+      title: params.title,
+      content: params.content,
+    );
+
+    await repository.updateTopics(
+      updatedTopic,
+    );
   }
 }

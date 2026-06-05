@@ -22,4 +22,29 @@ class TopicEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  TopicEntity copyWith({
+    String? title,
+    String? content,
+    double? masteryScore,
+    int? questionCount,
+    int? estimatedReadTime,
+    double? cognitiveDifficulty,
+    DateTime? updatedAt,
+  }) {
+    return TopicEntity(
+      id: id,
+      projectId: projectId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      masteryScore: masteryScore ?? this.masteryScore,
+      questionCount: questionCount ?? this.questionCount,
+      estimatedReadTime:
+          estimatedReadTime ?? this.estimatedReadTime,
+      cognitiveDifficulty:
+          cognitiveDifficulty ?? this.cognitiveDifficulty,
+      createdAt: createdAt,
+      updatedAt: updatedAt ?? DateTime.now(),
+    );
+  }
 }

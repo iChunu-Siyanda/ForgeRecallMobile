@@ -28,4 +28,9 @@ class TopicRepositoryImpl implements TopicRepository{
     final model = TopicModel.fromEntity(topic);
     await repository.updateTopic(model);
   }
+  
+  @override
+  Future<TopicEntity> fetchTopicById(String topicId, String projectId) {
+    return repository.fetchTopicById(topicId, projectId);
+  }
 }

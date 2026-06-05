@@ -85,15 +85,15 @@ class _ProjectDetailScreenState
       ),
 
       body: BlocBuilder<ProjectBloc, ProjectState>(
-        builder: (context, state) {
-          if (state is ProjectLoadingState){
+        builder: (context, projectState) {
+          if (projectState is ProjectLoadingState){
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if (state is ProjectLoadedState){
-            final project = state.project;
+          if (projectState is ProjectLoadedState){
+            final project = projectState.project;
             return CustomScrollView(
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
@@ -181,7 +181,8 @@ class _ProjectDetailScreenState
                         ),
             
                         const SizedBox(height: 30),
-            
+                       //#########TopicBloc######################
+                       
                         const TopicSectionHeader(),
             
                         const SizedBox(height: 20),
@@ -238,16 +239,16 @@ class _ProjectDetailScreenState
             );
           }  
 
-           if (state is ProjectErrorState) {
+           if (projectState is ProjectErrorState) {
                 // Print it to your debug console so you can read the full trace
-                debugPrint('SINGLE PROJECT ERROR: ${state.message}'); 
+                debugPrint('SINGLE PROJECT ERROR: ${projectState.message}'); 
                 
                 // Show it on the screen temporarily so you can see it
                 return Center(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      'Error: ${state.message}',
+                      'Error: ${projectState.message}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: Colors.red),
                     ),

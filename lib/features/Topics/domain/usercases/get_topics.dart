@@ -1,11 +1,11 @@
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
 
-abstract class GetTopics {
+class GetTopicsUseCase {
   final TopicRepository repository;
-  GetTopics(this.repository);
+  GetTopicsUseCase(this.repository);
 
-  Future<Stream<List<TopicEntity>>> call(String projectId) async {
+  Stream<List<TopicEntity>> call(String projectId) {
     return repository.getTopics(projectId);
   }
 }

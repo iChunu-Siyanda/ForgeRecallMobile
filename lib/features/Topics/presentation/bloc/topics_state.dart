@@ -1,3 +1,5 @@
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
+
 abstract class TopicState {
   const TopicState();
 }
@@ -11,7 +13,7 @@ class TopicLoading extends TopicState{
 }
 
 class TopicLoaded extends TopicState {
-  final List<String> topics;
+  final List<TopicEntity> topics;
 
   const TopicLoaded(this.topics);
 }
