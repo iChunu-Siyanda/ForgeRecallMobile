@@ -5,9 +5,9 @@ import 'package:forge_recall/features/topics/presentation/widgets/topic_metric.d
 
 class TopicTile extends StatelessWidget {
   final String title;
-  final int mastery;
+  final double mastery;
   final int questions;
-  final String difficulty;
+  final double difficulty;
 
   const TopicTile({
     super.key,
@@ -66,7 +66,7 @@ class TopicTile extends StatelessWidget {
                           Colors.deepPurple.withValues(alpha: 0.15),
                     ),
                     child: Text(
-                      difficulty,
+                      difficulty.toString(),
                       style: const TextStyle(
                         color: Color(0xFFC4B5FD),
                         fontWeight: FontWeight.w700,

@@ -3,9 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
+import 'package:forge_recall/features/projects/presentation/widgets/add_topic_button.dart';
+import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
+import 'package:forge_recall/features/topics/presentation/bloc/topics_state.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/add_topic.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/topic_empty_state.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_section_header.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_tile.dart';
-import 'package:forge_recall/features/projects/presentation/widgets/add_topic_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_detail_hero_section.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_mastery_card.dart';
 import 'package:go_router/go_router.dart';
@@ -60,10 +64,6 @@ class _ProjectDetailScreenState
     super.dispose();
   }
 
-  void _addTopic() {
-    debugPrint('Add topic');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +77,7 @@ class _ProjectDetailScreenState
             ? FloatingActionButton.extended(
                 key: const ValueKey('fab'),
                 heroTag: 'add_topic',
-                onPressed: _addTopic,
+                onPressed: () => addTopic(context,widget.projectId),
                 icon: const Icon(Icons.add),
                 label: const Text('Add Topic'),
               )
@@ -162,74 +162,90 @@ class _ProjectDetailScreenState
                     ),
                   ),
                 ),
+             
                 SliverPadding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20),
-                  sliver: SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         const SizedBox(height: 18),
-            
-                        ProjectDetailHeroSection(
-                          project: project,
-                        ),
-            
+                        ProjectDetailHeroSection(project: project),
                         const SizedBox(height: 26),
-            
-                        ProjectMasteryCard(
-                          project: project,
-                        ),
-            
+                        ProjectMasteryCard(project: project),
                         const SizedBox(height: 30),
-                       //#########TopicBloc######################
-                       
                         const TopicSectionHeader(),
-            
                         const SizedBox(height: 20),
-            
-                        TopicTile(
-                          title: 'Cellular Respiration',
-                          mastery: 72,
-                          questions: 28,
-                          difficulty: 'Advanced',
-                        ),
-            
-                        const SizedBox(height: 16),
-            
-                        TopicTile(
-                          title:
-                              'Electrochemical Gradients',
-                          mastery: 41,
-                          questions: 16,
-                          difficulty: 'Expert',
-                        ),
-            
-                        const SizedBox(height: 16),
-            
-                        TopicTile(
-                          title:
-                              'Quantum Wave Functions',
-                          mastery: 18,
-                          questions: 9,
-                          difficulty: 'Expert',
-                        ),
-            
-                        const SizedBox(height: 22),
-            
+                      ],
+                    ),
+                  ),
+                ),
+
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: BlocBuilder<TopicBloc,TopicState>(
+                    builder: (context, topicState) {
+                      if (topicState is TopicLoading) {
+                        return const SliverToBoxAdapter(
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      if (topicState is TopicLoaded) {
+                        final topics = topicState.topics; // Assuming your state holds a list
+
+                        if (topics.isEmpty) {
+                          return const SliverToBoxAdapter(
+                            child: Center(child: TopicEmptyState()),
+                          );
+                        }
+
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final topic = topics[index];
+
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 16), // Replaces your SizedBox(height: 16)
+                                child: TopicTile(
+                                  title: topic.title,
+                                  mastery: topic.masteryScore,
+                                  questions: topic.questionCount,
+                                  difficulty: topic.cognitiveDifficulty,
+                                ),
+                              );
+                            },
+                            childCount: topics.length,
+                          ),
+                        );
+                      }
+
+                      if (topicState is TopicError) {
+                        return SliverToBoxAdapter(
+                          child: Center(child: Text(topicState.message, style: const TextStyle(color: Colors.red))),
+                        );
+                      }
+
+                      return const SliverToBoxAdapter(child: SizedBox.shrink());  
+                    }
+                  ),
+                ),
+                
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      children: [
                         const SizedBox(height: 26),
-            
                         AnimatedSwitcher(
-                          duration:
-                              const Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           child: !_showFab
                               ? AddTopicButton(
-                                  key: const ValueKey(
-                                      'bottom_button'),
-                                  onTap: _addTopic,
+                                  key: const ValueKey('bottom_button'),
+                                  onTap: () => addTopic(context, widget.projectId),
                                 )
                               : const SizedBox.shrink(),
                         ),
-            
                         const SizedBox(height: 120),
                       ],
                     ),
@@ -240,21 +256,19 @@ class _ProjectDetailScreenState
           }  
 
            if (projectState is ProjectErrorState) {
-                // Print it to your debug console so you can read the full trace
-                debugPrint('SINGLE PROJECT ERROR: ${projectState.message}'); 
-                
-                // Show it on the screen temporarily so you can see it
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Error: ${projectState.message}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                );
-              }
+            debugPrint('SINGLE PROJECT ERROR: ${projectState.message}'); 
+            
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Error: ${projectState.message}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            );
+          }
 
           return const SizedBox();
         }
