@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase.dart';
 import 'package:forge_recall/features/auth/presentation/page/forgot_password_page.dart';
@@ -10,6 +12,13 @@ import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/features/dashboard/presentation/pages/dashboard.dart';
+import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
+import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
+import 'package:forge_recall/features/topics/domain/usercases/create_topic.dart';
+import 'package:forge_recall/features/topics/domain/usercases/delete_topic.dart';
+import 'package:forge_recall/features/topics/domain/usercases/get_topics.dart';
+import 'package:forge_recall/features/topics/domain/usercases/update_topic.dart';
+import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -39,9 +48,24 @@ class AppRouter {
         path: '/projectDetail/:id',
         builder: (context, state) {
           final projectId = state.pathParameters['id']!;
+          final firestore = FirebaseFirestore.instance;
+          final datasource = TopicRemoteDatasourceImpl(firestore);
+          final topicRepository = TopicRepositoryImpl(datasource);
+          final createTopic = CreateTopicUseCase(topicRepository); 
+          final updateTopic = UpdateTopicUseCase(topicRepository);
+          final getTopics = GetTopicsUseCase(topicRepository);
+          final deleteTopic = DeleteTopicUseCase(topicRepository);
 
-          return ProjectDetailScreen(
-            projectId: projectId,
+          return BlocProvider(
+            create: (_) => TopicBloc.name(
+              createTopic: createTopic, 
+              updateTopic: updateTopic, 
+              getTopics: getTopics, 
+              deleteTopic: deleteTopic,
+            ),
+            child: ProjectDetailScreen(
+              projectId: projectId,
+            ),
           );
         },
       ),

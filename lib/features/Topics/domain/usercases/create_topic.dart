@@ -7,11 +7,12 @@ class CreateTopicUseCase {
   final TopicRepository repository;
   CreateTopicUseCase(this.repository);
 
-  Future<void> call(CreateTopicParams params) async {
-    // Capture the exact time the topic is being generated
+  Future<void> call(
+    CreateTopicParams params,
+  ) async {
     final now = DateTime.now();
 
-    final topicWithId = TopicEntity(
+    final topic = TopicEntity(
       id: const Uuid().v4(),
       projectId: params.projectId,
       title: params.title,
@@ -24,7 +25,7 @@ class CreateTopicUseCase {
       updatedAt: now,
     );
 
-    return repository.createTopics(topicWithId);
+    return repository.createTopics(topic);
   }
 
   int _calculateReadTime(String content) {

@@ -5,6 +5,7 @@ import 'package:forge_recall/features/projects/presentation/bloc/project_event.d
 import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/add_topic_button.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
+import 'package:forge_recall/features/topics/presentation/bloc/topic_event.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topics_state.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/add_topic.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_empty_state.dart';
@@ -39,16 +40,24 @@ class _ProjectDetailScreenState
     super.initState();
 
     context.read<ProjectBloc>().add(GetSingleProjectEvent(widget.projectId),);
+    context.read<TopicBloc>().add(LoadTopics(widget.projectId));
 
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    
     final position = _scrollController.position;
 
-    final nearBottom =
-        position.pixels >
-        position.maxScrollExtent - 200;
+    // If the list is too short to scroll, just show the inline button
+    if (position.maxScrollExtent <= 0) {
+      if (_showFab) setState(() => _showFab = false);
+      return;
+    }
+
+    // Because the height is locked, 100px is a perfectly stable threshold
+    final nearBottom = position.pixels > position.maxScrollExtent - 100;
 
     if (_showFab == nearBottom) {
       setState(() {
@@ -247,25 +256,28 @@ class _ProjectDetailScreenState
                     child: Column(
                       children: [
                         const SizedBox(height: 26),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
-                          transitionBuilder: (Widget child, Animation<double> animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SizeTransition(
-                                sizeFactor: animation,
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: !_showFab
-                              ? AddTopicButton(
-                                  key: const ValueKey('inline_btn_active'), // Unique key
-                                  onTap: () => addTopic(context, widget.projectId),
-                                )
-                              : const SizedBox.shrink(key: ValueKey('inline_btn_hidden')), // Unique key
+                        SizedBox(
+                          height: 60,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            switchInCurve: Curves.easeOut,
+                            switchOutCurve: Curves.easeIn,
+                            transitionBuilder: (Widget child, Animation<double> animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: SizeTransition(
+                                  sizeFactor: animation,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: !_showFab
+                                ? AddTopicButton(
+                                    key: const ValueKey('inline_btn_active'), // Unique key
+                                    onTap: () => addTopic(context, widget.projectId),
+                                  )
+                                : const SizedBox.shrink(key: ValueKey('inline_btn_hidden')), // Unique key
+                          ),
                         ),
                         const SizedBox(height: 120),
                       ],
