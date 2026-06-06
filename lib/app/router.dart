@@ -19,6 +19,7 @@ import 'package:forge_recall/features/topics/domain/usercases/delete_topic.dart'
 import 'package:forge_recall/features/topics/domain/usercases/get_topics.dart';
 import 'package:forge_recall/features/topics/domain/usercases/update_topic.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
+import 'package:forge_recall/features/topics/presentation/pages/topic_knowledge_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -68,6 +69,14 @@ class AppRouter {
             ),
           );
         },
+      ),
+
+      GoRoute(
+        path: '/topicsKnowledgePage',
+        builder: (context, state) {
+          final topicTitle = state.extra as String;
+          return TopicKnowledgePage(topicTitle: topicTitle);
+        }
       ),
 
       ShellRoute(
