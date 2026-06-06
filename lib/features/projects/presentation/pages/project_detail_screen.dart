@@ -73,15 +73,25 @@ class _ProjectDetailScreenState
         duration: const Duration(milliseconds: 300),
         switchInCurve: Curves.easeOut,
         switchOutCurve: Curves.easeIn,
+        // We use transitionBuilder to make it fade and slightly scale
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: animation,
+              child: child,
+            ),
+          );
+        },
         child: _showFab
             ? FloatingActionButton.extended(
-                key: const ValueKey('fab'),
-                heroTag: 'add_topic',
-                onPressed: () => addTopic(context,widget.projectId),
+                key: const ValueKey('fab_active'), // Unique key
+                // heroTag: null, // Ensure Hero is disabled or removed
+                onPressed: () => addTopic(context, widget.projectId),
                 icon: const Icon(Icons.add),
                 label: const Text('Add Topic'),
               )
-            : const SizedBox.shrink(),
+            : const SizedBox.shrink(key: ValueKey('fab_hidden')), // Unique key
       ),
 
       body: BlocBuilder<ProjectBloc, ProjectState>(
@@ -239,12 +249,23 @@ class _ProjectDetailScreenState
                         const SizedBox(height: 26),
                         AnimatedSwitcher(
                           duration: const Duration(milliseconds: 300),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          transitionBuilder: (Widget child, Animation<double> animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: SizeTransition(
+                                sizeFactor: animation,
+                                child: child,
+                              ),
+                            );
+                          },
                           child: !_showFab
                               ? AddTopicButton(
-                                  key: const ValueKey('bottom_button'),
+                                  key: const ValueKey('inline_btn_active'), // Unique key
                                   onTap: () => addTopic(context, widget.projectId),
                                 )
-                              : const SizedBox.shrink(),
+                              : const SizedBox.shrink(key: ValueKey('inline_btn_hidden')), // Unique key
                         ),
                         const SizedBox(height: 120),
                       ],
