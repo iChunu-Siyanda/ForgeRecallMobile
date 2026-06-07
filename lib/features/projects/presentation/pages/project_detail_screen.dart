@@ -227,10 +227,7 @@ class _ProjectDetailScreenState
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 16), // Replaces your SizedBox(height: 16)
                                 child: TopicTile(
-                                  title: topic.title,
-                                  mastery: topic.masteryScore,
-                                  questions: topic.questionCount,
-                                  difficulty: topic.cognitiveDifficulty,
+                                  topic: topic,
                                 ),
                               );
                             },

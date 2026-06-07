@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
+import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
+import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_modes.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_hero_card.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_session_stats.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/core/theme/app_typography.dart';
+import 'package:go_router/go_router.dart';
 
 
-class Recall extends StatelessWidget {
-  const Recall({super.key});
+class RecallPage extends StatelessWidget {
+  final List<QuestionEntity> questions;
+
+  const RecallPage({super.key, required this.questions});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +75,18 @@ class Recall extends StatelessWidget {
 
               // PRIMARY ACTION
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  context.read<RecallLabBloc>().add(
+                    StartRecallSessionEvent(
+                      questions,
+                    ),
+                  );
+
+                  context.push(
+                    '/recall-session',
+                    extra: questions,
+                  );
+                },
 
                 child: Container(
                   height: 62,

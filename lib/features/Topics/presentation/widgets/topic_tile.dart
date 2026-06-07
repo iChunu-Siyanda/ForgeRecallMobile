@@ -1,27 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_metric.dart';
 import 'package:go_router/go_router.dart';
 
 class TopicTile extends StatelessWidget {
-  final String title;
-  final double mastery;
-  final int questions;
-  final double difficulty;
+  final TopicEntity topic;
 
   const TopicTile({
     super.key,
-    required this.title,
-    required this.mastery,
-    required this.questions,
-    required this.difficulty,
+    required this.topic,
   });
 
     @override
     Widget build(BuildContext context) {
       return GestureDetector(
-        onTap: () => context.go('/topicsKnowledgePage', extra: title),
+        onTap: () => context.go('/topicsKnowledgePage', extra: topic),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: BackdropFilter(
@@ -49,7 +44,7 @@ class TopicTile extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        title,
+                        topic.title,
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -69,7 +64,7 @@ class TopicTile extends StatelessWidget {
                             Colors.deepPurple.withValues(alpha: 0.15),
                       ),
                       child: Text(
-                        difficulty.toString(),
+                        topic.cognitiveDifficulty.toString(),
                         style: const TextStyle(
                           color: Color(0xFFC4B5FD),
                           fontWeight: FontWeight.w700,
@@ -87,14 +82,14 @@ class TopicTile extends StatelessWidget {
                     Expanded(
                       child: TopicMetric(
                         title: 'Mastery',
-                        value: '$mastery%',
+                        value: '${topic.masteryScore}%',
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: TopicMetric(
                         title: 'Questions',
-                        value: '$questions',
+                        value: '${topic.questionCount}',
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -112,7 +107,7 @@ class TopicTile extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: LinearProgressIndicator(
-                    value: mastery / 100,
+                    value: topic.masteryScore / 100,
                     minHeight: 10,
                     backgroundColor:
                         Colors.white.withValues(alpha: 0.05),

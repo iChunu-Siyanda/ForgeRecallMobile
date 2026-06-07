@@ -8,12 +8,20 @@ import 'package:forge_recall/features/auth/presentation/page/register_page.dart'
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/pages/project_detail_screen.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
+import 'package:forge_recall/features/questions/presentation/pages/notes_input_page.dart';
+import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
+import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
+import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_state.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
+import 'package:forge_recall/features/recall/presentation/pages/recall_session_page.dart';
+import 'package:forge_recall/features/recall/presentation/pages/session_complete_page.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/features/dashboard/presentation/pages/dashboard.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/domain/usercases/create_topic.dart';
 import 'package:forge_recall/features/topics/domain/usercases/delete_topic.dart';
 import 'package:forge_recall/features/topics/domain/usercases/get_topics.dart';
@@ -74,9 +82,46 @@ class AppRouter {
       GoRoute(
         path: '/topicsKnowledgePage',
         builder: (context, state) {
-          final topicTitle = state.extra as String;
-          return TopicKnowledgePage(topicTitle: topicTitle);
+          final topicEntity = state.extra as TopicEntity;
+          return TopicKnowledgePage(topic: topicEntity);
         }
+      ),
+
+      GoRoute(
+        path: '/notesInput',
+        builder: (context, state) {
+          final topic = state.extra as TopicEntity;
+
+          return NotesInputPage(
+            topic: topic,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/recall-session',
+        builder: (context, state) {
+          final questions = state.extra as List<QuestionEntity>;
+
+          return BlocProvider(
+            create: (_) => RecallLabBloc()..add(StartRecallSessionEvent(questions,),),
+            child: const RecallSessionPage(),
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/session-complete',
+        builder: (context, state) {
+          final result = state.extra as RecallLabCompleted;
+
+          return SessionCompletePage(
+            totalQuestions: result.totalQuestions,
+            easyCount: result.easyCount,
+            partialCount: result.partialCount,
+            forgotCount: result.forgotCount,
+          );
+        },
       ),
 
       ShellRoute(
@@ -97,7 +142,17 @@ class AppRouter {
             },
           ),
 
-          GoRoute(path: '/recall', builder: (context, state) => const Recall()),
+          GoRoute(
+            path: '/recall',
+            builder: (context, state) {
+              final questions =
+                  state.extra as List<QuestionEntity>;
+
+              return RecallPage(
+                questions: questions,
+              );
+            },
+          ),
 
           GoRoute(
             path: '/analytics',
