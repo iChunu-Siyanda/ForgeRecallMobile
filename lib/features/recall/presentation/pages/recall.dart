@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
-import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
-import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_modes.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_hero_card.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/recall_session_stats.dart';
@@ -13,9 +9,8 @@ import 'package:go_router/go_router.dart';
 
 
 class RecallPage extends StatelessWidget {
-  final List<QuestionEntity> questions;
 
-  const RecallPage({super.key, required this.questions});
+  const RecallPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -76,31 +71,25 @@ class RecallPage extends StatelessWidget {
               // PRIMARY ACTION
               GestureDetector(
                 onTap: () {
-                  context.read<RecallLabBloc>().add(
-                    StartRecallSessionEvent(
-                      questions,
-                    ),
-                  );
+                  // context.read<RecallLabBloc>().add(
+                  //   StartRecallSessionEvent(
+                  //     topic.,
+                  //   ),
+                  // );
 
-                  context.push(
-                    '/recall-session',
-                    extra: questions,
-                  );
+                  context.push('/recall-session',);
                 },
 
                 child: Container(
                   height: 62,
-
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-
                     gradient: const LinearGradient(
                       colors: [
                         AppColours.electricBlue,
                         Color(0xFF306BFF),
                       ],
                     ),
-
                     boxShadow: [
                       BoxShadow(
                         color: AppColours.electricBlue.withValues(alpha: 0.35),

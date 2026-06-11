@@ -8,19 +8,32 @@ import 'package:forge_recall/features/questions/presentation/widgets/edit_dialog
 import 'package:forge_recall/features/questions/presentation/widgets/question_card.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
-class QuestionsPreviewPage extends StatelessWidget {
+class QuestionsPreviewPage extends StatefulWidget {
   final TopicEntity topic;
+  final String note;
 
   const QuestionsPreviewPage({
     super.key,
     required this.topic,
+    required this.note
   });
+
+  @override
+  State<QuestionsPreviewPage> createState() => _QuestionsPreviewPageState();
+}
+
+class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<QuestionsGenerationBloc>().add(GenerateQuestionsEvent(widget.note));
+  }
 
   void _handleSaveQuestions(BuildContext context) {
     context.read<QuestionsGenerationBloc>().add(
       SaveQuestionsEvent(
-        projectId: topic.projectId,
-        topicId: topic.id,
+        projectId: widget.topic.projectId,
+        topicId: widget.topic.id,
       ),
     );
   }
@@ -29,8 +42,14 @@ class QuestionsPreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<QuestionsGenerationBloc,QuestionsGenerationState>(
       listener: (context, state) {
-        if (state is QuestionsSaved) {
-          context.go('/recall-lab');
+        debugPrint(
+          'QuestionsPreviewPage: ${state.runtimeType}',
+        );
+        if (state is QuestionsSaveSuccess) {
+          context.go(
+            '/recall-session',
+            extra: widget.topic,
+          );
         }
 
         if (state is QuestionsError) {
@@ -43,6 +62,7 @@ class QuestionsPreviewPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){context.go('/notesInput', extra: widget.topic,);},),
           title: const Text('Generated Questions'),
         ),
         body: Column(
@@ -72,8 +92,7 @@ class QuestionsPreviewPage extends StatelessWidget {
                   }
 
                   if (state is QuestionsLoaded || state is QuestionsSaving) {
-                    final questions =
-                        state is QuestionsLoaded ? state.questions : (state as QuestionsSaving).questions;
+                    final questions = state is QuestionsLoaded ? state.questions : (state as QuestionsSaving).questions;
 
                     if (questions.isEmpty) {
                       return const Center(
@@ -88,9 +107,8 @@ class QuestionsPreviewPage extends StatelessWidget {
                         ListView.separated(
                           padding: const EdgeInsets.all(16),
                           itemCount: questions.length + 1,
-                          separatorBuilder: (_, _) =>const SizedBox(height: 16,),
-                          itemBuilder:
-                              (context, index) {
+                          separatorBuilder: (_, _) => const SizedBox(height: 16,),
+                          itemBuilder: (context, index) {
                             if (index == questions.length) {
                               return OutlinedButton.icon(
                                 onPressed: () {
@@ -136,15 +154,11 @@ class QuestionsPreviewPage extends StatelessWidget {
                       return ElevatedButton(
                         onPressed: isSaving
                             ? null
-                            : () =>
-                                _handleSaveQuestions(context,),
-                        style:
-                            ElevatedButton.styleFrom(
+                            : () => _handleSaveQuestions(context,),
+                        style: ElevatedButton.styleFrom(
                           padding:const EdgeInsets.symmetric(vertical: 16,),
                         ),
-                        child: Text(
-                          isSaving ? 'Saving...' : 'Save Questions',
-                        ),
+                        child: Text( isSaving ? 'Saving...' : 'Save Questions',),
                       );
                     },
                   ),

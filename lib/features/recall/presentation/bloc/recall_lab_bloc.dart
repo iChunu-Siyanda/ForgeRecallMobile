@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/recall/domain/entities/recall_rating.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
@@ -15,6 +16,10 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
     StartRecallSessionEvent event,
     Emitter<RecallLabState> emit,
   ) {
+    if (event.questions.isEmpty) {
+      debugPrint('event.questions. is empty');
+      return;
+    }
     emit(
       RecallLabLoaded(
         questions: event.questions,

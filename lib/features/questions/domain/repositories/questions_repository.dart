@@ -1,6 +1,14 @@
-import 'package:forge_recall/features/questions/domain/entities/topics_questions_entity.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
 
 abstract class QuestionsRepository {
-    //get questions
-  Future<TopicQuestionsEntity> getTopicQuestions(String questionsId, String topicId, String projectId);
+  Future<void> saveQuestions({
+    required String projectId,
+    required String topicId,
+    required List<QuestionEntity> questions,
+  });
+
+  Future<List<QuestionEntity>> getQuestions({
+    required String projectId,
+    required String topicId,
+  });
 }

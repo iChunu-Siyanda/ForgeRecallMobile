@@ -253,28 +253,25 @@ class _ProjectDetailScreenState
                     child: Column(
                       children: [
                         const SizedBox(height: 26),
-                        SizedBox(
-                          height: 60,
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            switchInCurve: Curves.easeOut,
-                            switchOutCurve: Curves.easeIn,
-                            transitionBuilder: (Widget child, Animation<double> animation) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: SizeTransition(
-                                  sizeFactor: animation,
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: !_showFab
-                                ? AddTopicButton(
-                                    key: const ValueKey('inline_btn_active'), // Unique key
-                                    onTap: () => addTopic(context, widget.projectId),
-                                  )
-                                : const SizedBox.shrink(key: ValueKey('inline_btn_hidden')), // Unique key
-                          ),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          transitionBuilder: (Widget child, Animation<double> animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: SizeTransition(
+                                sizeFactor: animation,
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: !_showFab
+                              ? AddTopicButton(
+                                  key: const ValueKey('inline_btn_active'), // Unique key
+                                  onTap: () => addTopic(context, widget.projectId),
+                                )
+                              : const SizedBox.shrink(key: ValueKey('inline_btn_hidden')), // Unique key
                         ),
                         const SizedBox(height: 120),
                       ],

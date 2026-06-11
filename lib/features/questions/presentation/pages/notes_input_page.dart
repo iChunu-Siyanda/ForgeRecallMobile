@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_preview_params.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
+import 'package:go_router/go_router.dart';
 
 class NotesInputPage extends StatefulWidget {
   final TopicEntity topic;
@@ -56,9 +58,8 @@ class _NotesInputPageState extends State<NotesInputPage> {
 
       return;
     }
-
-    // TODO:
-    // Navigate to Questions Preview Page
+    
+    context.go('/questionsPreviewPage', extra: QuestionPreviewParams(topic: widget.topic, note: notes),);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -73,6 +74,7 @@ class _NotesInputPageState extends State<NotesInputPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: (){context.go('/topicsKnowledgePage', extra: widget.topic,);},),
         title: Text(widget.topic.title),
       ),
       body: Padding(

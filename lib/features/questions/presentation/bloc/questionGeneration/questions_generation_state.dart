@@ -18,7 +18,7 @@ class QuestionsSaving extends QuestionsGenerationState {
   QuestionsSaving(this.questions);
 }
 
-class QuestionsSaved extends QuestionsGenerationState {}
+class QuestionsSaveSuccess extends QuestionsGenerationState {}
 
 class QuestionsError extends QuestionsGenerationState {
   final String message;

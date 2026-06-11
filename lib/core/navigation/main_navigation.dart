@@ -44,7 +44,7 @@ class MainNavigation extends StatelessWidget {
         break;
 
       case 2:
-        context.go('/recall');
+        context.go('/recall',);
         break;
 
       case 3:

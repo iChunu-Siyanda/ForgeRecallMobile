@@ -17,38 +17,68 @@ class SessionCompletePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accuracy = totalQuestions == 0 
-        ? 0 : (((easyCount + (partialCount * 0.5))/totalQuestions) *100).round();
+    final accuracy = totalQuestions == 0
+        ? 0
+        : (((easyCount + (partialCount * 0.5)) /
+                    totalQuestions) *
+                100)
+            .round();
+
+    final performance = switch (accuracy) {
+      >= 90 => 'Mastery',
+      >= 75 => 'Strong Recall',
+      >= 60 => 'Developing',
+      _ => 'Needs Reinforcement',
+    };
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Session Complete'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
+          child: ListView(
             children: [
-              const Spacer(),
+              const SizedBox(height: 16),
 
               const Icon(
                 Icons.emoji_events,
-                size: 100,
+                size: 96,
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               Text(
-                'Session Complete',
-                style: Theme.of(context).textTheme.headlineMedium,
+                '$accuracy%',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge,
+              ),
+
+              const SizedBox(height: 8),
+
+              Text(
+                performance,
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge,
               ),
 
               const SizedBox(height: 12),
 
               Text(
-                'Great work. Your recall session is finished.',
+                'Active recall session completed successfully.',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge,
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 32),
 
               Card(
                 child: Padding(
@@ -88,15 +118,43 @@ class SessionCompletePage extends StatelessWidget {
                 ),
               ),
 
-              const Spacer(),
+              const SizedBox(height: 24),
+
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.psychology,
+                        size: 40,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      Text(
+                        accuracy >= 75
+                            ? 'Your memory traces are strengthening. Continue reviewing on schedule.'
+                            : 'Several concepts need reinforcement. A follow-up review is recommended.',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 32),
 
               SizedBox(
                 width: double.infinity,
-                child: FilledButton(
+                child: FilledButton.icon(
                   onPressed: () {
                     context.pop();
                   },
-                  child: const Text('Review Again',),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text(
+                    'Review Again',
+                  ),
                 ),
               ),
 
@@ -104,11 +162,14 @@ class SessionCompletePage extends StatelessWidget {
 
               SizedBox(
                 width: double.infinity,
-                child: OutlinedButton(
+                child: OutlinedButton.icon(
                   onPressed: () {
                     context.go('/projects');
                   },
-                  child: const Text('Back To Projects',),
+                  icon: const Icon(Icons.home),
+                  label: const Text(
+                    'Back To Projects',
+                  ),
                 ),
               ),
             ],

@@ -159,7 +159,7 @@ class TopicTile extends StatelessWidget {
             ),
           ),
         ),
-            ),
-      );
+      ),
+    );
   }
 }  

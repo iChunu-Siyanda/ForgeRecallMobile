@@ -18,50 +18,52 @@ class TopicKnowledgePage extends StatelessWidget {
       context: context,
       showDragHandle: true,
       builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Choose Input Method',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-
-              const SizedBox(height: 20),
-
-              ListTile(
-                leading: const Icon(Icons.edit_note),
-                title: const Text('Type Notes'),
-                subtitle: const Text(
-                  'Paste study material manually',
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 15,),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Choose Input Method',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-
-                  context.go(
-                    '/notesInput',
-                    extra: topic,
-                  );
-                },
-              ),
-
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Upload Image'),
-                subtitle: const Text('Coming Soon'),
-                enabled: false,
-              ),
-
-              ListTile(
-                leading: const Icon(Icons.picture_as_pdf),
-                title: const Text('Upload PDF'),
-                subtitle: const Text('Coming Soon'),
-                enabled: false,
-              ),
-
-              const SizedBox(height: 12),
-            ],
+          
+                const SizedBox(height: 10),
+          
+                ListTile(
+                  leading: const Icon(Icons.edit_note),
+                  title: const Text('Type Notes'),
+                  subtitle: const Text(
+                    'Paste study material manually',
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+          
+                    context.go(
+                      '/notesInput',
+                      extra: topic,
+                    );
+                  },
+                ),
+          
+                ListTile(
+                  leading: const Icon(Icons.image),
+                  title: const Text('Upload Image'),
+                  subtitle: const Text('Coming Soon'),
+                  enabled: false,
+                ),
+          
+                ListTile(
+                  leading: const Icon(Icons.picture_as_pdf),
+                  title: const Text('Upload PDF'),
+                  subtitle: const Text('Coming Soon'),
+                  enabled: false,
+                ),
+          
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         );
       },
@@ -73,6 +75,10 @@ class TopicKnowledgePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
+        leading: IconButton(
+          onPressed: () { context.go('/projectDetail/${topic.projectId}');}, 
+          icon: Icon(Icons.arrow_back_ios),
+        ),
         title: Text(topic.title),
       ),
       body: SingleChildScrollView(

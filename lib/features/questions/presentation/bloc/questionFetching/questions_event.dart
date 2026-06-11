@@ -2,10 +2,9 @@ abstract class QuestionsEvent {
   const QuestionsEvent();
 }
 
-abstract class QuestionsLoadedEvent extends QuestionsEvent {
-  final String questionsId;
-  final String topicId;
+class QuestionsLoadedEvent extends QuestionsEvent {
   final String projectId;
+  final String topicId;
 
-  QuestionsLoadedEvent(this.questionsId, this.topicId, this.projectId,);
+  QuestionsLoadedEvent(this.projectId,this.topicId);
 }

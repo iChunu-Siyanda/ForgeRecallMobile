@@ -1,13 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/questions/domain/usecases/get_topics_questions_user_case.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
 
 class QuestionsBloc extends Bloc<QuestionsEvent,QuestionsState>{
-  final GetTopicsQuestionsUserCase  getTopicQuestions;
+  final GetTopicsQuestionsUseCase  getQuestionsUseCase;
 
   QuestionsBloc(
-    this.getTopicQuestions
+    this.getQuestionsUseCase
   ) : super(QuestionsInitialState()){
     on<QuestionsLoadedEvent>(_onQuestionsLoaded);
   }
@@ -18,11 +19,19 @@ class QuestionsBloc extends Bloc<QuestionsEvent,QuestionsState>{
   ) async {
     emit(QuestionsLoadingState());
 
-    try{
-      final questions = await getTopicQuestions(event.questionsId, event.topicId, event.projectId);
-      emit(QuestionsLoadedState(questions));
-    } catch(e){
-      emit(QuestionsErrorState('QuetionsLoaded QuestionsBloc Error ${e.toString()}'));
+    try {
+      debugPrint('LOADING QUESTIONS');
+
+      final questions =  await getQuestionsUseCase(event.projectId,event.topicId,);
+
+      debugPrint('QUESTIONS FOUND: ${questions.length}',);
+
+      emit(QuestionsLoadedState(questions,),);
+    } catch (e) {
+      debugPrint('LOAD ERROR');
+      debugPrint(e.toString());
+
+      emit(QuestionsErrorState(e.toString(),),);
     }
   }
 }

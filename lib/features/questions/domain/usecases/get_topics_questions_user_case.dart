@@ -1,11 +1,11 @@
-import 'package:forge_recall/features/questions/domain/entities/topics_questions_entity.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
 import 'package:forge_recall/features/questions/domain/repositories/questions_repository.dart';
 
-class GetTopicsQuestionsUserCase {
+class GetTopicsQuestionsUseCase {
   final QuestionsRepository repository;
-  GetTopicsQuestionsUserCase(this.repository);
+  GetTopicsQuestionsUseCase(this.repository);
 
-  Future<TopicQuestionsEntity> call(String questionsId, String topicId, String projectId) {
-    return repository.getTopicQuestions(questionsId, topicId, projectId);
+  Future<List<QuestionEntity>> call(String projectId, String topicId) {
+    return repository.getQuestions(projectId: projectId, topicId: topicId);
   }
 }

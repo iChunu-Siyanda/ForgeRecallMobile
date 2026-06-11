@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/shared/app_dependencies.dart';
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase.dart';
 import 'package:forge_recall/features/auth/presentation/page/forgot_password_page.dart';
@@ -8,10 +10,13 @@ import 'package:forge_recall/features/auth/presentation/page/register_page.dart'
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/pages/project_detail_screen.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
-import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_preview_params.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/pages/notes_input_page.dart';
+import 'package:forge_recall/features/questions/presentation/pages/questions_preview_page.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
-import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_state.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall_session_page.dart';
@@ -31,6 +36,7 @@ import 'package:forge_recall/features/topics/presentation/pages/topic_knowledge_
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
+
   static final router = GoRouter(
     initialLocation: '/',
     routes: [
@@ -99,13 +105,41 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/recall-session',
+        path: '/questionsPreviewPage',
         builder: (context, state) {
-          final questions = state.extra as List<QuestionEntity>;
+          final args = state.extra as QuestionPreviewParams;
 
           return BlocProvider(
-            create: (_) => RecallLabBloc()..add(StartRecallSessionEvent(questions,),),
-            child: const RecallSessionPage(),
+            create: (_) => QuestionsGenerationBloc(AppDependencies.saveQuestionsUseCase,),
+            child: QuestionsPreviewPage(
+              topic: args.topic,
+              note: args.note,
+            ),
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/recall-session',
+        builder: (context, state) {
+          final topic = state.extra as TopicEntity;
+          debugPrint('TOPIC: ${topic.title}');
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                lazy: false,
+                create: (_){ 
+                debugPrint('CREATING QUESTIONS BLOC');
+                return QuestionsBloc(AppDependencies.getQuestionsUseCase,)..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
+              }),
+              BlocProvider(
+                create: (_){
+                debugPrint('CREATING RECALL BLOC');
+                return RecallLabBloc();
+              }),
+            ],
+
+            child: RecallSessionPage(topic: topic,),
           );
         },
       ),
@@ -145,11 +179,9 @@ class AppRouter {
           GoRoute(
             path: '/recall',
             builder: (context, state) {
-              final questions =
-                  state.extra as List<QuestionEntity>;
-
-              return RecallPage(
-                questions: questions,
+              return BlocProvider(
+                create: (_) =>  RecallLabBloc(),
+                child: const RecallPage(),
               );
             },
           ),
