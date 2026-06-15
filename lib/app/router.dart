@@ -7,6 +7,7 @@ import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase
 import 'package:forge_recall/features/auth/presentation/page/forgot_password_page.dart';
 import 'package:forge_recall/features/auth/presentation/page/login_page.dart';
 import 'package:forge_recall/features/auth/presentation/page/register_page.dart';
+import 'package:forge_recall/features/library/presentation/pages/library_page.dart';
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/pages/project_detail_screen.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
@@ -18,12 +19,12 @@ import 'package:forge_recall/features/questions/presentation/pages/notes_input_p
 import 'package:forge_recall/features/questions/presentation/pages/questions_preview_page.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_state.dart';
-import 'package:forge_recall/features/recall/presentation/pages/recall.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall_session_page.dart';
 import 'package:forge_recall/features/recall/presentation/pages/session_complete_page.dart';
+import 'package:forge_recall/features/search/presentation/pages/search_page.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
-import 'package:forge_recall/features/dashboard/presentation/pages/dashboard.dart';
+import 'package:forge_recall/features/today/presentation/pages/today_page.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
@@ -59,6 +60,7 @@ class AppRouter {
         builder: (context, state) => const ForgotPasswordPage(),
       ),
 
+      //1.
       GoRoute(
         path: '/projectDetail/:id',
         builder: (context, state) {
@@ -85,6 +87,7 @@ class AppRouter {
         },
       ),
 
+      //2.
       GoRoute(
         path: '/topicsKnowledgePage',
         builder: (context, state) {
@@ -93,6 +96,7 @@ class AppRouter {
         }
       ),
 
+      //3.
       GoRoute(
         path: '/notesInput',
         builder: (context, state) {
@@ -104,6 +108,7 @@ class AppRouter {
         },
       ),
 
+      //4.
       GoRoute(
         path: '/questionsPreviewPage',
         builder: (context, state) {
@@ -119,6 +124,7 @@ class AppRouter {
         },
       ),
 
+      //5.
       GoRoute(
         path: '/recall-session',
         builder: (context, state) {
@@ -157,43 +163,55 @@ class AppRouter {
           );
         },
       ),
-
+      
       ShellRoute(
         builder: (context, state, child) {
-          return MainNavigation(child: child);
+          return MainNavigation(
+            child: child,
+          );
         },
 
         routes: [
           GoRoute(
-            path: '/dashboard',
-            builder: (context, state) => const Dashboard(),
-          ),
-
-          GoRoute(
             path: '/projects',
             builder: (context, state) {
-                return const Projects();
+              return const Projects();
             },
           ),
 
           GoRoute(
-            path: '/recall',
+            path: '/search',
             builder: (context, state) {
-              return BlocProvider(
-                create: (_) =>  RecallLabBloc(),
-                child: const RecallPage(),
-              );
+              return const SearchPage();
+            },
+          ),
+
+          GoRoute(
+            path: '/today',
+            builder: (context, state) {
+              return const TodayPage();
+            },
+          ),
+
+          GoRoute(
+            path: '/library',
+            builder: (context, state) {
+              return const LibraryPage();
             },
           ),
 
           GoRoute(
             path: '/analytics',
-            builder: (context, state) => const Analytics(),
+            builder: (context, state) {
+              return const Analytics();
+            },
           ),
 
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const Profile(),
+            builder: (context, state) {
+              return const Profile();
+            },
           ),
         ],
       ),

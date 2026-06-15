@@ -38,7 +38,6 @@ class MainNavigation extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-
               // HEADER
               Padding(
                 padding: const EdgeInsets.all(24),
@@ -118,7 +117,7 @@ class MainNavigation extends StatelessWidget {
                 selected: currentRoute == '/analytics',
                 onTap: () => _navigate(context, '/analytics'),
               ),
-              
+
               const Spacer(),
 
               const Divider(),

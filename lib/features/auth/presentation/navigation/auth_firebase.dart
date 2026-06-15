@@ -19,7 +19,7 @@ class AuthFirebase extends StatelessWidget {
           //Home page if user logged in
           if (snapshot.hasData){
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.go('/dashboard');
+              context.go('/projects');
             });
             
             return const Center(child: CircularProgressIndicator());
