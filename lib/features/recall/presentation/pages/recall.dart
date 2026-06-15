@@ -71,12 +71,6 @@ class RecallPage extends StatelessWidget {
               // PRIMARY ACTION
               GestureDetector(
                 onTap: () {
-                  // context.read<RecallLabBloc>().add(
-                  //   StartRecallSessionEvent(
-                  //     topic.,
-                  //   ),
-                  // );
-
                   context.push('/recall-session',);
                 },
 
