@@ -96,7 +96,7 @@ class _ProjectsState extends State<Projects> {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          useRootNavigator: true,
+                          //useRootNavigator: true,
                           backgroundColor: Colors.transparent,
                           builder: (_) {
                             return DraggableScrollableSheet(
