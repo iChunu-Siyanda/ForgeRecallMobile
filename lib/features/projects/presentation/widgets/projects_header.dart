@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 
 class ProjectsHeader extends StatelessWidget {
   const ProjectsHeader({
@@ -16,7 +17,7 @@ class ProjectsHeader extends StatelessWidget {
             Text(
               'PROJECTS',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColours.textPrimary,
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.2,
@@ -26,7 +27,7 @@ class ProjectsHeader extends StatelessWidget {
             Text(
               'Forge mastery through repetition.',
               style: TextStyle(
-                color: Color(0xFF8D93A6),
+                color: AppColours.textSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -38,14 +39,14 @@ class ProjectsHeader extends StatelessWidget {
           width: 50,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
-            color: Colors.white.withValues(alpha: 0.05),
+            color: AppColours.glassBorder.withValues(alpha: 0.05),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: AppColours.glassBorder.withValues(alpha: 0.08),
             ),
           ),
           child: const Icon(
             Icons.search_rounded,
-            color: Colors.white,
+            color: AppColours.textPrimary,
           ),
         ),
       ],

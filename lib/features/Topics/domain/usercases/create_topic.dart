@@ -16,10 +16,10 @@ class CreateTopicUseCase {
       id: const Uuid().v4(),
       projectId: params.projectId,
       title: params.title,
-      content: params.content,
+      content: params.material,
       masteryScore: 0.0,        
       questionCount: 0,         
-      estimatedReadTime: _calculateReadTime(params.content), 
+      estimatedReadTime: _calculateReadTime(params.material), 
       cognitiveDifficulty: 0.0, 
       createdAt: now,
       updatedAt: now,
@@ -28,10 +28,10 @@ class CreateTopicUseCase {
     return repository.createTopics(topic);
   }
 
-  int _calculateReadTime(String content) {
-    final wordCount = content.split(' ').length;
+  int _calculateReadTime(String material) {
+    final wordCount = material.split(' ').length;
     // Average reading speed is roughly 200 words per minute
     final minutes = (wordCount / 200).ceil();
     return minutes > 0 ? minutes : 1; 
   }
-  }
+}

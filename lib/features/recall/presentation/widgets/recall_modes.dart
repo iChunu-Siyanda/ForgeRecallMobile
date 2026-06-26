@@ -23,7 +23,7 @@ class RecallModes extends StatelessWidget {
           title: "PRESSURE RECALL",
           subtitle: "Timed rapid-response memory combat",
           icon: Icons.timer_rounded,
-          accent: AppColours.emberOrange,
+          accent: AppColours.amber,
           stats: "5s Response Window",
         ),
 

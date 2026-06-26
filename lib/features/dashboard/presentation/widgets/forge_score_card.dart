@@ -45,7 +45,7 @@ class ForgeScoreCard extends StatelessWidget {
             animation: true,
             barRadius: const Radius.circular(30),
             progressColor: AppColours.electricBlue,
-            backgroundColor: AppColours.steelGray,
+            backgroundColor: AppColours.surfaceSecondary,
             padding: EdgeInsets.zero,
           ),
         ],

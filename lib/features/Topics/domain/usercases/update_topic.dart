@@ -17,7 +17,7 @@ class UpdateTopicUseCase {
     final updatedTopic =
         existingTopic.copyWith(
       title: params.title,
-      content: params.content,
+      content: params.material,
     );
 
     await repository.updateTopics(

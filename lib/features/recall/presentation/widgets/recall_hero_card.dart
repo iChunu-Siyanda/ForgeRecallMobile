@@ -85,7 +85,7 @@ class RecallHeroCard extends StatelessWidget {
 
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
-              color: AppColours.steelGray,
+              color: AppColours.surfaceSecondary,
             ),
 
             child: FractionallySizedBox(
@@ -99,7 +99,7 @@ class RecallHeroCard extends StatelessWidget {
                   gradient: const LinearGradient(
                     colors: [
                       AppColours.electricBlue,
-                      AppColours.emberOrange,
+                      AppColours.amber,
                     ],
                   ),
                 ),

@@ -1,11 +1,13 @@
+import 'dart:ui'; // Crucial for ImageFilter blur effects
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/navigation/main_navigation.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
-import 'package:forge_recall/features/projects/presentation/widgets/create_project_modal.dart';
-import 'package:forge_recall/features/projects/presentation/widgets/project_button.dart';
+import 'package:forge_recall/features/projects/presentation/widgets/fab_create_project_modal.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_card.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_section_title.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/projects_header.dart';
@@ -22,121 +24,225 @@ class _ProjectsState extends State<Projects> {
   final User? user = FirebaseAuth.instance.currentUser;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  
+  late ScrollController _scrollController;
+  bool _showCollapsedTitle = false;
+
+  // The scroll distance required before the header passes under the AppBar zone
+  final double _scrollThreshold = 50.0;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController()..addListener(_scrollListener);
     context.read<ProjectBloc>().add(LoadProjectsEvent(user!.uid));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.hasClients) {
+      if (_scrollController.offset >= _scrollThreshold && !_showCollapsedTitle) {
+        setState(() {
+          _showCollapsedTitle = true;
+        });
+      } else if (_scrollController.offset < _scrollThreshold && _showCollapsedTitle) {
+        setState(() {
+          _showCollapsedTitle = false;
+        });
+      }
+    }
+  }
+
+  Color getProjectAccent(double mastery) {
+    if (mastery >= 80) return AppColours.emerald;
+    if (mastery >= 60) return AppColours.electricBlue;
+    if (mastery >= 40) return AppColours.amber;
+    return AppColours.crimson;
   }
 
   @override
   Widget build(BuildContext context) {
     final projectBloc = context.read<ProjectBloc>();
+    
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0B0F),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: BlocBuilder<ProjectBloc,ProjectState>(
-            builder:(context, state) {
-              if (state is ProjectLoadingState) {
-                return const Center(child: CircularProgressIndicator(),);
-              }
+      backgroundColor: AppColours.background,
+      floatingActionButton: FabCreateProjectModal(projectBloc: projectBloc),
+      body: BlocBuilder<ProjectBloc, ProjectState>(
+        builder: (context, state) {
+          if (state is ProjectLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
+              ),
+            );
+          }
+            
+          if (state is ProjectsLoadedState) {
+            final projects = state.projects;
 
-              if (state is ProjectsLoadedState) {
-                final projects = state.projects;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const ProjectsHeader(),
-                    const SizedBox(height: 20),
-                    const ProjectSectionTitle(title: 'Your Projects'),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: projects.isEmpty
-                          ? const Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.folder_off_rounded, size: 64, color: Colors.grey),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    "You don't have any projects yet.",
-                                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                                  ),
-                                  Text(
-                                    "Tap below to create your first one!",
-                                    style: TextStyle(color: Colors.grey, fontSize: 14),
-                                  ),
-                                ],
-                              ),
-                            )
-                        :ListView.builder(
-                          itemCount: projects.length,
-                          itemBuilder: (context, index) {
-                            final project = projects[index];
-                            return GestureDetector(
+            return CustomScrollView(
+              controller: _scrollController,
+              slivers: [
+                // Frosted Glass / Blurry Pinned Navigation Bar
+                SliverAppBar(
+                  pinned: true,
+                  backgroundColor: Colors.transparent, // Keeps container bounds clear for the blur layer
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  centerTitle: true,
+                  leading: IconButton(
+                    icon: const Icon(Icons.menu, color: AppColours.textPrimary),
+                    onPressed: () {
+                      MainNavigation.openDrawer(context);
+                    },
+                  ),
+                  title: AnimatedOpacity(
+                    opacity: _showCollapsedTitle ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 150),
+                    child: const Text(
+                      'PROJECTS',
+                      style: TextStyle(
+                        color: AppColours.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
+                  
+                  // This handles the real-time blur processing behind the bar elements
+                  flexibleSpace: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: _showCollapsedTitle ? 12.0 : 0.0,
+                        sigmaY: _showCollapsedTitle ? 12.0 : 0.0,
+                      ),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        color: _showCollapsedTitle
+                            ? AppColours.background.withValues(alpha: 0.65) // Frosted Tint
+                            : AppColours.background, // Clean Solid Canvas
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Natural Large Header (Scrolls up natively)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 16.0),
+                    child: ProjectsHeader(),
+                  ),
+                ),
+
+                // Section Divider Title
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 16.0),
+                    child: ProjectSectionTitle(),
+                  ),
+                ),
+
+                // Cards Matrix
+                if (projects.isEmpty)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.folder_off_rounded,
+                            size: 64,
+                            color: AppColours.textMuted.withValues(alpha: 0.3),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "You don't have any projects yet.",
+                            style: TextStyle(
+                              color: AppColours.textSecondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            "Tap + to create your first one!",
+                            style: TextStyle(
+                              color: AppColours.textMuted,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else 
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final project = projects[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: GestureDetector(
                               onTap: () {
                                 context.go('/projectDetail/${project.id}');
                               },
                               child: ProjectCard(
-                                title: project.title, 
-                                mastery: project.masteryPercentage, 
-                                topics: project.totalTopics, 
-                                due: 5,
-                                accentColor: Colors.deepPurple,),
-                            );
-                          },
+                                title: project.title,
+                                mastery: project.masteryPercentage,
+                                topics: project.totalTopics,
+                                due: 5, 
+                                accentColor: getProjectAccent(project.masteryPercentage), 
+                                lastStudied: 'Not studied for 2 days', 
+                                daysSinceStudy: 2,
+                              ),
+                            ),
+                          );
+                        },
+                        childCount: projects.length,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    ProjectButton(
-                      projectBtnText: 'Create New Project',
-                      projectBtnOnTap: (){
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          //useRootNavigator: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) {
-                            return DraggableScrollableSheet(
-                              initialChildSize: 0.65,
-                              minChildSize: 0.45,
-                              maxChildSize: 0.9,
-                              expand: false,
-                              builder: (context, scrollController) {
-                                return CreateProjectModal(projectBloc: projectBloc,);
-                              },
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }
-
-              if (state is ProjectErrorState) {
-                // Print it to your debug console so you can read the full trace
-                debugPrint('PROJECTS ERROR: ${state.message}'); 
-                
-                // Show it on the screen temporarily so you can see it
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Error: ${state.message}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.red),
-                    ),
                   ),
-                );
-              }
-
-              return const SizedBox.shrink();
-            },
-          ),
-        ),
+                
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 100),
+                ),
+              ],
+            );
+          }
+            
+          if (state is ProjectErrorState) {
+            debugPrint('PROJECTS ERROR: ${state.message}'); 
+            
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Error: ${state.message}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: AppColours.crimson,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            );
+          }
+            
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

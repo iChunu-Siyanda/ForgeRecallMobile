@@ -105,7 +105,7 @@ class _ProjectDetailScreenState
                       }
 
                       if (topicState is TopicLoaded) {
-                        final topics = topicState.topics; // Assuming your state holds a list
+                        final topics = topicState.topics; 
 
                         if (topics.isEmpty) {
                           return const SliverToBoxAdapter(
@@ -119,7 +119,7 @@ class _ProjectDetailScreenState
                               final topic = topics[index];
 
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 16), // Replaces your SizedBox(height: 16)
+                                padding: const EdgeInsets.only(bottom: 16),
                                 child: TopicTile(topic: topic,),
                               );
                             },

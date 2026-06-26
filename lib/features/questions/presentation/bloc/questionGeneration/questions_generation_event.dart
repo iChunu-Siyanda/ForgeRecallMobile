@@ -1,6 +1,6 @@
 import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
 
-sealed class QuestionsGenerationEvent {}
+abstract class QuestionsGenerationEvent {}
 
 class GenerateQuestionsEvent extends QuestionsGenerationEvent {
   final String notes;
@@ -29,9 +29,11 @@ class DeleteQuestionEvent extends QuestionsGenerationEvent {
 class SaveQuestionsEvent extends QuestionsGenerationEvent {
   final String projectId;
   final String topicId;
+  final List<QuestionEntity>? questions;
 
   SaveQuestionsEvent({
     required this.projectId,
     required this.topicId,
+    this.questions,
   });
 }

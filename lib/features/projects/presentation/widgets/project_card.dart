@@ -1,6 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:forge_recall/features/projects/presentation/widgets/project_stat_tile.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 
 class ProjectCard extends StatelessWidget {
   final String title;
@@ -8,6 +7,8 @@ class ProjectCard extends StatelessWidget {
   final int topics;
   final int due;
   final Color accentColor;
+  final String lastStudied;
+  final int daysSinceStudy;
 
   const ProjectCard({
     super.key,
@@ -16,418 +17,211 @@ class ProjectCard extends StatelessWidget {
     required this.topics,
     required this.due,
     required this.accentColor,
+    required this.lastStudied,
+    required this.daysSinceStudy,
   });
 
   @override
   Widget build(BuildContext context) {
     final masteryValue = mastery.clamp(0, 100);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(34),
-          boxShadow: [
-            BoxShadow(
-              color: accentColor.withValues(alpha: 0.18),
-              blurRadius: 40,
-              spreadRadius: -8,
-              offset: const Offset(0, 24),
-            ),
-          ],
+    late Color studyColor;
+    late IconData studyIcon;
+
+    if (daysSinceStudy <= 1) {
+      studyColor = AppColours.emerald;
+      studyIcon = Icons.auto_awesome_rounded; // Gemini-style sparkle icon for active streaks
+    } else if (daysSinceStudy <= 3) {
+      studyColor = AppColours.amber;
+      studyIcon = Icons.schedule_rounded;
+    } else {
+      studyColor = AppColours.crimson;
+      studyIcon = Icons.warning_amber_rounded;
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: AppColours.surface,
+        borderRadius: BorderRadius.circular(24), // Softer, modern rounding
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(
+          color: AppColours.glassBorder.withValues(alpha: 0.8),
+          width: 1,
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(34),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(34),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.white.withValues(alpha: 0.10),
-                    Colors.white.withValues(alpha: 0.03),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // HEADER SECTION
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: AppColours.textPrimary,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        // Chip for Topics Count
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColours.surfaceSecondary,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '$topics Topics',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColours.textSecondary,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Sleek Minimalist Arrow Button
+                  Container(
+                    height: 36,
+                    width: 36,
+                    decoration: BoxDecoration(
+                      color: AppColours.surfaceSecondary.withValues(alpha: 0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward_rounded,
+                      size: 18,
+                      color: AppColours.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              // MASTERY SECTION
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Mastery Progress',
+                    style: TextStyle(
+                      color: AppColours.textMuted,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    '${masteryValue.toStringAsFixed(0)}%',
+                    style: TextStyle(
+                      color: accentColor,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              // Gemini-themed Progress Bar
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 8,
+                      width: double.infinity,
+                      color: AppColours.surfaceSecondary,
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: masteryValue / 100,
+                      child: Container(
+                        height: 8,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          gradient: AppColours.geminiGradient, // Beautiful cosmic gradient flow
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  width: 1.2,
-                ),
               ),
-              child: Stack(
+
+              const SizedBox(height: 20),
+              
+              const Divider(color: AppColours.glassBorder, height: 1),
+              
+              const SizedBox(height: 14),
+
+              // FOOTER STATUS CHIPS
+              Row(
                 children: [
-                  Positioned(
-                    top: -80,
-                    right: -40,
-                    child: Container(
-                      height: 180,
-                      width: 180,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: accentColor.withValues(alpha: 0.12),
+                  // Review Status Chip
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: due > 0 
+                          ? AppColours.crimson.withValues(alpha: 0.08) 
+                          : AppColours.emerald.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Text(
+                      due > 0 ? '$due Reviews Due' : 'Up To Date',
+                      style: TextStyle(
+                        color: due > 0 ? AppColours.crimson : AppColours.emerald,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
                       ),
                     ),
                   ),
 
-                  Positioned(
-                    bottom: -100,
-                    left: -60,
-                    child: Container(
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.03),
-                      ),
-                    ),
-                  ),
+                  const Spacer(),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // Study Recency indicator
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      /// HEADER
-                      Row(
-                        children: [
-                          Container(
-                            height: 62,
-                            width: 62,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(22),
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  accentColor,
-                                  accentColor.withValues(alpha: 0.65),
-                                ],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      accentColor.withValues(alpha: 0.35),
-                                  blurRadius: 22,
-                                  offset: const Offset(0, 10),
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.auto_awesome_rounded,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                          ),
-
-                          const SizedBox(width: 18),
-
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w800,
-                                    height: 1,
-                                  ),
-                                ),
-
-                                const SizedBox(height: 8),
-
-                                Row(
-                                  children: [
-                                    _buildMiniChip(
-                                      icon: Icons.menu_book_rounded,
-                                      label: '$topics Topics',
-                                    ),
-                                    const SizedBox(width: 10),
-                                    _buildMiniChip(
-                                      icon: Icons.bolt_rounded,
-                                      label: '$due Due',
-                                      color: due > 0
-                                          ? Colors.orangeAccent
-                                          : Colors.greenAccent,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          Container(
-                            height: 44,
-                            width: 44,
-                            decoration: BoxDecoration(
-                              color:
-                                  Colors.white.withValues(alpha: 0.06),
-                              borderRadius:
-                                  BorderRadius.circular(14),
-                            ),
-                            child: const Icon(
-                              Icons.arrow_forward_rounded,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 30),
-
-                      /// MASTERY SECTION
-                      Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Mastery Progress',
-                            style: TextStyle(
-                              color: Color(0xFFB6BED1),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(100),
-                              color:
-                                  accentColor.withValues(alpha: 0.15),
-                              border: Border.all(
-                                color: accentColor.withValues(
-                                  alpha: 0.25,
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              '${masteryValue.toStringAsFixed(0)}%',
-                              style: TextStyle(
-                                color: accentColor,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 18),
-
-                      Stack(
-                        children: [
-                          Container(
-                            height: 14,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(100),
-                              color:
-                                  Colors.white.withValues(alpha: 0.05),
-                            ),
-                          ),
-
-                          FractionallySizedBox(
-                            widthFactor: masteryValue / 100,
-                            child: Container(
-                              height: 14,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(100),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    accentColor,
-                                    accentColor.withValues(
-                                      alpha: 0.65,
-                                    ),
-                                  ],
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: accentColor.withValues(
-                                      alpha: 0.45,
-                                    ),
-                                    blurRadius: 14,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      /// STATS
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ProjectStatTile(
-                              title: 'Recall',
-                              value:
-                                  '${(masteryValue * 1.2).round()}%',
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          const Expanded(
-                            child: ProjectStatTile(
-                              title: 'Speed',
-                              value: '2.8s',
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          const Expanded(
-                            child: ProjectStatTile(
-                              title: 'Streak',
-                              value: '17',
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      /// ACTIONS
-                      Row(
-                        children: [
-                          Expanded(
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: Colors.white.withValues(
-                                    alpha: 0.08,
-                                  ),
-                                ),
-                                backgroundColor:
-                                    Colors.white.withValues(
-                                  alpha: 0.03,
-                                ),
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                  vertical: 18,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(20),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.analytics_rounded,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Analytics',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(width: 14),
-
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: accentColor,
-                                padding:
-                                    const EdgeInsets.symmetric(
-                                  vertical: 18,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(20),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.play_arrow_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    'Start Drill',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                      Icon(studyIcon, size: 14, color: studyColor),
+                      const SizedBox(width: 4),
+                      Text(
+                        lastStudied,
+                        style: TextStyle(
+                          color: studyColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
+            ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildMiniChip({
-    required IconData icon,
-    required String label,
-    Color color = Colors.white,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 8,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(100),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.05),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 15,
-            color: color,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
       ),
     );
   }

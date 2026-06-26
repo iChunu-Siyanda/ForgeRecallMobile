@@ -1,7 +1,7 @@
 class CreateTopicParams {
   final String title;
   final String projectId;
-  final String content;
+  final String material;
 
-  CreateTopicParams(this.title, this.projectId, this.content);
+  CreateTopicParams(this.title, this.projectId, this.material);
 }

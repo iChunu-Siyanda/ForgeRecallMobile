@@ -175,7 +175,7 @@ class AppRouter {
           GoRoute(
             path: '/projects',
             builder: (context, state) {
-              return const Projects();
+              return Projects();
             },
           ),
 

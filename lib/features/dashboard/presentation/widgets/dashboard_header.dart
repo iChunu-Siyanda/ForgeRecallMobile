@@ -33,7 +33,7 @@ class DashboardHeader extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: AppColours.steelGray,
+            color: AppColours.surfaceSecondary,
             borderRadius: BorderRadius.circular(18),
           ),
           child: const Icon(

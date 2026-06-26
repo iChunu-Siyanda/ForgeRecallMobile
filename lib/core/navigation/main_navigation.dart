@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:go_router/go_router.dart';
 
-class MainNavigation extends StatelessWidget {
+class MainNavigation extends StatefulWidget {
   final Widget child;
 
   const MainNavigation({
     super.key,
     required this.child,
   });
+
+  static void openDrawer(
+    BuildContext context,
+  ) {
+    context.findAncestorStateOfType<_MainNavigationState>()?.openDrawer();
+  }
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _currentRoute(BuildContext context) {
     return GoRouterState.of(context).uri.toString();
@@ -19,22 +32,24 @@ class MainNavigation extends StatelessWidget {
     String route,
   ) {
     Navigator.pop(context); // Close drawer
-
+    
     if (_currentRoute(context) != route) {
       context.go(route);
     }
   }
 
+  void openDrawer() {
+    scaffoldKey.currentState?.openDrawer();
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentRoute = _currentRoute(context);
-
     return Scaffold(
-      backgroundColor: AppColours.obsidian,
-
+      key: scaffoldKey,
+      backgroundColor: AppColours.background,
       drawer: Drawer(
-        backgroundColor: AppColours.graphite,
-
+        backgroundColor: AppColours.surface,
         child: SafeArea(
           child: Column(
             children: [
@@ -80,42 +95,42 @@ class MainNavigation extends StatelessWidget {
                 icon: Icons.add_circle_outline_rounded,
                 label: 'New Project',
                 selected: false,
-                onTap: () => _navigate(context, '/create-project'),
+                onTap: () => _navigate(context, '/create-project',),
               ),
 
               _DrawerItem(
                 icon: Icons.search_rounded,
                 label: 'Search',
                 selected: currentRoute == '/search',
-                onTap: () => _navigate(context, '/search'),
+                onTap: () => _navigate(context, '/search',),
               ),
 
               _DrawerItem(
                 icon: Icons.local_fire_department_rounded,
                 label: 'Today',
                 selected: currentRoute == '/today',
-                onTap: () => _navigate(context, '/today'),
+                onTap: () => _navigate(context, '/today',),
               ),
 
               _DrawerItem(
                 icon: Icons.library_books_rounded,
                 label: 'Library',
                 selected: currentRoute == '/library',
-                onTap: () => _navigate(context, '/library'),
+                onTap: () => _navigate(context, '/library',),
               ),
 
               _DrawerItem(
                 icon: Icons.folder_open_rounded,
                 label: 'Projects',
                 selected: currentRoute == '/projects',
-                onTap: () => _navigate(context, '/projects'),
+                onTap: () => _navigate(context, '/projects',),
               ),
 
               _DrawerItem(
                 icon: Icons.analytics_rounded,
                 label: 'Analytics',
                 selected: currentRoute == '/analytics',
-                onTap: () => _navigate(context, '/analytics'),
+                onTap: () => _navigate(context, '/analytics',),
               ),
 
               const Spacer(),
@@ -126,7 +141,7 @@ class MainNavigation extends StatelessWidget {
                 icon: Icons.person_rounded,
                 label: 'Profile',
                 selected: currentRoute == '/profile',
-                onTap: () => _navigate(context, '/profile'),
+                onTap: () => _navigate(context, '/profile',)
               ),
 
               const SizedBox(height: 12),
@@ -135,7 +150,7 @@ class MainNavigation extends StatelessWidget {
         ),
       ),
 
-      body: child,
+      body: widget.child,
     );
   }
 }

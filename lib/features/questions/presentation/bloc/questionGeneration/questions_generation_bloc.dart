@@ -8,7 +8,9 @@ import 'package:forge_recall/features/questions/presentation/bloc/questionGenera
 class QuestionsGenerationBloc extends Bloc<QuestionsGenerationEvent, QuestionsGenerationState> {
     final SaveQuestionsUseCase saveQuestionsUseCase;
 
-  QuestionsGenerationBloc(this.saveQuestionsUseCase) : super(QuestionsInitial()) {
+  QuestionsGenerationBloc(
+    this.saveQuestionsUseCase,
+  ) : super(QuestionsInitial()) {
     on<GenerateQuestionsEvent>(_onGenerateQuestions,); 
     on<AddQuestionEvent>( _onAddQuestion,);
     on<DeleteQuestionEvent>(_onDeleteQuestion,);
@@ -69,7 +71,6 @@ class QuestionsGenerationBloc extends Bloc<QuestionsGenerationEvent, QuestionsGe
     Emitter<QuestionsGenerationState> emit,
   ) {
     if (state is! QuestionsLoaded) return;
-
     final current = (state as QuestionsLoaded).questions;
 
     final updated = current.map((q) => q.id == event.question.id ? event.question: q,).toList();
@@ -82,7 +83,6 @@ class QuestionsGenerationBloc extends Bloc<QuestionsGenerationEvent, QuestionsGe
     Emitter<QuestionsGenerationState> emit,
   ) async {
     if (state is! QuestionsLoaded) {return;}
-
     final questions = (state as QuestionsLoaded).questions;
 
     emit(QuestionsSaving(questions,),);
@@ -103,3 +103,4 @@ class QuestionsGenerationBloc extends Bloc<QuestionsGenerationEvent, QuestionsGe
     }
   }
 }
+

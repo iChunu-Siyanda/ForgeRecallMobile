@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_event.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/custom_questions_card.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/empty_knowledge_card.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/material_summary_car.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_stats_card.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,11 +46,7 @@ class TopicKnowledgePage extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-          
-                    context.go(
-                      '/notesInput',
-                      extra: topic,
-                    );
+                    context.go('/notesInput',extra: topic,);
                   },
                 ),
           
@@ -70,6 +73,84 @@ class TopicKnowledgePage extends StatelessWidget {
     );
   }
 
+  void _showAddQuestionSheet(BuildContext context) {
+    final questionController = TextEditingController();
+    final answerController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+
+      builder: (_) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+              Text(
+                'Add Custom Question',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+
+              const SizedBox(height: 20),
+
+              TextField(
+                controller: questionController,
+                decoration:const InputDecoration(
+                  labelText: 'Question',
+                  border: OutlineInputBorder(),
+                ),
+
+                maxLines: 3,
+              ),
+
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: answerController,
+                decoration:  const InputDecoration(
+                  labelText: 'Answer',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 4,
+              ),
+
+              const SizedBox(height: 20),
+
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () {
+                    final question = QuestionEntity(
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      question: questionController.text.trim(),
+                      solution: answerController.text.trim(),
+                    );
+
+                    context.read<QuestionsGenerationBloc>().add(
+                      AddQuestionEvent(question),
+                    );
+
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Save Question',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,32 +164,64 @@ class TopicKnowledgePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            EmptyKnowledgeCard(
-              onAddMaterial: () {
-                _showInputMethodSheet(context);
-              },
-            ),
+        child: BlocBuilder<QuestionsBloc,QuestionsState>(
+          builder: (BuildContext context, QuestionsState state) {
+            if (state is QuestionsInitialState) {
+              return const Center(child: CircularProgressIndicator(),);
+            }
 
-            const SizedBox(height: 16),
-
-            CustomQuestionsCard(
-              onAddQuestion: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Custom Questions Coming Soon'),
+            if (state is QuestionsLoadedState) {
+              final questions = state.topicQuestions;
+              return Column(
+                children: [
+                  questions.isEmpty ?
+                    EmptyKnowledgeCard(
+                      onAddMaterial: () {
+                        _showInputMethodSheet(context);
+                      },
+                    ) : MaterialSummaryCard(
+                          questionCount: questions.length,
+                          onEditMaterial: () {
+                            context.go(
+                              '/notesInput',
+                              extra: topic,
+                            );
+                          },
+                          onPreviewQuestions: () {
+                            context.go(
+                              '/recall-session',
+                              extra: topic,
+                            );
+                          },
+                        ),
+                
+                  const SizedBox(height: 16),
+              
+                  CustomQuestionsCard(
+                    onAddQuestion: () {_showAddQuestionSheet(context);},
                   ),
-                );
-              },
-            ),
+              
+                  const SizedBox(height: 16),
+              
+                  const TopicStatsCard(),
+                ],
+              );
+            }
 
-            const SizedBox(height: 16),
+            if (state is QuestionsErrorState) {
+              return Center(child: Text(state.message, style: TextStyle(color: Colors.red),),);
+            }
 
-            const TopicStatsCard(),
-          ],
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );
   }
 }
+
+//This page deals with:
+// Notes
+// Generated questions
+// Custom questions
+// Recall statistics

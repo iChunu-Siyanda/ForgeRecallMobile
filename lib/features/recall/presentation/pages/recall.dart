@@ -15,7 +15,7 @@ class RecallPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColours.obsidian,
+      backgroundColor: AppColours.background,
 
       body: SafeArea(
         child: SingleChildScrollView(

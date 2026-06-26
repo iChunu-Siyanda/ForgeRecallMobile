@@ -58,13 +58,13 @@ class BattleCard extends StatelessWidget {
               vertical: 8,
             ),
             decoration: BoxDecoration(
-              color: AppColours.emberOrange.withValues(alpha:0.12),
+              color: AppColours.amber.withValues(alpha:0.12),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
               difficulty,
               style: const TextStyle(
-                color: AppColours.emberOrange,
+                color: AppColours.amber,
                 fontWeight: FontWeight.bold,
               ),
             ),
