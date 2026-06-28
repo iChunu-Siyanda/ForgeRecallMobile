@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
 import 'package:go_router/go_router.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_event.dart';
@@ -30,7 +33,7 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
   }
 
   void _handleSaveQuestions(BuildContext context) {
-    context.read<QuestionsGenerationBloc>().add(
+    context.read<QuestionsBloc>().add(
       SaveQuestionsEvent(
         projectId: widget.topic.projectId,
         topicId: widget.topic.id,
@@ -40,7 +43,7 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<QuestionsGenerationBloc,QuestionsGenerationState>(
+    return BlocListener<QuestionsBloc,QuestionsState>(
       listener: (context, state) {
         debugPrint(
           'QuestionsPreviewPage: ${state.runtimeType}',
@@ -52,7 +55,7 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
           );
         }
 
-        if (state is QuestionsError) {
+        if (state is QuestionsErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -112,7 +115,7 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
                             if (index == questions.length) {
                               return OutlinedButton.icon(
                                 onPressed: () {
-                                  showAddEditDialog(context,);
+                                  showAddEditDialog(context, widget.topic);
                                 },
                                 icon: const Icon(Icons.add,),
                                 label: const Text('Add Question',),
@@ -123,7 +126,8 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
 
                             return QuestionCard(
                               index: index + 1,
-                              question: question,
+                              question: question, 
+                              topic: widget.topic,
                             );
                           },
                         ),

@@ -91,8 +91,19 @@ class AppRouter {
       GoRoute(
         path: '/topicsKnowledgePage',
         builder: (context, state) {
-          final topicEntity = state.extra as TopicEntity;
-          return TopicKnowledgePage(topic: topicEntity);
+          final topic = state.extra as TopicEntity;
+
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => QuestionsBloc(AppDependencies.getQuestionsUseCase,AppDependencies.saveQuestionsUseCase,)..add(QuestionsLoadedEvent(topic.projectId,topic.id)),
+              ),
+              BlocProvider(
+                create: (_) => QuestionsGenerationBloc()
+              )
+            ], 
+            child: TopicKnowledgePage(topic: topic),
+          );
         }
       ),
 
@@ -115,7 +126,7 @@ class AppRouter {
           final args = state.extra as QuestionPreviewParams;
 
           return BlocProvider(
-            create: (_) => QuestionsGenerationBloc(AppDependencies.saveQuestionsUseCase,),
+            create: (_) => QuestionsGenerationBloc(),
             child: QuestionsPreviewPage(
               topic: args.topic,
               note: args.note,
@@ -136,7 +147,7 @@ class AppRouter {
                 lazy: false,
                 create: (_){ 
                 debugPrint('CREATING QUESTIONS BLOC');
-                return QuestionsBloc(AppDependencies.getQuestionsUseCase,)..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
+                return QuestionsBloc(AppDependencies.getQuestionsUseCase,AppDependencies.saveQuestionsUseCase,)..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
               }),
               BlocProvider(
                 create: (_){

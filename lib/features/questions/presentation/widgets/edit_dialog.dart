@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_event.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
-void showAddEditDialog(BuildContext context, {QuestionEntity? existingQuestion}) {
+void showAddEditDialog(BuildContext context,  TopicEntity topic, {QuestionEntity? existingQuestion}) {
   final isEditing = existingQuestion != null;
   final questionController = TextEditingController(text: existingQuestion?.question ?? '');
   final answerController = TextEditingController(text: existingQuestion?.solution ?? '');
@@ -52,9 +53,9 @@ void showAddEditDialog(BuildContext context, {QuestionEntity? existingQuestion})
               );
 
               if (isEditing) {
-                context.read<QuestionsGenerationBloc>().add(UpdateQuestionEvent(newQuestion));
+                context.read<QuestionsBloc>().add(UpdateQuestionEvent(newQuestion));
               } else {
-                context.read<QuestionsGenerationBloc>().add(AddQuestionEvent(newQuestion));
+                context.read<QuestionsBloc>().add(AddQuestionEvent(projectId: '', topicId: '', question: newQuestion));
               }
 
               Navigator.of(dialogContext).pop();

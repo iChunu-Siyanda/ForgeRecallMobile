@@ -5,7 +5,7 @@ class GetTopicsQuestionsUseCase {
   final QuestionsRepository repository;
   GetTopicsQuestionsUseCase(this.repository);
 
-  Future<List<QuestionEntity>> call(String projectId, String topicId) {
+  Stream<List<QuestionEntity>> call(String projectId, String topicId) {
     return repository.getQuestions(projectId: projectId, topicId: topicId);
   }
 }

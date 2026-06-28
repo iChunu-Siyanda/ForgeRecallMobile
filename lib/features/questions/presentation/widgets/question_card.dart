@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_event.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/questions/presentation/widgets/edit_dialog.dart';
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 class QuestionCard extends StatelessWidget {
   final int index;
   final QuestionEntity question;
+  final TopicEntity topic;
 
   const QuestionCard({
     super.key,
     required this.index,
     required this.question,
+    required this.topic,
   });
 
   @override
@@ -51,14 +54,14 @@ class QuestionCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
-                  onPressed: () => showAddEditDialog(context, existingQuestion: question),
+                  onPressed: () => showAddEditDialog(context, topic, existingQuestion: question),
                   icon: const Icon(Icons.edit, size: 18),
                   label: const Text('Edit'),
                 ),
                 const SizedBox(width: 8),
                 TextButton.icon(
                   onPressed: () {
-                    context.read<QuestionsGenerationBloc>().add(DeleteQuestionEvent(question.id));
+                    context.read<QuestionsBloc>().add(DeleteQuestionEvent(question.id));
                   },
                   icon: const Icon(Icons.delete, size: 18, color: Colors.red),
                   label: const Text('Delete', style: TextStyle(color: Colors.red)),

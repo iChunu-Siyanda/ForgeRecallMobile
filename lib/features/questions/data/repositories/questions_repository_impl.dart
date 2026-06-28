@@ -9,7 +9,7 @@ class QuestionsRepositoryImpl implements QuestionsRepository {
   QuestionsRepositoryImpl(this.remoteDatasource,);
 
   @override
-  Future<List<QuestionEntity>> getQuestions({
+  Stream<List<QuestionEntity>> getQuestions({
     required String projectId,
     required String topicId,
   }) {

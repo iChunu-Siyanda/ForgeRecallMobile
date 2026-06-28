@@ -18,6 +18,14 @@ class QuestionsLoadedState extends QuestionsState {
   QuestionsLoadedState(this.topicQuestions);
 }
 
+class QuestionsSaving extends QuestionsState {
+    final List<QuestionEntity> questions;
+
+  QuestionsSaving(this.questions);
+}
+
+class QuestionsSaveSuccess extends QuestionsState {}
+
 class QuestionsErrorState extends QuestionsState {
   final String message;
 

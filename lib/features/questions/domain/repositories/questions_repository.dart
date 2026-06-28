@@ -7,7 +7,7 @@ abstract class QuestionsRepository {
     required List<QuestionEntity> questions,
   });
 
-  Future<List<QuestionEntity>> getQuestions({
+  Stream<List<QuestionEntity>> getQuestions({
     required String projectId,
     required String topicId,
   });

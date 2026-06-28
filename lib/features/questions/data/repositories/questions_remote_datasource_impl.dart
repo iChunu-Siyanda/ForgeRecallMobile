@@ -27,26 +27,26 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
   }
 
   @override
-  Future<List<QuestionEntity>> getQuestions({
+  Stream<List<QuestionEntity>> getQuestions({
     required String projectId,
     required String topicId,
-  }) async {
-    debugPrint('LOAD PROJECT: $projectId , should be equal to SAVE ROJECT ID.');
+  }) {
+    debugPrint('LOAD PROJECT: $projectId');
     debugPrint('LOAD TOPIC: $topicId');
 
-    final snapshot = await _questionsCollection(
+    return _questionsCollection(
       projectId,
       topicId,
-    ).get();
+    ).snapshots().map((snapshot) {
+      debugPrint('DOC COUNT: ${snapshot.docs.length}');
 
-    debugPrint('DOC COUNT: ${snapshot.docs.length}');
-
-    return snapshot.docs.map((doc) {
-      return QuestionModel.fromJson({
-        'id': doc.id,
-        ...doc.data(),
-      });
-    }).toList();
+      return snapshot.docs.map((doc) {
+        return QuestionModel.fromJson({
+          'id': doc.id,
+          ...doc.data(),
+        });
+      }).toList();
+    });
   }
 
   @override
@@ -61,6 +61,7 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
     final batch = firestore.batch();
 
     for (final question in questions) {
+      debugPrint("SAVE PROJECT INSIDE Questions: $projectId");
       final model = QuestionModel.fromEntity(question);
 
       final docRef = _questionRef(

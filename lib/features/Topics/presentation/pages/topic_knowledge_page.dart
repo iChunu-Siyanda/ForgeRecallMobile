@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_event.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/custom_questions_card.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/empty_knowledge_card.dart';
@@ -134,8 +133,8 @@ class TopicKnowledgePage extends StatelessWidget {
                       solution: answerController.text.trim(),
                     );
 
-                    context.read<QuestionsGenerationBloc>().add(
-                      AddQuestionEvent(question),
+                    context.read<QuestionsBloc>().add(
+                      AddQuestionEvent(question:question, projectId: topic.projectId, topicId: topic.id,),
                     );
 
                     Navigator.pop(context);

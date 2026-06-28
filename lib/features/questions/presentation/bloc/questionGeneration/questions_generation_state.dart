@@ -12,14 +12,6 @@ class QuestionsLoaded extends QuestionsGenerationState {
   QuestionsLoaded(this.questions);
 }
 
-class QuestionsSaving extends QuestionsGenerationState {
-    final List<QuestionEntity> questions;
-
-  QuestionsSaving(this.questions);
-}
-
-class QuestionsSaveSuccess extends QuestionsGenerationState {}
-
 class QuestionsError extends QuestionsGenerationState {
   final String message;
 
