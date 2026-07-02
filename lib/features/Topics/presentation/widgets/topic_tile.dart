@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
-import 'package:forge_recall/features/topics/presentation/widgets/topic_metric.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:your_app/theme/app_colours.dart'; 
 
 class TopicTile extends StatelessWidget {
   final TopicEntity topic;
@@ -13,153 +12,115 @@ class TopicTile extends StatelessWidget {
     required this.topic,
   });
 
-    @override
-    Widget build(BuildContext context) {
-      return GestureDetector(
-        onTap: () => context.go('/topicsKnowledgePage', extra: topic),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-            child: Container(
-              padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.05),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                      Colors.white.withValues(alpha: 0.06),
-                      Colors.white.withValues(alpha: 0.03),
-                    ],
-                  ),
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.go('/topicsKnowledgePage', extra: topic),
+      child: Container(
+        // Slimmer horizontal interior padding, reduced vertical footprint
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColours.surface, // Pure clean white workspace card
+          borderRadius: BorderRadius.circular(16), // Rounded but professional (not blocky)
+          border: Border.all(
+            color: AppColours.glassBorder,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF000000).withValues(alpha: 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ],
+        ),
+        child: Row(
+          children: [
+            // Left Action / Mastery Visual Element
+            Stack(
+              alignment: Alignment.center,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        topic.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 19,
-                          height: 1.3,
-                        ),
-                      ),
-                    ),  
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color:
-                            Colors.deepPurple.withValues(alpha: 0.15),
-                      ),
-                      child: Text(
-                        topic.cognitiveDifficulty.toString(),
-                        style: const TextStyle(
-                          color: Color(0xFFC4B5FD),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),  
-        
-                const SizedBox(height: 24),
-        
-                Row(
-                  children: [
-                    Expanded(
-                      child: TopicMetric(
-                        title: 'Mastery',
-                        value: '${topic.masteryScore}%',
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: TopicMetric(
-                        title: 'Questions',
-                        value: '${topic.questionCount}',
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                     const Expanded(
-                      child: TopicMetric(
-                        title: 'Pressure',
-                        value: 'Stable',
-                      ),
-                    ),
-                  ],
-                ),
-        
-                const SizedBox(height: 22),
-        
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: LinearProgressIndicator(
+                SizedBox(
+                  height: 40,
+                  width: 40,
+                  child: CircularProgressIndicator(
                     value: topic.masteryScore / 100,
-                    minHeight: 10,
-                    backgroundColor:
-                        Colors.white.withValues(alpha: 0.05),
-                    valueColor: const AlwaysStoppedAnimation(
-                      Color(0xFF8B5CF6),
-                    ),
+                    strokeWidth: 3.5,
+                    backgroundColor: AppColours.surfaceSecondary,
+                    valueColor: const AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
                   ),
                 ),
-        
-                const SizedBox(height: 20),
-        
-                    Row(
-                  children: [
-                    const Icon(
-                      Icons.bolt_rounded,
-                      color: Color(0xFF8B5CF6),
-                      size: 18,
-                    ),
-        
-                    const SizedBox(width: 8),
-        
-                    const Text(
-                      'Adaptive Recall Ready',
-                      style: TextStyle(
-                        color: Color(0xFFB6C2D1),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-        
-                    const Spacer(),
-        
-                    Container(
-                      height: 42,
-                      width: 42,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        color: Colors.white.withValues(alpha: 0.05),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Colors.white70,
-                        size: 20,
-                      ),
-                    ),
-                  ],
+                Text(
+                  '${topic.masteryScore}%',
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: AppColours.electricBlue,
+                  ),
                 ),
               ],
             ),
-          ),
+            const SizedBox(width: 16),
+
+            // Middle Column (Title + Minimal Inline Stats)
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    topic.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColours.textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      // Sub-pill for difficulty
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColours.surfaceSecondary,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          topic.cognitiveDifficulty.toString().split('.').last.toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColours.textSecondary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 9,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      // Inline Question Counter
+                      Text(
+                        '${topic.questionCount} Questions',
+                        style: const TextStyle(
+                          color: AppColours.textMuted,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            
+            // Right Arrow / Navigation indicator 
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppColours.textMuted,
+              size: 20,
+            ),
+          ],
         ),
       ),
     );
   }
-}  
+}

@@ -9,8 +9,7 @@ class UpdateTopicUseCase {
   Future<void> call(
     UpdateTopicParams params,
   ) async {
-    final existingTopic =
-        await repository.fetchTopicById(
+    final existingTopic = await repository.fetchTopicById(
       params.topicId, params.projectId,
     );
 

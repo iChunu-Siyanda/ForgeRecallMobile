@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:forge_recall/features/Topics/data/datasource/topic_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
-import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
   final FirebaseFirestore firestore;
@@ -16,19 +15,16 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
   }
 
   @override
-  Future<TopicEntity> fetchTopicById(
+  Future<TopicModel> fetchTopicById(
     String topicId, 
     String projectId,
   ) async {
-    // 1. Fetch the document snapshot from Firestore
     final snapshot = await _topicsRef(projectId).doc(topicId).get();
 
-    // 2. Check if the document actually exists
     if (!snapshot.exists || snapshot.data() == null) {
-      throw Exception("Topic not found"); 
-      // Or return a default value / handle errors according to your app's architecture
+      throw Exception("Topic not found");
     }
-
+    
     return TopicModel.fromJson(snapshot.data()!);
   }
 

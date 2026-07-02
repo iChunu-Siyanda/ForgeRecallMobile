@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/shared/app_dependencies.dart';
@@ -25,7 +24,6 @@ import 'package:forge_recall/features/search/presentation/pages/search_page.dart
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/features/today/presentation/pages/today_page.dart';
-import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/domain/usercases/create_topic.dart';
@@ -65,9 +63,7 @@ class AppRouter {
         path: '/projectDetail/:id',
         builder: (context, state) {
           final projectId = state.pathParameters['id']!;
-          final firestore = FirebaseFirestore.instance;
-          final datasource = TopicRemoteDatasourceImpl(firestore);
-          final topicRepository = TopicRepositoryImpl(datasource);
+          final topicRepository = TopicRepositoryImpl(AppDependencies.topicsDatasource, AppDependencies.questionsDatasource);
           final createTopic = CreateTopicUseCase(topicRepository); 
           final updateTopic = UpdateTopicUseCase(topicRepository);
           final getTopics = GetTopicsUseCase(topicRepository);

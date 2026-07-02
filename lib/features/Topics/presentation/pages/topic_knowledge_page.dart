@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/add_question_sheet.dart.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/custom_questions_card.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/empty_knowledge_card.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/material_summary_car.dart';
-import 'package:forge_recall/features/topics/presentation/widgets/topic_stats_card.dart';
+import 'package:forge_recall/features/topics/presentation/widgets/method_sheet.dart';
 import 'package:go_router/go_router.dart';
 
 class TopicKnowledgePage extends StatelessWidget {
@@ -23,51 +23,12 @@ class TopicKnowledgePage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
+      backgroundColor: AppColours.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (_) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 15,),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Choose Input Method',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-          
-                const SizedBox(height: 10),
-          
-                ListTile(
-                  leading: const Icon(Icons.edit_note),
-                  title: const Text('Type Notes'),
-                  subtitle: const Text(
-                    'Paste study material manually',
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.go('/notesInput',extra: topic,);
-                  },
-                ),
-          
-                ListTile(
-                  leading: const Icon(Icons.image),
-                  title: const Text('Upload Image'),
-                  subtitle: const Text('Coming Soon'),
-                  enabled: false,
-                ),
-          
-                ListTile(
-                  leading: const Icon(Icons.picture_as_pdf),
-                  title: const Text('Upload PDF'),
-                  subtitle: const Text('Coming Soon'),
-                  enabled: false,
-                ),
-          
-                const SizedBox(height: 8),
-              ],
-            ),
-          ),
-        );
+        return MethodSheet(topic: topic);
       },
     );
   }
@@ -79,141 +40,125 @@ class TopicKnowledgePage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-
+      backgroundColor: AppColours.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (_) {
         return Padding(
           padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            left: 24,
+            right: 24,
+            top: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
           ),
-
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-
-              Text(
-                'Add Custom Question',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: questionController,
-                decoration:const InputDecoration(
-                  labelText: 'Question',
-                  border: OutlineInputBorder(),
-                ),
-
-                maxLines: 3,
-              ),
-
-              const SizedBox(height: 16),
-
-              TextField(
-                controller: answerController,
-                decoration:  const InputDecoration(
-                  labelText: 'Answer',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 4,
-              ),
-
-              const SizedBox(height: 20),
-
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () {
-                    final question = QuestionEntity(
-                      id: DateTime.now().millisecondsSinceEpoch.toString(),
-                      question: questionController.text.trim(),
-                      solution: answerController.text.trim(),
-                    );
-
-                    context.read<QuestionsBloc>().add(
-                      AddQuestionEvent(question:question, projectId: topic.projectId, topicId: topic.id,),
-                    );
-
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    'Save Question',
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: AddQuestionSheet(questionController: questionController, answerController: answerController, topic: topic),
         );
       },
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
-        leading: IconButton(
-          onPressed: () { context.go('/projectDetail/${topic.projectId}');}, 
-          icon: Icon(Icons.arrow_back_ios),
+      backgroundColor: AppColours.background, // Clean ambient workspace background
+      appBar: AppBar(
+        backgroundColor: AppColours.surface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        shape: const Border(
+          bottom: BorderSide(
+            color: AppColours.glassBorder, 
+            width: 1,
+          ),
         ),
-        title: Text(topic.title),
+        leading: IconButton(
+          onPressed: () { 
+            context.go('/projectDetail/${topic.projectId}');
+          }, 
+          // Swapped to the modern, centered iOS arrow asset
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded, 
+            color: AppColours.textSecondary,
+            size: 18,
+          ),
+        ),
+        title: Text(
+          topic.title,
+          style: const TextStyle(
+            color: AppColours.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.4,
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: BlocBuilder<QuestionsBloc,QuestionsState>(
-          builder: (BuildContext context, QuestionsState state) {
-            if (state is QuestionsInitialState) {
-              return const Center(child: CircularProgressIndicator(),);
-            }
+      body: BlocBuilder<QuestionsBloc, QuestionsState>(
+        builder: (BuildContext context, QuestionsState state) {
+          if (state is QuestionsInitialState) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
+                strokeWidth: 3,
+              ),
+            );
+          }
 
-            if (state is QuestionsLoadedState) {
-              final questions = state.topicQuestions;
-              return Column(
+          if (state is QuestionsLoadedState) {
+            final questions = state.topicQuestions;
+            
+            return SingleChildScrollView(
+              // Consistent workspace padding gutters
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  questions.isEmpty ?
-                    EmptyKnowledgeCard(
-                      onAddMaterial: () {
-                        _showInputMethodSheet(context);
-                      },
-                    ) : MaterialSummaryCard(
+                  // Material Summary Card or Empty Slate Section
+                  questions.isEmpty 
+                      ? EmptyKnowledgeCard(
+                          onAddMaterial: () => _showInputMethodSheet(context),
+                        ) 
+                      : MaterialSummaryCard(
                           questionCount: questions.length,
                           onEditMaterial: () {
-                            context.go(
-                              '/notesInput',
-                              extra: topic,
-                            );
+                            context.go('/notesInput', extra: topic);
                           },
                           onPreviewQuestions: () {
-                            context.go(
-                              '/recall-session',
-                              extra: topic,
-                            );
+                            context.go('/recall-session', extra: topic);
                           },
                         ),
-                
-                  const SizedBox(height: 16),
               
+                  const SizedBox(height: 16),
+            
+                  // Bottom Actions Area
                   CustomQuestionsCard(
-                    onAddQuestion: () {_showAddQuestionSheet(context);},
+                    onAddQuestion: () => _showAddQuestionSheet(context),
                   ),
-              
-                  const SizedBox(height: 16),
-              
-                  const TopicStatsCard(),
                 ],
-              );
-            }
+              ),
+            );
+          }
 
-            if (state is QuestionsErrorState) {
-              return Center(child: Text(state.message, style: TextStyle(color: Colors.red),),);
-            }
+          if (state is QuestionsErrorState) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  state.message, 
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            );
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
+          return const SizedBox.shrink();
+        },
       ),
     );
   }

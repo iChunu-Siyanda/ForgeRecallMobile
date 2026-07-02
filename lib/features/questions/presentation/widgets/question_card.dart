@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_entity.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
@@ -20,51 +21,98 @@ class QuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColours.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColours.glassBorder, width: 1.5),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Question $index',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Question $index',
+                  style: const TextStyle(
+                    color: AppColours.textPrimary,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
                   ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
+                    color: AppColours.surfaceSecondary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.psychology_rounded,
+                    color: AppColours.geminiPurple,
+                    size: 18,
+                  ),
+                ),
+              ],
             ),
-            const Divider(height: 24, thickness: 1),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Divider(height: 1, thickness: 1, color: AppColours.glassBorder),
+            ),
             Text(
               question.question,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                color: AppColours.textPrimary,
+                fontSize: 15,
+                height: 1.4,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Answer:',
-              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+            Text(
+              'ANSWER',
+              style: TextStyle(
+                color: AppColours.textMuted,
+                fontSize: 11,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               question.solution,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(
+                color: AppColours.textSecondary,
+                fontSize: 14,
+                height: 1.4,
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
                   onPressed: () => showAddEditDialog(context, topic, existingQuestion: question),
-                  icon: const Icon(Icons.edit, size: 18),
-                  label: const Text('Edit'),
+                  icon: const Icon(Icons.edit_outlined, size: 16),
+                  label: const Text('Edit', style: TextStyle(fontWeight: FontWeight.w600)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColours.electricBlue,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 4),
                 TextButton.icon(
                   onPressed: () {
                     context.read<QuestionsBloc>().add(DeleteQuestionEvent(question.id));
                   },
-                  icon: const Icon(Icons.delete, size: 18, color: Colors.red),
-                  label: const Text('Delete', style: TextStyle(color: Colors.red)),
+                  icon: const Icon(Icons.delete_outline_rounded, size: 16),
+                  label: const Text('Delete', style: TextStyle(fontWeight: FontWeight.w600)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColours.crimson,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
                 ),
               ],
             )

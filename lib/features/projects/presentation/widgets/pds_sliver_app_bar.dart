@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:your_app/theme/app_colours.dart'; 
 
 class PdsSliverAppBar extends StatelessWidget {
   const PdsSliverAppBar({
@@ -13,14 +15,22 @@ class PdsSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 140,
+      expandedHeight: 120,
       pinned: true,
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColours.background,
       elevation: 0,
+      // Subtle bottom divider line matching Google/Gemini standards
+      shape: const Border(
+        bottom: BorderSide(
+          color: AppColours.glassBorder,
+          width: 1,
+        ),
+      ),
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back_ios_new_rounded,
-          color: Colors.white,
+          color: AppColours.textPrimary, // Swapped from white to off-black
+          size: 20,
         ),
         onPressed: () {
           if (context.canPop()) {
@@ -32,48 +42,20 @@ class PdsSliverAppBar extends StatelessWidget {
       ),
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.only(
-          left: 24,
-          bottom: 18,
+          left: 56, // Adjusted to clear back button neatly
+          bottom: 16,
         ),
         title: Text(
           project.title,
           style: const TextStyle(
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
+            fontWeight: FontWeight.w600, // Slightly cleaner weight for light mode
+            color: AppColours.textPrimary,
             fontSize: 18,
+            letterSpacing: -0.3,
           ),
         ),
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF111827),
-                    Color(0xFF070B14),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: -50,
-              right: -40,
-              child: Container(
-                height: 180,
-                width: 180,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.deepPurple.withValues(
-                    alpha: 0.18,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Removed the heavy decorative background stacks for workspace clarity
+        background: Container(color: AppColours.background),
       ),
     );
   }

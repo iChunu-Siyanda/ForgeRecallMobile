@@ -21,7 +21,7 @@ class AppDependencies {
 
   //Topics
   static final topicsDatasource = TopicRemoteDatasourceImpl(firestore,);
-  static final topicRepository = TopicRepositoryImpl(topicsDatasource);
+  static final topicRepository = TopicRepositoryImpl(topicsDatasource,questionsDatasource);
   static final createTopic = CreateTopicUseCase(topicRepository); 
   static final updateTopic = UpdateTopicUseCase(topicRepository);
   static final getTopics = GetTopicsUseCase(topicRepository);

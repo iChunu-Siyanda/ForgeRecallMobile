@@ -78,5 +78,4 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
       emit(TopicError(e.toString()));
     }
   }
-
 }

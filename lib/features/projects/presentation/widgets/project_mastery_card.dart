@@ -1,7 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
+// import 'package:your_app/theme/app_colours.dart'; 
 
 class ProjectMasteryCard extends StatelessWidget {
   final ProjectEntity project;
@@ -9,79 +9,71 @@ class ProjectMasteryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(30),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(30),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.06),
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.white.withValues(alpha: 0.07),
-                Colors.white.withValues(alpha: 0.03),
-              ],
-            ),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppColours.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColours.glassBorder, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF000000).withValues(alpha: 0.02),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
             children: [
-               const Row(
-                children: [
-                  Icon(
-                    Icons.psychology_alt_rounded,
-                    color: Color(0xFF8B5CF6),
-                    size: 24,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Mastery Analytics',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
+              Icon(
+                Icons.psychology_alt_rounded,
+                color: AppColours.violet, // Shifted away from bright deepPurple
+                size: 22,
               ),
-
-              const SizedBox(height: 24),
-
-              Row(
-                children: [
-                   Expanded(
-                    child: _MasteryMetric(
-                      title: 'Cognitive Strength',
-                      value:
-                          '${(project.masteryPercentage + 12).clamp(0, 100).toInt()}%',
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _MasteryMetric(
-                      title: 'Retention',
-                      value:
-                          '${(project.masteryPercentage - 8).clamp(0, 100).toInt()}%',
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _MasteryMetric(
-                      title: 'Recall Speed',
-                      value: '2.8s',
-                    ),
-                  ),
-                ],
+              SizedBox(width: 10),
+              Text(
+                'Mastery Analytics',
+                style: TextStyle(
+                  color: AppColours.textPrimary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  letterSpacing: -0.2,
+                ),
               ),
             ],
           ),
-        ),
+
+          const SizedBox(height: 18),
+
+          Row(
+            children: [
+              Expanded(
+                child: _MasteryMetric(
+                  title: 'Cognitive Strength',
+                  value: '${(project.masteryPercentage + 12).clamp(0, 100).toInt()}%',
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _MasteryMetric(
+                  title: 'Retention',
+                  value: '${(project.masteryPercentage - 8).clamp(0, 100).toInt()}%',
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: _MasteryMetric(
+                  title: 'Recall Speed',
+                  value: '2.8s',
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -96,39 +88,39 @@ class _MasteryMetric extends StatelessWidget {
     required this.value,
   });
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 18,
-        horizontal: 12,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
-        color: Colors.white.withValues(alpha: 0.04),
+        color: AppColours.background, // Uses light workspace grey tint as sub-tiles
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             value,
             style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-              fontSize: 20,
-                        ),
+              color: AppColours.textPrimary,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+            ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             title,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              color: Color(0xFF8B93A7),
-              fontSize: 12,
-              height: 1.5,
+              color: AppColours.textSecondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
       ),
     );
   }
-}  
+}
