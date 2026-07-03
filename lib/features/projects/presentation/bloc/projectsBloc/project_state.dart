@@ -6,13 +6,13 @@ abstract class ProjectState {
 }
 
 // ProjectInitial
-class ProjectInitialState extends ProjectState{
-  const ProjectInitialState();
+class ProjectsInitialState extends ProjectState{
+  const ProjectsInitialState();
 }
 
 // ProjectLoading
-class ProjectLoadingState extends ProjectState{
-  const ProjectLoadingState();
+class ProjectsLoadingState extends ProjectState{
+  const ProjectsLoadingState();
 }
 
 // ProjectsLoaded
@@ -21,15 +21,9 @@ class ProjectsLoadedState extends ProjectState{
   ProjectsLoadedState(this.projects);
 }
 
-//Project Loaded
-class ProjectLoadedState extends ProjectState{
-  final ProjectEntity project;
-  ProjectLoadedState(this.project);
-}
-
 // ProjectError
-class ProjectErrorState extends ProjectState{
+class ProjectsErrorState extends ProjectState{
   final String message;
 
-  const ProjectErrorState(this.message);
+  const ProjectsErrorState(this.message);
 }

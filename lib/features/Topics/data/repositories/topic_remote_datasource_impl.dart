@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:forge_recall/features/Topics/data/datasource/topic_remote_datasource.dart';
+import 'package:forge_recall/features/topics/data/datasource/topic_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
 
 class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {

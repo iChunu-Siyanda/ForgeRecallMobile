@@ -32,12 +32,9 @@ class PdsSliverAppBar extends StatelessWidget {
           color: AppColours.textPrimary, // Swapped from white to off-black
           size: 20,
         ),
-        onPressed: () {
-          if (context.canPop()) {
-            context.pop();
-          } else {
-            context.go('/projects');
-          }
+        onPressed: () { 
+          context.pop(); 
+          //context.go(AppRoutes.projects);
         },
       ),
       flexibleSpace: FlexibleSpaceBar(

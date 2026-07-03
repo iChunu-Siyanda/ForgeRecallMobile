@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:go_router/go_router.dart';
 
@@ -136,32 +137,32 @@ class _MainNavigationState extends State<MainNavigation> {
                       _DrawerItem(
                         icon: Icons.search_rounded,
                         label: 'Search Workspace',
-                        selected: currentRoute == '/search',
-                        onTap: () => _navigate(context, '/search'),
+                        selected: currentRoute == AppRoutes.search,
+                        onTap: () => _navigate(context, AppRoutes.search),
                       ),
                       _DrawerItem(
                         icon: Icons.local_fire_department_rounded,
                         label: 'Today Focus',
-                        selected: currentRoute == '/today',
-                        onTap: () => _navigate(context, '/today'),
+                        selected: currentRoute == AppRoutes.today,
+                        onTap: () => _navigate(context, AppRoutes.today),
                       ),
                       _DrawerItem(
                         icon: Icons.library_books_rounded,
                         label: 'Knowledge Library',
-                        selected: currentRoute == '/library',
-                        onTap: () => _navigate(context, '/library'),
+                        selected: currentRoute == AppRoutes.library,
+                        onTap: () => _navigate(context, AppRoutes.library),
                       ),
                       _DrawerItem(
                         icon: Icons.folder_open_rounded,
                         label: 'Projects Index',
-                        selected: currentRoute == '/projects',
-                        onTap: () => _navigate(context, '/projects'),
+                        selected: currentRoute == AppRoutes.projects,
+                        onTap: () => _navigate(context, AppRoutes.projects),
                       ),
                       _DrawerItem(
                         icon: Icons.analytics_rounded,
                         label: 'Analytics Dashboard',
-                        selected: currentRoute == '/analytics',
-                        onTap: () => _navigate(context, '/analytics'),
+                        selected: currentRoute == AppRoutes.analytics,
+                        onTap: () => _navigate(context, AppRoutes.analytics),
                       ),
                     ],
                   ),
@@ -177,8 +178,8 @@ class _MainNavigationState extends State<MainNavigation> {
                 _DrawerItem(
                   icon: Icons.person_rounded,
                   label: 'User Profile',
-                  selected: currentRoute == '/profile',
-                  onTap: () => _navigate(context, '/profile'),
+                  selected: currentRoute == AppRoutes.profile,
+                  onTap: () => _navigate(context, AppRoutes.profile),
                 ),
                 const SizedBox(height: 12),
               ],

@@ -9,6 +9,7 @@ import 'package:forge_recall/features/auth/presentation/page/login_page.dart';
 import 'package:forge_recall/features/auth/presentation/page/register_page.dart';
 import 'package:forge_recall/features/library/presentation/pages/library_page.dart';
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/pages/project_detail_screen.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_preview_params.dart';
@@ -61,12 +62,15 @@ class AppRouter {
           final projectId = state.pathParameters['id']!;
           
 
-          return BlocProvider(
-            create: (_) => getIt<TopicBloc>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<TopicBloc>(),),
+              BlocProvider(create: (_) => getIt<ProjectDetailBloc>(),),
+            ],
             child: ProjectDetailScreen(
               projectId: projectId,
-            ),
-          );
+            )
+          ,);
         },
       ),
 

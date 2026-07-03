@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:forge_recall/features/projects/domain/entities/create_project_params.dart';
-import '../bloc/project_bloc.dart';
-import '../bloc/project_event.dart';
+import '../bloc/projectsBloc/project_bloc.dart';
+import '../bloc/projectsBloc/project_event.dart';
 
 class CreateProjectModal extends StatefulWidget {
   const CreateProjectModal({super.key, required this.projectBloc});

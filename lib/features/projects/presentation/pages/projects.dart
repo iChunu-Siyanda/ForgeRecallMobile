@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_bloc.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_event.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_state.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/fab_create_project_modal.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_card.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_section_title.dart';
@@ -78,7 +78,8 @@ class _ProjectsState extends State<Projects> {
       floatingActionButton: FabCreateProjectModal(projectBloc: projectBloc),
       body: BlocBuilder<ProjectBloc, ProjectState>(
         builder: (context, state) {
-          if (state is ProjectLoadingState) {
+          debugPrint("Current state: ${state.runtimeType}");
+          if (state is ProjectsLoadingState) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
@@ -87,6 +88,7 @@ class _ProjectsState extends State<Projects> {
           }
             
           if (state is ProjectsLoadedState) {
+            debugPrint("Project count: ${state.projects.length}");
             final projects = state.projects;
 
             return CustomScrollView(
@@ -224,7 +226,7 @@ class _ProjectsState extends State<Projects> {
             );
           }
             
-          if (state is ProjectErrorState) {
+          if (state is ProjectsErrorState) {
             debugPrint('PROJECTS ERROR: ${state.message}'); 
             
             return Center(

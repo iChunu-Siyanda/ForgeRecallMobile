@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/create_project_modal.dart';
 
 class FabCreateProjectModal extends StatelessWidget {

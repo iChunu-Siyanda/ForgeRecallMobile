@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_event.dart';
-import 'package:forge_recall/features/projects/presentation/bloc/project_state.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_bloc.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_event.dart';
+import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_state.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/pds_floating_action_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/pds_hero_section.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/pds_sliver_app_bar.dart';
@@ -12,8 +12,6 @@ import 'package:forge_recall/features/topics/presentation/bloc/topic_event.dart'
 import 'package:forge_recall/features/topics/presentation/bloc/topics_state.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_empty_state.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_tile.dart';
-// Assuming AppColours is imported from your theme directory:
-// import 'package:your_app/theme/app_colours.dart'; 
 
 class ProjectDetailScreen extends StatefulWidget {
   const ProjectDetailScreen({
@@ -31,7 +29,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ProjectBloc>().add(GetSingleProjectEvent(widget.projectId));
+    context.read<ProjectDetailBloc>().add(GetSingleProjectEvent(widget.projectId));
     context.read<TopicBloc>().add(LoadTopics(widget.projectId));
   }
 
@@ -40,7 +38,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     return Scaffold(
       backgroundColor: AppColours.background,
       floatingActionButton: PdsFloatingActionBtn(widget: widget),
-      body: BlocBuilder<ProjectBloc, ProjectState>(
+      body: BlocBuilder<ProjectDetailBloc, ProjectDetailState>(
         builder: (context, projectState) {
           if (projectState is ProjectLoadingState) {
             return const Center(

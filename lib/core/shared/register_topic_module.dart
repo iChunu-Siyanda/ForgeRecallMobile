@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:forge_recall/features/questions/data/datasource/questions_remote_datasource.dart';
-import 'package:forge_recall/features/questions/data/repositories/questions_remote_datasource_impl.dart';
+import 'package:forge_recall/features/topics/data/datasource/topic_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
@@ -16,19 +16,15 @@ final getIt = GetIt.instance;
 
 void registerTopicModule() {
   //Datasources
-  getIt.registerLazySingleton<TopicRemoteDatasourceImpl>(
+  getIt.registerLazySingleton<TopicRemoteDatasource>(
     () => TopicRemoteDatasourceImpl(getIt<FirebaseFirestore>(),),
-  );
-
-  getIt.registerLazySingleton<QuestionsRemoteDatasource>(
-    () => QuestionsRemoteDatasourceImpl(getIt<FirebaseFirestore>(),),
   );
 
   //Repositories
   getIt.registerLazySingleton<TopicRepository>(
     () => TopicRepositoryImpl(
-      getIt(),
-      getIt(),
+      getIt<TopicRemoteDatasource>(),
+      getIt<QuestionsRemoteDatasource>(),
     ),
   );
   

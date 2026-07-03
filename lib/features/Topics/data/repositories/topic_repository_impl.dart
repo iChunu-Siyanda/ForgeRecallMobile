@@ -1,13 +1,13 @@
-import 'package:forge_recall/features/questions/data/repositories/questions_remote_datasource_impl.dart';
+import 'package:forge_recall/features/questions/data/datasource/questions_remote_datasource.dart';
+import 'package:forge_recall/features/topics/data/datasource/topic_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
-import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TopicRepositoryImpl implements TopicRepository{
-  final TopicRemoteDatasourceImpl repository;
-  final QuestionsRemoteDatasourceImpl questionRepository;
+  final TopicRemoteDatasource repository;
+  final QuestionsRemoteDatasource questionRepository;
   TopicRepositoryImpl(this.repository, this.questionRepository);
 
   @override
