@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:go_router/go_router.dart';
@@ -15,13 +16,12 @@ class TopicTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.go('/topicsKnowledgePage', extra: topic),
+      onTap: () => context.push(AppRoutes.topicKnowledge, extra: topic),
       child: Container(
-        // Slimmer horizontal interior padding, reduced vertical footprint
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: AppColours.surface, // Pure clean white workspace card
-          borderRadius: BorderRadius.circular(16), // Rounded but professional (not blocky)
+          color: AppColours.surface, 
+          borderRadius: BorderRadius.circular(16), 
           border: Border.all(
             color: AppColours.glassBorder,
             width: 1,
@@ -112,7 +112,6 @@ class TopicTile extends StatelessWidget {
               ),
             ),
             
-            // Right Arrow / Navigation indicator 
             const Icon(
               Icons.chevron_right_rounded,
               color: AppColours.textMuted,

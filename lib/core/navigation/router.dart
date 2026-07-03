@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/shared/app_dependencies.dart';
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase.dart';
@@ -37,30 +38,30 @@ import 'package:go_router/go_router.dart';
 class AppRouter {
 
   static final router = GoRouter(
-    initialLocation: '/',
+    initialLocation: AppRoutes.splash,
     routes: [
-      GoRoute(path: '/', builder: (context, state) => const Splash()),
+      GoRoute(path: AppRoutes.splash, builder: (context, state) => const Splash()),
 
-      GoRoute(path: '/auth', builder: (context, state) => const AuthFirebase()),
+      GoRoute(path: AppRoutes.auth, builder: (context, state) => const AuthFirebase()),
 
       GoRoute(
-        path: '/login_page',
+        path: AppRoutes.login,
         builder: (context, state) => const LoginPage(),
       ),
 
       GoRoute(
-        path: '/register_page',
+        path: AppRoutes.register,
         builder: (context,state) => const RegisterPage(),
       ),
 
       GoRoute(
-        path: '/forgot_password_page',
+        path: AppRoutes.forgotPassword,
         builder: (context, state) => const ForgotPasswordPage(),
       ),
 
       //1.
       GoRoute(
-        path: '/projectDetail/:id',
+        path: AppRoutes.projectDetail(':id'),
         builder: (context, state) {
           final projectId = state.pathParameters['id']!;
           final topicRepository = TopicRepositoryImpl(AppDependencies.topicsDatasource, AppDependencies.questionsDatasource);
@@ -85,7 +86,7 @@ class AppRouter {
 
       //2.
       GoRoute(
-        path: '/topicsKnowledgePage',
+        path: AppRoutes.topicKnowledge,
         builder: (context, state) {
           final topic = state.extra as TopicEntity;
 
@@ -105,7 +106,7 @@ class AppRouter {
 
       //3.
       GoRoute(
-        path: '/notesInput',
+        path: AppRoutes.notesInput,
         builder: (context, state) {
           final topic = state.extra as TopicEntity;
 
@@ -117,7 +118,7 @@ class AppRouter {
 
       //4.
       GoRoute(
-        path: '/questionsPreviewPage',
+        path: AppRoutes.previewQuestions,
         builder: (context, state) {
           final args = state.extra as QuestionPreviewParams;
 
@@ -133,7 +134,7 @@ class AppRouter {
 
       //5.
       GoRoute(
-        path: '/recall-session',
+        path: AppRoutes.recallSession,
         builder: (context, state) {
           final topic = state.extra as TopicEntity;
           debugPrint('TOPIC: ${topic.title}');
@@ -158,7 +159,7 @@ class AppRouter {
       ),
 
       GoRoute(
-        path: '/session-complete',
+        path: AppRoutes.sessionComplete,
         builder: (context, state) {
           final result = state.extra as RecallLabCompleted;
 
@@ -180,42 +181,42 @@ class AppRouter {
 
         routes: [
           GoRoute(
-            path: '/projects',
+            path: AppRoutes.projects,
             builder: (context, state) {
               return Projects();
             },
           ),
 
           GoRoute(
-            path: '/search',
+            path: AppRoutes.search,
             builder: (context, state) {
               return const SearchPage();
             },
           ),
 
           GoRoute(
-            path: '/today',
+            path: AppRoutes.today,
             builder: (context, state) {
               return const TodayPage();
             },
           ),
 
           GoRoute(
-            path: '/library',
+            path: AppRoutes.library,
             builder: (context, state) {
               return const LibraryPage();
             },
           ),
 
           GoRoute(
-            path: '/analytics',
+            path: AppRoutes.analytics,
             builder: (context, state) {
               return const Analytics();
             },
           ),
 
           GoRoute(
-            path: '/profile',
+            path: AppRoutes.profile,
             builder: (context, state) {
               return const Profile();
             },

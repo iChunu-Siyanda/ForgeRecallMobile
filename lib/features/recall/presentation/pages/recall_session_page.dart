@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
@@ -47,7 +48,6 @@ class RecallSessionPage extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.close_rounded, color: AppColours.textSecondary, size: 24),
             onPressed: () {
-              // Gracefully drop back out of workspace session
               context.pop();
             },
           ),
@@ -98,7 +98,7 @@ class RecallSessionPage extends StatelessWidget {
               return BlocConsumer<RecallLabBloc, RecallLabState>(
                 listener: (context, state) {
                   if (state is RecallLabCompleted) {
-                    context.go('/session-complete', extra: state);
+                    context.go(AppRoutes.sessionComplete, extra: state);
                   }
                 },
                 builder: (context, state) {

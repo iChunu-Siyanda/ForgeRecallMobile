@@ -38,10 +38,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 1. Updated to Gemini light workspace background
       backgroundColor: AppColours.background,
-      
-      // 2. Transformed addTopic button into an elegant standard FloatingActionButton with the signature gradient
       floatingActionButton: PdsFloatingActionBtn(widget: widget),
       body: BlocBuilder<ProjectBloc, ProjectState>(
         builder: (context, projectState) {

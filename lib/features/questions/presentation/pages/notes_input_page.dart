@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_preview_params.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
@@ -59,7 +60,7 @@ class _NotesInputPageState extends State<NotesInputPage> {
       return;
     }
     
-    context.go('/questionsPreviewPage', extra: QuestionPreviewParams(topic: widget.topic, note: notes),);
+    context.push(AppRoutes.previewQuestions, extra: QuestionPreviewParams(topic: widget.topic, note: notes),);
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -85,7 +86,7 @@ class _NotesInputPageState extends State<NotesInputPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColours.textPrimary, size: 20),
           onPressed: () {
-            context.go('/topicsKnowledgePage', extra: widget.topic);
+            context.pop();
           },
         ),
         title: Text(

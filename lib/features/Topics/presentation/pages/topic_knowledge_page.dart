@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
@@ -75,7 +76,7 @@ class TopicKnowledgePage extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: () { 
-            context.go('/projectDetail/${topic.projectId}');
+            context.pop();
           }, 
           // Swapped to the modern, centered iOS arrow asset
           icon: const Icon(
@@ -122,10 +123,10 @@ class TopicKnowledgePage extends StatelessWidget {
                       : MaterialSummaryCard(
                           questionCount: questions.length,
                           onEditMaterial: () {
-                            context.go('/notesInput', extra: topic);
+                            context.push(AppRoutes.notesInput, extra: topic);
                           },
                           onPreviewQuestions: () {
-                            context.go('/recall-session', extra: topic);
+                            context.push(AppRoutes.recallSession, extra: topic);
                           },
                         ),
               

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:forge_recall/app/router.dart';
+import 'package:forge_recall/core/navigation/router.dart';
 import 'package:forge_recall/features/projects/data/repositories/project_remote_data_source_impl.dart';
 import 'package:forge_recall/features/projects/data/repositories/project_repository_impl.dart';
 import 'package:forge_recall/features/projects/domain/usercases/create_project.dart';

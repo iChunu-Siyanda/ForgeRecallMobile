@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
@@ -50,7 +51,7 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
       listener: (context, state) {
         debugPrint('QuestionsPreviewPage: ${state.runtimeType}');
         if (state is QuestionsSaveSuccess) {
-          context.go('/recall-session', extra: widget.topic);
+          context.push(AppRoutes.recallSession, extra: widget.topic);
         }
 
         if (state is QuestionsErrorState) {
@@ -80,7 +81,7 @@ class _QuestionsPreviewPageState extends State<QuestionsPreviewPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColours.textPrimary, size: 20),
             onPressed: () {
-              context.go('/notesInput', extra: widget.topic);
+              context.pop();
             },
           ),
           title: const Text(

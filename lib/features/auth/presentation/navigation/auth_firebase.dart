@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/login_or_register.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +20,7 @@ class AuthFirebase extends StatelessWidget {
           //Home page if user logged in
           if (snapshot.hasData){
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              context.go('/projects');
+              context.go(AppRoutes.projects);
             });
             
             return const Center(child: CircularProgressIndicator());

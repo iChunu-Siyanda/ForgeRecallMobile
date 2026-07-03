@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:go_router/go_router.dart';
 
@@ -197,7 +198,6 @@ class SessionCompletePage extends StatelessWidget {
 
               const SizedBox(height: 40),
 
-              // Execution Action Buttons Block
               Container(
                 width: double.infinity,
                 height: 52,
@@ -233,7 +233,7 @@ class SessionCompletePage extends StatelessWidget {
                 height: 52,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    context.go('/projects');
+                    context.go(AppRoutes.projects);
                   },
                   icon: const Icon(Icons.home_outlined, size: 20),
                   label: const Text(

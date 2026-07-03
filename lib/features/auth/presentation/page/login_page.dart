@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/auth_background.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/my_button.dart';
 import 'package:forge_recall/features/auth/presentation/widgets/my_text_field.dart';
@@ -103,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () {
-                  context.go('/forgot_password_page');
+                  context.go(AppRoutes.forgotPassword);
                 },
                 child: const Text(
                   "Forgot password?",

@@ -2,6 +2,7 @@ import 'dart:ui'; // Crucial for ImageFilter blur effects
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/project_bloc.dart';
@@ -197,7 +198,7 @@ class _ProjectsState extends State<Projects> {
                             padding: const EdgeInsets.only(bottom: 14),
                             child: GestureDetector(
                               onTap: () {
-                                context.go('/projectDetail/${project.id}');
+                                context.push(AppRoutes.projectDetail(project.id));
                               },
                               child: ProjectCard(
                                 title: project.title,
