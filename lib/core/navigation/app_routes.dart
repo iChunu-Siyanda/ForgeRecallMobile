@@ -11,6 +11,7 @@ class AppRoutes {
 
   //Projects
   static const projects = '/projects';
+  static const projectDetailRoute = '/project-detail/:id';
   static String projectDetail(String id) => '/project-detail/$id';
   static const topicKnowledge = '/topic-knowledge';
   static const notesInput = '/notes-input';

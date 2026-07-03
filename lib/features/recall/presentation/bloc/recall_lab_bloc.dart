@@ -64,15 +64,12 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
       RecallLabLoaded(
         questions: current.questions,
         currentIndex: current.currentIndex,
-        answerRevealed:
-            current.answerRevealed,
+        answerRevealed: current.answerRevealed,
         forgotCount: event.rating == RecallRating.forgot
                 ? current.forgotCount + 1 : current.forgotCount,
-        partialCount:
-            event.rating == RecallRating.partial
+        partialCount: event.rating == RecallRating.partial
                 ? current.partialCount + 1 : current.partialCount,
-        easyCount:
-            event.rating ==RecallRating.easy
+        easyCount: event.rating ==RecallRating.easy
                 ? current.easyCount + 1 : current.easyCount,
       ),
     );

@@ -37,6 +37,7 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
       onData: (topics) => TopicLoaded(topics),
       onError: (error, stackTrace) {
         debugPrint('TopicBloc getTopics FIREBASE ERROR: $error'); 
+        debugPrint('STACK TRACE:\n$stackTrace');
         return TopicError(error.toString()); 
       },
     ); 

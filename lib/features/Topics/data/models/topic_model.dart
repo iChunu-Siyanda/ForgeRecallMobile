@@ -63,21 +63,14 @@ class TopicModel extends TopicEntity {
   Map<String, dynamic> toJson() {
     return {
       'projectId': projectId,
-
       'title': title,
       'content': content,
-
       'masteryScore': masteryScore,
-
       'questionCount': questionCount,
-
       'estimatedReadTime': estimatedReadTime,
-
       'cognitiveDifficulty': cognitiveDifficulty,
-
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
   }
-  
 }

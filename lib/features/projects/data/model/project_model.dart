@@ -16,13 +16,13 @@ class ProjectModel extends ProjectEntity {
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) {
     return ProjectModel(
-      id: json['id'],
-      title: json['title'],
-      description: json['description'],
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
       masteryPercentage: (json['masteryPercentage'] as num).toDouble(),
       totalTopics: json['totalTopics'],
-      totalQuestions: json['totalQuestions'],
-      userId: json['userId'],
+      totalQuestions: json['totalQuestions'] ,
+      userId: json['userId'] as String,
       createdAt: json['createdAt'] != null
         ? json['createdAt'].toDate()
         : DateTime.now(),

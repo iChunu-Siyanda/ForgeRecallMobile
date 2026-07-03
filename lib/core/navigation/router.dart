@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
-import 'package:forge_recall/core/shared/app_dependencies.dart';
+import 'package:forge_recall/core/shared/register_firebase_module.dart';
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_firebase.dart';
 import 'package:forge_recall/features/auth/presentation/page/forgot_password_page.dart';
@@ -25,12 +25,7 @@ import 'package:forge_recall/features/search/presentation/pages/search_page.dart
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/features/today/presentation/pages/today_page.dart';
-import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
-import 'package:forge_recall/features/topics/domain/usercases/create_topic.dart';
-import 'package:forge_recall/features/topics/domain/usercases/delete_topic.dart';
-import 'package:forge_recall/features/topics/domain/usercases/get_topics.dart';
-import 'package:forge_recall/features/topics/domain/usercases/update_topic.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
 import 'package:forge_recall/features/topics/presentation/pages/topic_knowledge_page.dart';
 import 'package:go_router/go_router.dart';
@@ -61,22 +56,13 @@ class AppRouter {
 
       //1.
       GoRoute(
-        path: AppRoutes.projectDetail(':id'),
+        path: AppRoutes.projectDetailRoute,
         builder: (context, state) {
           final projectId = state.pathParameters['id']!;
-          final topicRepository = TopicRepositoryImpl(AppDependencies.topicsDatasource, AppDependencies.questionsDatasource);
-          final createTopic = CreateTopicUseCase(topicRepository); 
-          final updateTopic = UpdateTopicUseCase(topicRepository);
-          final getTopics = GetTopicsUseCase(topicRepository);
-          final deleteTopic = DeleteTopicUseCase(topicRepository);
+          
 
           return BlocProvider(
-            create: (_) => TopicBloc.name(
-              createTopic: createTopic, 
-              updateTopic: updateTopic, 
-              getTopics: getTopics, 
-              deleteTopic: deleteTopic,
-            ),
+            create: (_) => getIt<TopicBloc>(),
             child: ProjectDetailScreen(
               projectId: projectId,
             ),
@@ -93,7 +79,7 @@ class AppRouter {
           return MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) => QuestionsBloc(AppDependencies.getQuestionsUseCase,AppDependencies.saveQuestionsUseCase,)..add(QuestionsLoadedEvent(topic.projectId,topic.id)),
+                create: (_) => getIt<QuestionsBloc>()..add(QuestionsLoadedEvent(topic.projectId,topic.id)),
               ),
               BlocProvider(
                 create: (_) => QuestionsGenerationBloc()
@@ -144,7 +130,7 @@ class AppRouter {
                 lazy: false,
                 create: (_){ 
                 debugPrint('CREATING QUESTIONS BLOC');
-                return QuestionsBloc(AppDependencies.getQuestionsUseCase,AppDependencies.saveQuestionsUseCase,)..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
+                return getIt<QuestionsBloc>()..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
               }),
               BlocProvider(
                 create: (_){
