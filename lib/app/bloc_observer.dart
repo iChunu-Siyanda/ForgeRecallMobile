@@ -1,0 +1,1 @@
+//Bloc -> usecase -> repository -> datasource -> Firebase(or any backend).
