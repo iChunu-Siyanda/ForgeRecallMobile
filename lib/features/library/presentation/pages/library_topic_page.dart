@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:forge_recall/features/library/domain/entities/library_filter.dart';
+import 'package:forge_recall/core/shared/entites/topic_filter.dart';
 import 'package:forge_recall/features/library/presentation/widgets/library_topic_card.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 class LibraryTopicsPage extends StatelessWidget {
   final String title;
-  final LibraryFilter filter;
+  final TopicFilter filter;
 
   const LibraryTopicsPage({
     super.key,

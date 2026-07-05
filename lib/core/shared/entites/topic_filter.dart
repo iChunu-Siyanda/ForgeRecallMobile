@@ -1,4 +1,4 @@
-enum LibraryFilter {
+enum TopicFilter {
   allTopics,
   favorites,
   recent,

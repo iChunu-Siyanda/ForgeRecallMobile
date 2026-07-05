@@ -3,6 +3,7 @@ import 'package:forge_recall/features/library/presentation/widgets/continue_stud
 import 'package:forge_recall/features/library/presentation/widgets/library_tile.dart';
 
 class LibraryPage extends StatelessWidget {
+  //LibraryPage -> LibraryBloc -> GetLibraryUseCase -> TopicRepository -> Firestore
   const LibraryPage({super.key});
 
   @override

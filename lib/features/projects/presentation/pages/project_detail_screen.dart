@@ -7,6 +7,7 @@ import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBl
 import 'package:forge_recall/features/projects/presentation/widgets/pds_floating_action_button.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/pds_hero_section.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/pds_sliver_app_bar.dart';
+import 'package:forge_recall/core/shared/entites/topic_query.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_event.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topics_state.dart';
@@ -30,7 +31,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   void initState() {
     super.initState();
     context.read<ProjectDetailBloc>().add(GetSingleProjectEvent(widget.projectId));
-    context.read<TopicBloc>().add(LoadTopics(widget.projectId));
+    context.read<TopicBloc>().add(LoadTopics(TopicQuery(projectId: widget.projectId)));
   }
 
   @override

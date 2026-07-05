@@ -33,7 +33,7 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
     emit(TopicLoading());
 
     await emit.forEach(
-      getTopics(event.projectId), 
+      getTopics(event.query), 
       onData: (topics) => TopicLoaded(topics),
       onError: (error, stackTrace) {
         debugPrint('TopicBloc getTopics FIREBASE ERROR: $error'); 

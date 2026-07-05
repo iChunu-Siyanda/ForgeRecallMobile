@@ -1,3 +1,4 @@
+import 'package:forge_recall/core/shared/entites/topic_query.dart';
 import 'package:forge_recall/features/questions/data/datasource/questions_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/datasource/topic_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
@@ -22,31 +23,31 @@ class TopicRepositoryImpl implements TopicRepository{
   }
 
   @override
-  Stream<List<TopicEntity>> getTopics(String projectId) {
-    // 1. Fetch your raw database stream of topics just like before
-    return repository.getTopics(projectId).switchMap((List<TopicEntity> rawTopics) {
-      if (rawTopics.isEmpty) {
-        return Stream.value(<TopicEntity>[]);
-      }
+  Stream<List<TopicEntity>> getTopics(
+    TopicQuery query,
+  ) {
+    return repository
+        .getTopics(query)
+        .switchMap((rawTopics) {
+          if (rawTopics.isEmpty) {
+            return Stream.value(<TopicEntity>[]);
+          }
 
-      // 2. Loop through the list to look up corresponding questions streams
-      final combinedTopicStreams = rawTopics.map((topic) {
-          return questionRepository.getQuestions(
-            projectId: projectId,
-            topicId: topic.id,
-          )
-          .map((questions) {
-            final count = questions.length;
+          final topicStreams = rawTopics.map((topic) {
+            return questionRepository
+                .getQuestions(
+                  projectId: topic.projectId,
+                  topicId: topic.id,
+                )
+                .map((questions) {
+                  return topic.copyWith(
+                    questionCount: questions.length,
+                  );
+                });
+          }).toList();
 
-            return topic.copyWith(
-              questionCount: count,
-            );
-          });
-      }).toList();
-
-      // 3. Flatten them back into a single clean Stream<List<TopicEntity>>
-      return Rx.combineLatestList(combinedTopicStreams);
-    });
+          return Rx.combineLatestList(topicStreams);
+        });
   }
 
   @override

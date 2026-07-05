@@ -1,8 +1,9 @@
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
+import 'package:forge_recall/core/shared/entites/topic_query.dart';
 
 abstract class TopicRemoteDatasource {
   Stream<List<TopicModel>> getTopics(
-    String projectId,
+    TopicQuery query,
   );
 
   Future<TopicModel> fetchTopicById(

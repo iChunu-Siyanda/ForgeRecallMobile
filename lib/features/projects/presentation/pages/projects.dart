@@ -12,6 +12,7 @@ import 'package:forge_recall/features/projects/presentation/widgets/fab_create_p
 import 'package:forge_recall/features/projects/presentation/widgets/project_card.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/project_section_title.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/projects_header.dart';
+import 'package:forge_recall/core/shared/entites/topic_query.dart';
 import 'package:go_router/go_router.dart';
 
 class Projects extends StatefulWidget {
@@ -200,7 +201,7 @@ class _ProjectsState extends State<Projects> {
                             padding: const EdgeInsets.only(bottom: 14),
                             child: GestureDetector(
                               onTap: () {
-                                context.push(AppRoutes.projectDetail(project.id));
+                                context.push(AppRoutes.projectDetail(TopicQuery(projectId: project.id).projectId!));
                               },
                               child: ProjectCard(
                                 title: project.title,

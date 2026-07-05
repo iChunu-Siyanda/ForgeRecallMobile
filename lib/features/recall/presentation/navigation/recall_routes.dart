@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
-import 'package:forge_recall/core/shared/register_firebase_module.dart';
+import 'package:forge_recall/core/shared/registrations/register_firebase_module.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';

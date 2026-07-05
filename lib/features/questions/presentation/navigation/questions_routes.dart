@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
-import 'package:forge_recall/core/shared/register_projects_module.dart';
+import 'package:forge_recall/core/shared/registrations/register_projects_module.dart';
 import 'package:forge_recall/features/questions/domain/entities/question_preview_params.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionGeneration/questions_generation_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/pages/notes_input_page.dart';
