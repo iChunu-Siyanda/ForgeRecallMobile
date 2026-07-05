@@ -1,6 +1,7 @@
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/navigation/shell_routes.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_routes.dart';
+import 'package:forge_recall/features/library/presentation/navigation/library_routes.dart';
 import 'package:forge_recall/features/questions/presentation/navigation/questions_routes.dart';
 import 'package:forge_recall/features/recall/presentation/navigation/recall_routes.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
@@ -24,7 +25,8 @@ class AppRouter {
 
       ...RecallRoutes.routes,
 
-      //NEXT
+      //Library
+      ...LibraryRoutes.routes,
      
       ShellRoute(
         builder: (context, state, child) {
