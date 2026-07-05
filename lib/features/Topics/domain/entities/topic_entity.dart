@@ -7,6 +7,9 @@ class TopicEntity {
   final int questionCount;
   final int estimatedReadTime;
   final double cognitiveDifficulty;
+  final bool isFavorite;
+  final DateTime? lastStudiedAt;
+  final int studyCount;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -20,7 +23,10 @@ class TopicEntity {
     required this.estimatedReadTime,
     required this.cognitiveDifficulty,
     required this.createdAt,
-    required this.updatedAt,
+    required this.updatedAt, 
+    required this.isFavorite, 
+    this.lastStudiedAt, 
+    required this.studyCount,
   });
 
   TopicEntity copyWith({
@@ -31,6 +37,9 @@ class TopicEntity {
     int? estimatedReadTime,
     double? cognitiveDifficulty,
     DateTime? updatedAt,
+    DateTime? lastStudiedAt,
+    bool? isFavorite,
+    int? studyCount,
   }) {
     return TopicEntity(
       id: id,
@@ -44,7 +53,9 @@ class TopicEntity {
       cognitiveDifficulty:
           cognitiveDifficulty ?? this.cognitiveDifficulty,
       createdAt: createdAt,
-      updatedAt: updatedAt ?? DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(), 
+      isFavorite: isFavorite ?? this.isFavorite, 
+      studyCount: studyCount ?? this.studyCount,
     );
   }
 }

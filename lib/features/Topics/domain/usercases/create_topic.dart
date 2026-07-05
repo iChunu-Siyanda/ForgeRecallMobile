@@ -22,7 +22,10 @@ class CreateTopicUseCase {
       estimatedReadTime: _calculateReadTime(params.material), 
       cognitiveDifficulty: 0.0, 
       createdAt: now,
-      updatedAt: now,
+      updatedAt: now, 
+      //TODO: implement isFavorite and studyCout
+      isFavorite: false, 
+      studyCount: 0,
     );
 
     return repository.createTopics(topic);

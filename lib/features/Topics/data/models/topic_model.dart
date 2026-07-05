@@ -12,7 +12,9 @@ class TopicModel extends TopicEntity {
     required super.estimatedReadTime,
     required super.cognitiveDifficulty,
     required super.createdAt,
-    required super.updatedAt,
+    required super.updatedAt, 
+    required super.isFavorite, 
+    required super.studyCount,
   });
 
   factory TopicModel.fromJson(
@@ -41,7 +43,9 @@ class TopicModel extends TopicEntity {
           (data['createdAt'] as Timestamp).toDate(),
 
       updatedAt:
-          (data['updatedAt'] as Timestamp).toDate(),
+          (data['updatedAt'] as Timestamp).toDate(), 
+      isFavorite: data['isFavorite'] ?? false, 
+      studyCount: data['studyCount'] ?? 0,
     );
   }
 
@@ -56,7 +60,9 @@ class TopicModel extends TopicEntity {
       estimatedReadTime: topic.estimatedReadTime, 
       cognitiveDifficulty: topic.cognitiveDifficulty, 
       createdAt: topic.createdAt, 
-      updatedAt: topic.updatedAt,
+      updatedAt: topic.updatedAt, 
+      isFavorite: topic.isFavorite, 
+      studyCount: topic.studyCount,
     );
   }
 
@@ -71,6 +77,8 @@ class TopicModel extends TopicEntity {
       'cognitiveDifficulty': cognitiveDifficulty,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'isFavorite': isFavorite,
+      'studyCount': studyCount,
     };
   }
 }

@@ -78,3 +78,13 @@ Nested Inside Project:
 -> Project Analytics
 -> Modules
 -> Recall Sessions
+
+-----------------------------------------------------------------------
+
+Section	    Purpose	                     Depends on AI?
+Projects:	 Create and manage knowledge	Partially
+Today	Daily: learning workflow	         No
+Library:	    Browse all knowledge	      No
+Analytics:	 Learning insights	         Mostly No
+Search:	    Find anything	               No (basic search)
+Profile:	    User settings	               No
