@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:forge_recall/core/shared/entites/topic_filter.dart';
 import 'package:forge_recall/features/topics/data/datasource/topic_remote_datasource.dart';
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
@@ -15,6 +16,8 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
         .doc(projectId)
         .collection('topics');
   }
+
+  //Search every folder named topics.
   Query<Map<String, dynamic>> get _topicsCollectionGroup => firestore.collectionGroup('topics');
 
   @override
@@ -35,14 +38,17 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
   Stream<List<TopicModel>> getTopics(
     TopicQuery query,
   ) {
+    debugPrint(
+      'TopicQuery: '
+      'projectId=${query.projectId}, '
+      'filter=${query.filter}, '
+      'search=${query.search}',
+    );
 
     Query<Map<String, dynamic>> firestoreQuery = query.projectId != null ? _topicsRef(query.projectId!): _topicsCollectionGroup;
 
     if (query.projectId != null) {
-      firestoreQuery = firestoreQuery.where(
-        'projectId',
-        isEqualTo: query.projectId,
-      );
+      firestoreQuery = _topicsRef(query.projectId!);
     }
 
     switch (query.filter) {
