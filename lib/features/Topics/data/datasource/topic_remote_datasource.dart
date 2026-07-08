@@ -19,6 +19,10 @@ abstract class TopicRemoteDatasource {
     TopicModel topic,
   );
 
+  Future<void> updateTopicStats(
+    TopicModel topic
+  );
+
   Future<void> deleteTopic(
     String projectId,
     String topicId,

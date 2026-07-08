@@ -4,6 +4,7 @@ import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
+import 'package:forge_recall/features/recall/domain/entities/complete_recall_stats.dart';
 import 'package:forge_recall/features/recall/domain/entities/recall_rating.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
@@ -15,6 +16,8 @@ import 'package:forge_recall/features/recall/presentation/widgets/recall_session
 import 'package:forge_recall/features/recall/presentation/widgets/recall_stats_tracking.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/reveal_ans_btn.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
+import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
+import 'package:forge_recall/features/topics/presentation/bloc/topic_event.dart';
 import 'package:go_router/go_router.dart';
 
 class RecallSessionPage extends StatelessWidget {
@@ -63,6 +66,18 @@ class RecallSessionPage extends StatelessWidget {
               return BlocConsumer<RecallLabBloc, RecallLabState>(
                 listener: (context, state) {
                   if (state is RecallLabCompleted) {
+                    context.read<TopicBloc>().add(
+                      UpdateTopicStats(
+                        topic: topic,
+                        result: CompleteRecallStats(
+                          totalQuestions: state.totalQuestions,
+                          easy: state.easyCount,
+                          partial: state.partialCount,
+                          forgot: state.forgotCount,
+                        ),
+                      ),
+                    );
+
                     context.go(AppRoutes.sessionComplete, extra: state);
                   }
                 },

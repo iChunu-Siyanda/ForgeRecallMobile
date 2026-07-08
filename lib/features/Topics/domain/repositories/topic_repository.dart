@@ -14,10 +14,14 @@ abstract class TopicRepository {
   //update topics
   Future<void> updateTopics(TopicEntity topic);
 
+  //Update topic stats after recall session
+  Future<void> updateTopicStats(TopicEntity topic);
+
   //delete topics
   Future<void> deleteTopic(String topicId, String projectId);
 
   //Add to favorites
+  //TODO: implement for topic cards
   Future<void> toggleFavorite(
     String projectId,
     String topicId,

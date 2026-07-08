@@ -13,8 +13,7 @@ class UpdateTopicUseCase {
       params.topicId, params.projectId,
     );
 
-    final updatedTopic =
-        existingTopic.copyWith(
+    final updatedTopic = existingTopic.copyWith(
       title: params.title,
       content: params.material,
     );

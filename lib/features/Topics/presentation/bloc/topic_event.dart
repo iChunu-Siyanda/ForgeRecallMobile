@@ -1,3 +1,4 @@
+import 'package:forge_recall/features/recall/domain/entities/complete_recall_stats.dart';
 import 'package:forge_recall/features/topics/domain/entities/create_topic_params.dart';
 import 'package:forge_recall/core/shared/entites/topic_query.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
@@ -42,4 +43,14 @@ class RefreshTopics extends TopicEvent {
   final TopicQuery query;
 
   RefreshTopics(this.query);
+}
+
+class UpdateTopicStats extends TopicEvent {
+  final TopicEntity topic;
+  final CompleteRecallStats result;
+
+  const UpdateTopicStats({
+    required this.topic,
+    required this.result,
+  });
 }

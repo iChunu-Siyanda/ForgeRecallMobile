@@ -4,11 +4,13 @@ import 'package:forge_recall/features/topics/data/datasource/topic_remote_dataso
 import 'package:forge_recall/features/topics/data/repositories/topic_remote_datasource_impl.dart';
 import 'package:forge_recall/features/topics/data/repositories/topic_repository_impl.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
+import 'package:forge_recall/features/topics/domain/services/recall_stats_calculator.dart';
 import 'package:forge_recall/features/topics/domain/usercases/create_topic.dart';
 import 'package:forge_recall/features/topics/domain/usercases/delete_topic.dart';
 import 'package:forge_recall/features/topics/domain/usercases/get_topics.dart';
 import 'package:forge_recall/features/topics/domain/usercases/toggle_favorite_use_case.dart';
 import 'package:forge_recall/features/topics/domain/usercases/update_topic.dart';
+import 'package:forge_recall/features/topics/domain/usercases/update_topic_stats.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -49,6 +51,14 @@ void registerTopicModule() {
   getIt.registerLazySingleton(
     () => ToggleFavoriteUseCase(getIt(),),
   );
+
+  getIt.registerLazySingleton(
+    () => UpdateTopicStatsUseCase(getIt(),),
+  );
+
+  getIt.registerLazySingleton(
+    () => RecallStatsCalculator(),
+  );
   
   //Bloc
   getIt.registerFactory(
@@ -58,6 +68,8 @@ void registerTopicModule() {
       getTopics: getIt(),
       deleteTopic: getIt(),
       toggleFavorite: getIt(),
+      updateTopicStats: getIt(),
+      recallStatCalculator: getIt(),
     ),
   );
 }

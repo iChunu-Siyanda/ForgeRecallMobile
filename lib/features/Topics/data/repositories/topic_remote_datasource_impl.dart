@@ -144,4 +144,15 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
                   'updatedAt': Timestamp.now(),
                 });
   }
+  
+  @override
+  Future<void> updateTopicStats(
+    TopicModel topic
+  ) async {
+    await _topicsRef(topic.projectId)
+        .doc(topic.id)
+        .update(
+          topic.toJson(),
+        );
+  }
 }

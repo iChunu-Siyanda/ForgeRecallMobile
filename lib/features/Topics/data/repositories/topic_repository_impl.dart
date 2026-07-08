@@ -65,4 +65,10 @@ class TopicRepositoryImpl implements TopicRepository{
   Future<void> toggleFavorite(String projectId, String topicId, bool isFavorite) {
     return repository.toggleFavorite(projectId, topicId, isFavorite);
   }
+  
+  @override
+  Future<void> updateTopicStats(TopicEntity topic) async {
+    final model = TopicModel.fromEntity(topic);
+    return repository.updateTopicStats(model);
+  }
 }

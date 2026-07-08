@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/recall/domain/entities/complete_recall_stats.dart';
 import 'package:forge_recall/features/recall/presentation/widgets/achievement_badge_rating.dart';
-import 'package:forge_recall/features/recall/presentation/widgets/stats_and_si_panel.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/stats_and_ai_panel.dart';
 import 'package:go_router/go_router.dart';
 
 class SessionCompletePage extends StatelessWidget {
@@ -21,23 +22,15 @@ class SessionCompletePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accuracy = totalQuestions == 0
-        ? 0
-        : (((easyCount + (partialCount * 0.5)) / totalQuestions) * 100).round();
-
-    final performance = switch (accuracy) {
-      >= 90 => 'Mastery',
-      >= 75 => 'Strong Recall',
-      >= 60 => 'Developing',
-      _ => 'Needs Reinforcement',
-    };
-
-    final performanceColor = switch (accuracy) {
-      >= 90 => AppColours.emerald,
-      >= 75 => AppColours.electricBlue,
-      >= 60 => AppColours.amber,
-      _ => AppColours.crimson,
-    };
+    final result = CompleteRecallStats(
+      totalQuestions: totalQuestions, 
+      easy: easyCount, 
+      partial: partialCount, 
+      forgot: forgotCount,
+    );
+    final accuracy = totalQuestions == 0 ? 0 : result.accuracy;
+    final performance = result.performance;
+    final performanceColor = result.performanceColor;
 
     return Scaffold(
       backgroundColor: AppColours.background,
