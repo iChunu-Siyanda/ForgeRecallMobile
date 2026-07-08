@@ -31,39 +31,33 @@ class TodayPage extends StatelessWidget {
           TodayHeroCard(),
 
           SizedBox(height: 28),
-
           SectionTitle(title: 'Continue Studying'),
 
           SizedBox(height: 16),
-
           ContinueStudyingPlaceholder(),
 
           SizedBox(height: 32),
-
           SectionTitle(title: 'Due for Review'),
 
           SizedBox(height: 16),
-
           TopicPlaceholderCard(),
+
           SizedBox(height: 12),
           TopicPlaceholderCard(),
 
           SizedBox(height: 32),
-
           SectionTitle(title: 'Recommended For You'),
 
           SizedBox(height: 16),
-
           TopicPlaceholderCard(),
+
           SizedBox(height: 12),
           TopicPlaceholderCard(),
 
           SizedBox(height: 32),
-
           SectionTitle(title: "Today's Progress",),
 
           SizedBox(height: 16),
-
           ProgressCard(),
 
           SizedBox(height: 32),
@@ -72,6 +66,3 @@ class TodayPage extends StatelessWidget {
     );
   }
 }
-
-
-

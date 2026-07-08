@@ -30,3 +30,9 @@ class DeleteTopic extends TopicEvent {
 
   const DeleteTopic(this.topicId, this.projectId);
 }
+
+class RefreshTopics extends TopicEvent {
+  final TopicQuery query;
+
+  RefreshTopics(this.query);
+}

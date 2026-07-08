@@ -6,6 +6,7 @@ import 'package:forge_recall/features/questions/presentation/navigation/question
 import 'package:forge_recall/features/recall/presentation/navigation/recall_routes.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
+import 'package:forge_recall/features/today/presentation/navigation/today_routes.dart';
 import 'package:forge_recall/features/topics/presentation/navigation/topic_routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,6 +28,9 @@ class AppRouter {
 
       //Library
       ...LibraryRoutes.routes,
+
+      //Today
+      ...TodayRoutes.routes,
      
       ShellRoute(
         builder: (context, state, child) {
