@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
+import 'package:forge_recall/core/shared/registrations/register_projects_module.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
@@ -53,7 +54,14 @@ class TopicKnowledgePage extends StatelessWidget {
             top: 24,
             bottom: MediaQuery.of(context).viewInsets.bottom + 24,
           ),
-          child: AddQuestionSheet(questionController: questionController, answerController: answerController, topic: topic),
+          child: BlocProvider(
+            create: (_) => getIt<QuestionsBloc>(),
+            child: AddQuestionSheet(
+              questionController: questionController, 
+              answerController: answerController, 
+              topic: topic,
+            ),
+          ),
         );
       },
     );

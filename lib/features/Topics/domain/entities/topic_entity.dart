@@ -27,7 +27,7 @@ class TopicEntity {
     required this.updatedAt, 
     required this.isFavorite, 
     required this.studyCount,
-    this.lastStudiedAt, 
+    required this.lastStudiedAt, 
     this.nextReviewAt,
   });
 
@@ -58,7 +58,8 @@ class TopicEntity {
       createdAt: createdAt,
       updatedAt: updatedAt ?? DateTime.now(), 
       isFavorite: isFavorite ?? this.isFavorite, 
-      studyCount: studyCount ?? this.studyCount,
+      studyCount: studyCount ?? this.studyCount, 
+      lastStudiedAt: lastStudiedAt ?? DateTime.now(), 
     );
   }
 }

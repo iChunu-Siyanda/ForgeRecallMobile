@@ -89,18 +89,19 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
         break;
     }
     
-    return firestoreQuery
-        .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
-              .map(
-                (doc) => TopicModel.fromJson({
-                  'id': doc.id,
-                  ...doc.data(),
-                }),
-              )
-              .toList(),
-        );
+    return firestoreQuery.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = {
+          'id': doc.id,
+          ...doc.data(),
+        };
+
+        debugPrint('Topic: ${doc.id}');
+        debugPrint("$data");
+
+        return TopicModel.fromJson(data);
+      }).toList();
+    });
   }
 
   @override

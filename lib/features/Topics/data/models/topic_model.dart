@@ -14,8 +14,16 @@ class TopicModel extends TopicEntity {
     required super.createdAt,
     required super.updatedAt, 
     required super.isFavorite, 
-    required super.studyCount,
+    required super.studyCount, 
+    required super.lastStudiedAt,
   });
+
+  DateTime parseTimestamp(dynamic value) {
+    if (value is Timestamp) {
+      return value.toDate();
+    }
+    return DateTime.now();
+  }
 
   factory TopicModel.fromJson(
     Map<String, dynamic> data,
@@ -23,29 +31,17 @@ class TopicModel extends TopicEntity {
     return TopicModel(
       id: data['id'],
       projectId: data['projectId'] ?? '',
-
       title: data['title'] ?? '',
       content: data['content'] ?? '',
-
-      masteryScore:
-          (data['masteryScore'] ?? 0).toDouble(),
-
-      questionCount:
-          data['questionCount'] ?? 0,
-
-      estimatedReadTime:
-          data['estimatedReadTime'] ?? 0,
-
-      cognitiveDifficulty:
-          (data['cognitiveDifficulty'] ?? 0).toDouble(),
-
-      createdAt:
-          (data['createdAt'] as Timestamp).toDate(),
-
-      updatedAt:
-          (data['updatedAt'] as Timestamp).toDate(), 
+      masteryScore: (data['masteryScore'] ?? 0).toDouble(),
+      questionCount: data['questionCount'] ?? 0,
+      estimatedReadTime: data['estimatedReadTime'] ?? 0,
+      cognitiveDifficulty: (data['cognitiveDifficulty'] ?? 0).toDouble(),
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(), 
       isFavorite: data['isFavorite'] ?? false, 
-      studyCount: data['studyCount'] ?? 0,
+      studyCount: data['studyCount'] ?? 0, 
+      lastStudiedAt: (data['lastStudiedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
@@ -62,7 +58,8 @@ class TopicModel extends TopicEntity {
       createdAt: topic.createdAt, 
       updatedAt: topic.updatedAt, 
       isFavorite: topic.isFavorite, 
-      studyCount: topic.studyCount,
+      studyCount: topic.studyCount, 
+      lastStudiedAt: topic.lastStudiedAt,
     );
   }
 
@@ -79,6 +76,7 @@ class TopicModel extends TopicEntity {
       'updatedAt': updatedAt,
       'isFavorite': isFavorite,
       'studyCount': studyCount,
+      'lastStudiedAt': lastStudiedAt,
     };
   }
 }

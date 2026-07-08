@@ -25,7 +25,8 @@ class CreateTopicUseCase {
       updatedAt: now, 
       //TODO: implement isFavorite and studyCout
       isFavorite: false, 
-      studyCount: 0,
+      studyCount: 0, 
+      lastStudiedAt: now,
     );
 
     return repository.createTopics(topic);

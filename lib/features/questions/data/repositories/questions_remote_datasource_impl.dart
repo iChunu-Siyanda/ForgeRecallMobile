@@ -12,7 +12,7 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
   CollectionReference<Map<String, dynamic>>
       get projectsCollection => firestore.collection('projects');
 
-  /// projects/{projectId}/topics/{topicId}/questions
+  /// projects/{projectId}/topics/{topicId}/questions/
   CollectionReference<Map<String, dynamic>>_questionsCollection(String projectId,String topicId,) {
     return projectsCollection
         .doc(projectId)
