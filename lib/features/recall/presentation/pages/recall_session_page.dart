@@ -8,10 +8,14 @@ import 'package:forge_recall/features/recall/domain/entities/recall_rating.dart'
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_state.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/recall_flash_cards.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/recall_questins_empty.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/recall_questions_error.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/recall_session_app_bar.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/recall_stats_tracking.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/reveal_ans_btn.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:go_router/go_router.dart';
-// Ensure your AppColours path is imported correctly here
-// import 'path_to_your_colors/app_colours.dart';
 
 class RecallSessionPage extends StatelessWidget {
   final TopicEntity topic;
@@ -37,28 +41,9 @@ class RecallSessionPage extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: AppColours.background,
-        appBar: AppBar(
-          backgroundColor: AppColours.surface,
-          elevation: 0,
-          scrolledUnderElevation: 0,
-          centerTitle: true,
-          shape: const Border(
-            bottom: BorderSide(color: AppColours.glassBorder, width: 1.5),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.close_rounded, color: AppColours.textSecondary, size: 24),
-            onPressed: () {
-              context.pop();
-            },
-          ),
-          title: Text(
-            topic.title,
-            style: const TextStyle(
-              color: AppColours.textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: RecallSessionAppBar(topic: topic),
         ),
         body: SafeArea(
           child: BlocBuilder<QuestionsBloc, QuestionsState>(
@@ -72,27 +57,7 @@ class RecallSessionPage extends StatelessWidget {
               }
 
               if (questionsState is QuestionsErrorState) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.error_outline_rounded, color: AppColours.crimson, size: 44),
-                        const SizedBox(height: 12),
-                        Text(
-                          questionsState.message,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: AppColours.crimson,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return RecallQuestionsError(questionsState: questionsState,);
               }
 
               return BlocConsumer<RecallLabBloc, RecallLabState>(
@@ -112,12 +77,7 @@ class RecallSessionPage extends StatelessWidget {
 
                   if (state is RecallLabLoaded) {
                     if (state.questions.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'No questions found.',
-                          style: TextStyle(color: AppColours.textMuted, fontSize: 15),
-                        ),
-                      );
+                      return RecallQuestionsEmpty();
                     }
 
                     final question = state.currentQuestion;
@@ -130,139 +90,17 @@ class RecallSessionPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           // Top Context Stats Tracking Panel
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'SESSION PROGRESS',
-                                style: TextStyle(
-                                  color: AppColours.textMuted,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.6,
-                                ),
-                              ),
-                              Text(
-                                '$currentIdx of $totalCount',
-                                style: const TextStyle(
-                                  color: AppColours.textPrimary,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: LinearProgressIndicator(
-                              value: currentIdx / totalCount,
-                              minHeight: 6,
-                              backgroundColor: AppColours.surfaceSecondary,
-                              valueColor: const AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
-                            ),
-                          ),
+                          RecallStatsTracking(currentIdx: currentIdx, totalCount: totalCount),
 
                           const Spacer(),
 
                           // Active Flashcard Canvas Area
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColours.surface,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: AppColours.glassBorder, width: 1.5),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColours.textPrimary.withValues(alpha:0.02),
-                                  blurRadius: 16,
-                                  offset: const Offset(0, 6),
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    question.question,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: AppColours.textPrimary,
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                  
-                                  // Animated Solution Expansion Box
-                                  AnimatedSize(
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.easeInOut,
-                                    child: state.answerRevealed
-                                        ? Column(
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 20),
-                                                child: Divider(height: 1, color: AppColours.glassBorder),
-                                              ),
-                                              Text(
-                                                'CORRECT SOLUTION',
-                                                style: TextStyle(
-                                                  color: AppColours.textMuted,
-                                                  fontSize: 11,
-                                                  fontWeight: FontWeight.w800,
-                                                  letterSpacing: 0.8,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Text(
-                                                question.solution,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: AppColours.textSecondary,
-                                                  fontSize: 15,
-                                                  height: 1.5,
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : const SizedBox(width: double.infinity),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          RecallFlashCards(question: question, state: state,),
 
                           const Spacer(),
 
                           // Action Controller Placement Section
-                          if (!state.answerRevealed)
-                            Container(
-                              height: 52,
-                              decoration: BoxDecoration(
-                                gradient: AppColours.geminiGradient,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  context.read<RecallLabBloc>().add(RevealAnswerEvent());
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                ),
-                                child: const Text(
-                                  'Reveal Answer',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ),
+                          if (!state.answerRevealed) RevealAnsBtn(),
 
                           if (state.answerRevealed)
                             Row(

@@ -60,4 +60,9 @@ class TopicRepositoryImpl implements TopicRepository{
   Future<TopicEntity> fetchTopicById(String topicId, String projectId) {
     return repository.fetchTopicById(topicId, projectId);
   }
+  
+  @override
+  Future<void> toggleFavorite(String projectId, String topicId, bool isFavorite) {
+    return repository.toggleFavorite(projectId, topicId, isFavorite);
+  }
 }

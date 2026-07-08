@@ -16,4 +16,11 @@ abstract class TopicRepository {
 
   //delete topics
   Future<void> deleteTopic(String topicId, String projectId);
+
+  //Add to favorites
+  Future<void> toggleFavorite(
+    String projectId,
+    String topicId,
+    bool isFavorite,
+  );
 }

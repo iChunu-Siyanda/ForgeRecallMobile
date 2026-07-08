@@ -9,6 +9,7 @@ class TopicEntity {
   final double cognitiveDifficulty;
   final bool isFavorite;
   final DateTime? lastStudiedAt;
+  DateTime? nextReviewAt;
   final int studyCount;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -25,8 +26,9 @@ class TopicEntity {
     required this.createdAt,
     required this.updatedAt, 
     required this.isFavorite, 
-    this.lastStudiedAt, 
     required this.studyCount,
+    this.lastStudiedAt, 
+    this.nextReviewAt,
   });
 
   TopicEntity copyWith({
@@ -38,6 +40,7 @@ class TopicEntity {
     double? cognitiveDifficulty,
     DateTime? updatedAt,
     DateTime? lastStudiedAt,
+    DateTime? nextReviewAt,
     bool? isFavorite,
     int? studyCount,
   }) {

@@ -1,5 +1,6 @@
 import 'package:forge_recall/features/topics/domain/entities/create_topic_params.dart';
 import 'package:forge_recall/core/shared/entites/topic_query.dart';
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/domain/entities/update_topic_param.dart';
 
 abstract class TopicEvent {
@@ -29,6 +30,12 @@ class DeleteTopic extends TopicEvent {
   final String projectId;
 
   const DeleteTopic(this.topicId, this.projectId);
+}
+
+class ToggleFavoriteEvent extends TopicEvent {
+  final TopicEntity topic;
+
+  ToggleFavoriteEvent(this.topic);
 }
 
 class RefreshTopics extends TopicEvent {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/achievement_badge_rating.dart';
+import 'package:forge_recall/features/recall/presentation/widgets/stats_and_si_panel.dart';
 import 'package:go_router/go_router.dart';
 
 class SessionCompletePage extends StatelessWidget {
@@ -65,137 +67,22 @@ class SessionCompletePage extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Decorative Achievement Badge Ring
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: performanceColor.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.emoji_events_rounded,
-                    size: 72,
-                    color: performanceColor,
-                  ),
-                ),
+              AchievementBadgeRating(
+                performanceColor: performanceColor, 
+                accuracy: accuracy, 
+                performance: performance,
               ),
-
-              const SizedBox(height: 24),
-
-              Text(
-                '$accuracy%',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColours.textPrimary,
-                  fontSize: 56,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -1,
-                ),
-              ),
-
-              const SizedBox(height: 6),
-
-              Text(
-                performance,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: performanceColor,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.2,
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              const Text(
-                'Active recall session completed successfully.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColours.textSecondary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
               const SizedBox(height: 32),
 
               // Statistics Panel Block
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColours.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColours.glassBorder, width: 1.5),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      _StatRow(
-                        label: 'Questions Reviewed',
-                        value: '$totalQuestions',
-                        isHeader: true,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Divider(height: 1, color: AppColours.glassBorder),
-                      ),
-                      _StatRow(label: '😎  Easy', value: '$easyCount'),
-                      _StatRow(label: '🤔  Partial', value: '$partialCount'),
-                      _StatRow(label: '😵  Forgot', value: '$forgotCount'),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Divider(height: 1, color: AppColours.glassBorder),
-                      ),
-                      _StatRow(
-                        label: 'Total Accuracy',
-                        value: '$accuracy%',
-                        valueColor: performanceColor,
-                        isBold: true,
-                      ),
-                    ],
-                  ),
-                ),
+              StatsAndAiPanel(
+                totalQuestions: totalQuestions, 
+                easyCount: easyCount, 
+                partialCount: partialCount, 
+                forgotCount: forgotCount, 
+                accuracy: accuracy, 
+                performanceColor: performanceColor,
               ),
-
-              const SizedBox(height: 16),
-
-              // AI Feedback Panel Block
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColours.surfaceSecondary,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColours.glassBorder),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Icon(
-                        Icons.psychology_rounded,
-                        color: AppColours.geminiPurple,
-                        size: 28,
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Text(
-                          accuracy >= 75
-                              ? 'Your memory traces are strengthening. Continue reviewing on schedule to consolidate this neural knowledge base.'
-                              : 'Several foundational concepts need reinforcement. A fast follow-up review cycle is highly recommended.',
-                          style: const TextStyle(
-                            color: AppColours.textSecondary,
-                            fontSize: 14,
-                            height: 1.4,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
               const SizedBox(height: 40),
 
               Container(
@@ -252,53 +139,6 @@ class SessionCompletePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _StatRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color? valueColor;
-  final bool isHeader;
-  final bool isBold;
-
-  const _StatRow({
-    required this.label,
-    required this.value,
-    this.valueColor,
-    this.isHeader = false,
-    this.isBold = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final defaultColor = isHeader ? AppColours.textSecondary : AppColours.textPrimary;
-    
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: isHeader ? AppColours.textSecondary : AppColours.textPrimary,
-                fontSize: isHeader ? 13 : 15,
-                fontWeight: (isHeader || isBold) ? FontWeight.w700 : FontWeight.w500,
-              ),
-            ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              color: valueColor ?? defaultColor,
-              fontSize: isHeader ? 14 : 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
       ),
     );
   }

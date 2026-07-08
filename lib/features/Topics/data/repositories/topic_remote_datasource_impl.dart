@@ -134,4 +134,14 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
         .doc(topicId)
         .delete();
   }
+  
+  @override
+  Future<void> toggleFavorite(String projectId, String topicId, bool isFavorite) async {
+    return await _topicsRef(projectId)
+                .doc(topicId)
+                .update({
+                  'isFavorite': isFavorite,
+                  'updatedAt': Timestamp.now(),
+                });
+  }
 }

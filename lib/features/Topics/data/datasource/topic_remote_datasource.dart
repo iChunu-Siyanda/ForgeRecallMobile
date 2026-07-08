@@ -23,4 +23,10 @@ abstract class TopicRemoteDatasource {
     String projectId,
     String topicId,
   );
+
+  Future<void> toggleFavorite(
+    String projectId,
+    String topicId,
+    bool isFavorite,
+  );
 }
