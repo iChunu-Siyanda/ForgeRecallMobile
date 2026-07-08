@@ -4,6 +4,8 @@ import 'package:forge_recall/core/shared/registrations/register_topic_module.dar
 import 'package:forge_recall/features/library/domain/entites/library_topic_params.dart';
 import 'package:forge_recall/features/library/presentation/bloc/library_bloc.dart';
 import 'package:forge_recall/features/library/presentation/bloc/library_event.dart';
+import 'package:forge_recall/features/library/presentation/pages/library_projects_page.dart';
+import 'package:forge_recall/features/library/presentation/pages/library_saved_questions_page.dart';
 import 'package:forge_recall/features/library/presentation/pages/library_topic_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,6 +20,20 @@ class LibraryRoutes {
           child: LibraryTopicsPage(title: libraryTopic.title, filter: libraryTopic.filter,)
           );
       },
+    ),
+
+    GoRoute(
+      path: AppRoutes.libraryProject,
+      builder: (context,state) {
+        return const LibraryProjectsPage();
+      }
+    ),
+
+    GoRoute(
+      path: AppRoutes.librarySavedQuestions,
+      builder: (context,state) {
+        return const LibrarySavedQuestionsPage();
+      }
     ),
   ];
 }

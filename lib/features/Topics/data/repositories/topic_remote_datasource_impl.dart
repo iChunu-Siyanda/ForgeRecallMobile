@@ -45,32 +45,36 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
       'search=${query.search}',
     );
 
-    Query<Map<String, dynamic>> firestoreQuery = query.projectId != null ? _topicsRef(query.projectId!): _topicsCollectionGroup;
-
-    if (query.projectId != null) {
-      firestoreQuery = _topicsRef(query.projectId!);
-    }
+    Query<Map<String, dynamic>> firestoreQuery =
+        query.projectId != null
+            ? _topicsRef(query.projectId!)
+            : _topicsCollectionGroup;
 
     switch (query.filter) {
       case TopicFilter.favorites:
         firestoreQuery = firestoreQuery.where(
           'isFavorite',
           isEqualTo: true,
-        );
+        )
+        .orderBy('updatedAt', descending: true);
         break;
 
       case TopicFilter.completed:
         firestoreQuery = firestoreQuery.where(
-          'masteryScore',
+          'masteryScore', 
           isGreaterThanOrEqualTo: 95,
-        );
+          )
+          .orderBy('masteryScore')
+          .orderBy('updatedAt');
         break;
 
       case TopicFilter.difficult:
         firestoreQuery = firestoreQuery.where(
           'masteryScore',
           isLessThan: 50,
-        );
+        )
+        .orderBy('masteryScore')
+        .orderBy('updatedAt');
         break;
 
       case TopicFilter.recent:
@@ -84,18 +88,19 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
       case null:
         break;
     }
-
+    
     return firestoreQuery
-        .orderBy('updatedAt', descending: true)
         .snapshots()
-        .map((snapshot) {
-          return snapshot.docs.map((doc) {
-            return TopicModel.fromJson({
-              'id': doc.id,
-              ...doc.data(),
-            });
-          }).toList();
-        });
+        .map(
+          (snapshot) => snapshot.docs
+              .map(
+                (doc) => TopicModel.fromJson({
+                  'id': doc.id,
+                  ...doc.data(),
+                }),
+              )
+              .toList(),
+        );
   }
 
   @override

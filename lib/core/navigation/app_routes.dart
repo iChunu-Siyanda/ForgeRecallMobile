@@ -28,6 +28,8 @@ class AppRoutes {
   //Library
   static const library = '/library';
   static const libraryTopic = '/library-topic';
+  static const libraryProject = '/library-project';
+  static const librarySavedQuestions = '/library-saved-questions';
 
   //Analytics
   static const analytics = '/analytics';

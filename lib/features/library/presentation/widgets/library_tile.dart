@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:forge_recall/core/navigation/app_routes.dart';
-import 'package:forge_recall/core/shared/entites/topic_filter.dart';
-import 'package:forge_recall/features/library/domain/entites/library_topic_params.dart';
-import 'package:go_router/go_router.dart';
 
 class LibraryTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final TopicFilter filter;
+  final VoidCallback onTapNav;
 
   const LibraryTile({
     super.key,
     required this.icon,
     required this.title,
     required this.subtitle, 
-    required this.filter,
+    required this.onTapNav,
   });
 
   @override
@@ -27,9 +23,7 @@ class LibraryTile extends StatelessWidget {
         title: Text(title),
         subtitle: Text(subtitle),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          context.push(AppRoutes.libraryTopic, extra: LibraryTopicParams(filter: filter,title: title));
-        },
+        onTap: onTapNav,
       ),
     );
   }
