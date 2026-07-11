@@ -14,8 +14,18 @@ class LibraryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColours.background, // Gemini crisp workspace tone
       appBar: AppBar(
-        title: const Text('Library'),
+        backgroundColor: AppColours.background,
+        elevation: 0,
+        title: const Text(
+          'Library',
+          style: TextStyle(
+            color: AppColours.textPrimary,
+            fontWeight: FontWeight.w600,
+            fontSize: 22,
+          ),
+        ),
         centerTitle: false,
         leading: IconButton(
           onPressed: () => MainNavigation.openDrawer(context),
@@ -26,76 +36,72 @@ class LibraryPage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         children: [
           const ContinueStudyingCard(),
-
-          const SizedBox(height: 32),
+          const SizedBox(height: 28),
           
-          //Topics
+          // Knowledge Group
           const _SectionHeader('Knowledge'),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           LibraryTile(
             icon: Icons.menu_book_outlined,
             title: 'All Topics',
             subtitle: 'Browse every topic you have created',
-            onTapNav: () => _goToTopics(context,TopicFilter.allTopics,'All Topics'),
+            onTapNav: () => _goToTopics(context, TopicFilter.allTopics, 'All Topics'),
           ),
-
           LibraryTile(
-            icon: Icons.star_border,
+            icon: Icons.star_border_rounded,
             title: 'Favorite Topics',
             subtitle: 'Topics you have starred',
-            onTapNav: () => _goToTopics(context,TopicFilter.favorites,'Favorite Topics'),
+            onTapNav: () => _goToTopics(context, TopicFilter.favorites, 'Favorite Topics'),
           ),
-
           LibraryTile(
-            icon: Icons.history,
+            icon: Icons.history_rounded,
             title: 'Recently Studied',
             subtitle: 'Continue where you left off',
-            onTapNav: () => _goToTopics(context,TopicFilter.recent,'Recently Studied'),
+            onTapNav: () => _goToTopics(context, TopicFilter.recent, 'Recently Studied'),
           ),
-
           LibraryTile(
             icon: Icons.local_fire_department_outlined,
             title: 'Advanced Topics',
             subtitle: 'Topics that need more practice',
-            onTapNav: () => _goToTopics(context,TopicFilter.difficult,'Advanced Topics'),
+            onTapNav: () => _goToTopics(context, TopicFilter.difficult, 'Advanced Topics'),
           ),
-
           LibraryTile(
-            icon: Icons.check_circle_outline,
+            icon: Icons.check_circle_outline_rounded,
             title: 'Completed Topics',
             subtitle: 'Topics you have mastered',
-            onTapNav: () => _goToTopics(context,TopicFilter.completed,'Completed Topics'),
+            onTapNav: () => _goToTopics(context, TopicFilter.completed, 'Completed Topics'),
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
 
-          // Projects
+          // Projects Group
           const _SectionHeader('Projects'),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           LibraryTile(
-            icon: Icons.folder_outlined,
+            icon: Icons.folder_open_rounded,
             title: 'All Projects',
             subtitle: 'Browse all your learning projects', 
             onTapNav: () {},
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
 
-          // Questions
+          // Questions Group
           const _SectionHeader('Questions'),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
           LibraryTile(
             icon: Icons.quiz_outlined,
             title: 'Saved Questions',
             subtitle: 'Questions you have bookmarked', 
-            onTapNav: () {  },
+            onTapNav: () {},
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -104,14 +110,13 @@ class LibraryPage extends StatelessWidget {
 
 void _goToTopics(BuildContext context, TopicFilter topic, String title){
   context.push(
-  AppRoutes.libraryTopic, 
-  extra: LibraryTopicParams(
-    filter: topic,
-    title: title,
+    AppRoutes.libraryTopic, 
+    extra: LibraryTopicParams(
+      filter: topic,
+      title: title,
     ),
   );
 }
-  
 
 class _SectionHeader extends StatelessWidget {
   final String title;
@@ -120,11 +125,16 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 4),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: AppColours.textPrimary,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.3,
+        ),
       ),
     );
   }

@@ -1,42 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 
 class ContinueStudyingCard extends StatelessWidget {
   const ContinueStudyingCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColours.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColours.glassBorder, width: 1.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            const Icon(
-              Icons.play_circle_fill,
-              size: 48,
+            // Beautiful Gemini Gradient Icon Frame
+            Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: AppColours.geminiGradient,
+              ),
+              child: const Icon(
+                Icons.play_arrow_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Continue Studying',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      color: AppColours.textPrimary,
+                      fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 4),
                   Text(
                     'Pick up where you left off.',
+                    style: TextStyle(
+                      color: AppColours.textSecondary,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
             ),
-            FilledButton(
-              onPressed: null,
-              child: const Text('Resume'),
+            const SizedBox(width: 12),
+            // Custom Outlined/Filled Modern Button
+            TextButton(
+              onPressed: () {
+                // Handle Action
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: AppColours.surfaceSecondary,
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+              child: const Text(
+                'Resume',
+                style: TextStyle(
+                  color: AppColours.electricBlue,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
+              ),
             )
           ],
         ),
