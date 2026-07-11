@@ -1,4 +1,6 @@
+// progress_stat.dart
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 
 class ProgressStat extends StatelessWidget {
   final String label;
@@ -16,10 +18,22 @@ class ProgressStat extends StatelessWidget {
       children: [
         Text(
           value,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: const TextStyle(
+            color: AppColours.textPrimary,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.5,
+          ),
         ),
         const SizedBox(height: 4),
-        Text(label),
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColours.textMuted,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ],
     );
   }

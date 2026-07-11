@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -8,11 +8,17 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: AppColours.textPrimary,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0.2,
+        ),
+      ),
     );
   }
 }

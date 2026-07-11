@@ -15,7 +15,8 @@ class TodayPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColours.background,
       appBar: AppBar(
-        title: const Text('Today'),
+        backgroundColor: AppColours.background,
+        elevation: 0,
         centerTitle: false,
         leading: IconButton(
           onPressed: () => MainNavigation.openDrawer(context),
@@ -24,42 +25,43 @@ class TodayPage extends StatelessWidget {
             color: AppColours.textPrimary,
           ),
         ),
+        title: const Text(
+          'Today',
+          style: TextStyle(
+            color: AppColours.textPrimary,
+            fontWeight: FontWeight.w600,
+            fontSize: 22,
+          ),
+        ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         children: const [
           TodayHeroCard(),
-
           SizedBox(height: 28),
+          
           SectionTitle(title: 'Continue Studying'),
-
-          SizedBox(height: 16),
+          SizedBox(height: 12),
           ContinueStudyingPlaceholder(),
-
-          SizedBox(height: 32),
+          SizedBox(height: 28),
+          
           SectionTitle(title: 'Due for Review'),
-
-          SizedBox(height: 16),
-          TopicPlaceholderCard(),
-
           SizedBox(height: 12),
           TopicPlaceholderCard(),
-
-          SizedBox(height: 32),
+          SizedBox(height: 12),
+          TopicPlaceholderCard(),
+          SizedBox(height: 28),
+          
           SectionTitle(title: 'Recommended For You'),
-
-          SizedBox(height: 16),
-          TopicPlaceholderCard(),
-
           SizedBox(height: 12),
           TopicPlaceholderCard(),
-
-          SizedBox(height: 32),
-          SectionTitle(title: "Today's Progress",),
-
-          SizedBox(height: 16),
+          SizedBox(height: 12),
+          TopicPlaceholderCard(),
+          SizedBox(height: 28),
+          
+          SectionTitle(title: "Today's Progress"),
+          SizedBox(height: 12),
           ProgressCard(),
-
           SizedBox(height: 32),
         ],
       ),

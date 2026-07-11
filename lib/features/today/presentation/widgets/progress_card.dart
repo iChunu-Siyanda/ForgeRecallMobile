@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/today/presentation/widgets/progress_stat.dart';
 
 class ProgressCard extends StatelessWidget {
@@ -6,34 +7,61 @@ class ProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColours.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColours.glassBorder, width: 1.0),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
-                  child: Text(
-                    'Daily Goal',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                const Text(
+                  'Daily Goal',
+                  style: TextStyle(
+                    color: AppColours.textPrimary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   '0%',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: TextStyle(
+                    color: AppColours.textSecondary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            const LinearProgressIndicator(
-              value: 0,
+            const SizedBox(height: 14),
+            // Custom Track containing the signature Gemini color scheme
+            Stack(
+              children: [
+                Container(
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: AppColours.surfaceSecondary,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+                Container(
+                  height: 6,
+                  width: 0, // Dynamic percentage mapping binding context
+                  decoration: BoxDecoration(
+                    gradient: AppColours.geminiGradient,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ProgressStat(
                   label: 'Topics',
