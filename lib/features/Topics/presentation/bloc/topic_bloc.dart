@@ -122,9 +122,20 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
         studyCount: event.topic.studyCount + 1,
         lastStudiedAt: DateTime.now(),
       );
-      
+
+      // debugPrint('''
+      //   Bloc Updating stats:
+      //   mastery: $mastery
+      //   difficulty: $difficulty
+      //   studyCount: ${event.topic.studyCount + 1}
+      // ''');
+
+      //debugPrint(updateTopicStats.runtimeType.toString());
       await updateTopicStats(stats);
-    } catch (e) {
+      debugPrint('Bloc finished');
+    } catch (e,stackTrace) {
+      debugPrint('UpdateStudyStatistics failed: $e');
+      debugPrintStack(stackTrace: stackTrace);
       emit(
         TopicError(
           'UpdateStudyStatistics failed: $e',

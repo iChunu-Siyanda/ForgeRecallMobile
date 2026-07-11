@@ -24,7 +24,7 @@ class TopicKnowledgePage extends StatelessWidget {
   void _showInputMethodSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      showDragHandle: true,
+      showDragHandle: false,
       backgroundColor: AppColours.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -105,6 +105,7 @@ class TopicKnowledgePage extends StatelessWidget {
       ),
       body: BlocBuilder<QuestionsBloc, QuestionsState>(
         builder: (BuildContext context, QuestionsState state) {
+          debugPrint('Entered TopicKnowledgePage');
           if (state is QuestionsInitialState) {
             return const Center(
               child: CircularProgressIndicator(

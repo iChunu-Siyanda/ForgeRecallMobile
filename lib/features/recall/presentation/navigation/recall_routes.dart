@@ -18,12 +18,12 @@ class RecallRoutes {
       path: AppRoutes.recallSession,
       builder: (context, state) {
         final topic = state.extra as TopicEntity;
-        debugPrint('TOPIC: ${topic.title}');
+        //debugPrint('TOPIC: ${topic.title}');
         return MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (_){ 
-              //debugPrint('CREATING QUESTIONS BLOC');
+              debugPrint('CREATING QUESTIONS BLOC');
               return getIt<QuestionsBloc>()..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
             }),
             BlocProvider(

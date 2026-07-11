@@ -35,6 +35,7 @@ class RecallSessionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Entered RecallSessionPage');
     return BlocListener<QuestionsBloc, QuestionsState>(
       listener: (context, state) {
         if (state is QuestionsLoadedState) {
@@ -63,136 +64,140 @@ class RecallSessionPage extends StatelessWidget {
                 return RecallQuestionsError(questionsState: questionsState,);
               }
 
-              return BlocConsumer<RecallLabBloc, RecallLabState>(
-                listener: (context, state) {
-                  if (state is RecallLabCompleted) {
-                    context.read<TopicBloc>().add(
-                      UpdateTopicStats(
-                        topic: topic,
-                        result: CompleteRecallStats(
-                          totalQuestions: state.totalQuestions,
-                          easy: state.easyCount,
-                          partial: state.partialCount,
-                          forgot: state.forgotCount,
+              if (questionsState is QuestionsLoadedState){
+                return BlocConsumer<RecallLabBloc, RecallLabState>(
+                  listener: (context, state) {
+                    if (state is RecallLabCompleted) {
+                      context.read<TopicBloc>().add(
+                        UpdateTopicStats(
+                          topic: topic,
+                          result: CompleteRecallStats(
+                            totalQuestions: state.totalQuestions,
+                            easy: state.easyCount,
+                            partial: state.partialCount,
+                            forgot: state.forgotCount,
+                          ),
                         ),
-                      ),
-                    );
+                      );
 
-                    context.go(AppRoutes.sessionComplete, extra: state);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is RecallLabInitial) {
+                      context.push(AppRoutes.sessionComplete, extra: state);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is RecallLabInitial) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
+                        ),
+                      );
+                    }
+
+                    if (state is RecallLabLoaded) {
+                      if (state.questions.isEmpty) {
+                        return RecallQuestionsEmpty();
+                      }
+
+                      final question = state.currentQuestion;
+                      final totalCount = state.questions.length;
+                      final currentIdx = state.currentIndex + 1;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Top Context Stats Tracking Panel
+                            RecallStatsTracking(currentIdx: currentIdx, totalCount: totalCount),
+
+                            const Spacer(),
+
+                            // Active Flashcard Canvas Area
+                            RecallFlashCards(question: question, state: state,),
+
+                            const Spacer(),
+
+                            // Action Controller Placement Section
+                            if (!state.answerRevealed) RevealAnsBtn(),
+
+                            if (state.answerRevealed)
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 48,
+                                      child: ElevatedButton(
+                                        onPressed: () => _rateRecall(context, RecallRating.forgot),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColours.crimson.withValues(alpha:0.12),
+                                          foregroundColor: AppColours.crimson,
+                                          elevation: 0,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            side: const BorderSide(color: AppColours.crimson, width: 1),
+                                          ),
+                                        ),
+                                        child: const Text('😵 Forgot', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 48,
+                                      child: ElevatedButton(
+                                        onPressed: () => _rateRecall(context, RecallRating.partial),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColours.amber.withValues(alpha:0.12),
+                                          foregroundColor: AppColours.amber,
+                                          elevation: 0,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            side: const BorderSide(color: AppColours.amber, width: 1),
+                                          ),
+                                        ),
+                                        child: const Text('🤔 Partial', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 48,
+                                      child: ElevatedButton(
+                                        onPressed: () => _rateRecall(context, RecallRating.easy),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColours.emerald.withValues(alpha:0.12),
+                                          foregroundColor: AppColours.emerald,
+                                          elevation: 0,
+                                          shadowColor: Colors.transparent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            side: const BorderSide(color: AppColours.emerald, width: 1),
+                                          ),
+                                        ),
+                                        child: const Text('😎 Easy', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      );
+                    }
+
                     return const Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
                       ),
                     );
-                  }
+                  },
+                );
+              }
 
-                  if (state is RecallLabLoaded) {
-                    if (state.questions.isEmpty) {
-                      return RecallQuestionsEmpty();
-                    }
-
-                    final question = state.currentQuestion;
-                    final totalCount = state.questions.length;
-                    final currentIdx = state.currentIndex + 1;
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // Top Context Stats Tracking Panel
-                          RecallStatsTracking(currentIdx: currentIdx, totalCount: totalCount),
-
-                          const Spacer(),
-
-                          // Active Flashcard Canvas Area
-                          RecallFlashCards(question: question, state: state,),
-
-                          const Spacer(),
-
-                          // Action Controller Placement Section
-                          if (!state.answerRevealed) RevealAnsBtn(),
-
-                          if (state.answerRevealed)
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 48,
-                                    child: ElevatedButton(
-                                      onPressed: () => _rateRecall(context, RecallRating.forgot),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColours.crimson.withValues(alpha:0.12),
-                                        foregroundColor: AppColours.crimson,
-                                        elevation: 0,
-                                        shadowColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          side: const BorderSide(color: AppColours.crimson, width: 1),
-                                        ),
-                                      ),
-                                      child: const Text('😵 Forgot', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 48,
-                                    child: ElevatedButton(
-                                      onPressed: () => _rateRecall(context, RecallRating.partial),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColours.amber.withValues(alpha:0.12),
-                                        foregroundColor: AppColours.amber,
-                                        elevation: 0,
-                                        shadowColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          side: const BorderSide(color: AppColours.amber, width: 1),
-                                        ),
-                                      ),
-                                      child: const Text('🤔 Partial', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 48,
-                                    child: ElevatedButton(
-                                      onPressed: () => _rateRecall(context, RecallRating.easy),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColours.emerald.withValues(alpha:0.12),
-                                        foregroundColor: AppColours.emerald,
-                                        elevation: 0,
-                                        shadowColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                          side: const BorderSide(color: AppColours.emerald, width: 1),
-                                        ),
-                                      ),
-                                      child: const Text('😎 Easy', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
-                    ),
-                  );
-                },
-              );
+              return SizedBox.shrink();
             },
           ),
         ),

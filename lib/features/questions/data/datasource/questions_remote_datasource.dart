@@ -11,4 +11,9 @@ abstract class QuestionsRemoteDatasource {
     required String projectId,
     required String topicId,
   });
+
+  Future<List<QuestionEntity>> getPrevQuestions({
+    required String projectId,
+    required String topicId,
+  });
 }

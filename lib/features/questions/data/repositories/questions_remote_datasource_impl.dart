@@ -31,6 +31,7 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
     required String projectId,
     required String topicId,
   }) {
+    debugPrint('In QuestionsRemoteDatasourceImpl:');
     debugPrint('LOAD PROJECT: $projectId');
     debugPrint('LOAD TOPIC: $topicId');
 
@@ -38,8 +39,6 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
       projectId,
       topicId,
     ).snapshots().map((snapshot) {
-      debugPrint('DOC COUNT: ${snapshot.docs.length}');
-
       return snapshot.docs.map((doc) {
         return QuestionModel.fromJson({
           'id': doc.id,
@@ -55,6 +54,7 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
     required String topicId,
     required List<QuestionEntity> questions,
   }) async {
+    debugPrint('In QuestionsRemoteDatasourceImpl:');
     debugPrint('SAVE PROJECT: $projectId');
     debugPrint('SAVE TOPIC: $topicId');
 
@@ -76,5 +76,17 @@ class QuestionsRemoteDatasourceImpl implements QuestionsRemoteDatasource {
     }
 
     await batch.commit();
+  }
+  
+  @override
+  Future<List<QuestionEntity>> getPrevQuestions({
+    required String projectId, 
+    required String topicId}) async {
+    
+    final snapshot = await _questionsCollection(projectId, topicId,).get();
+
+    return snapshot.docs.map((doc){
+      return QuestionModel.fromJson(doc.data());
+    }).toList();
   }
 }

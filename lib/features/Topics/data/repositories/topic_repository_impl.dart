@@ -4,7 +4,6 @@ import 'package:forge_recall/features/topics/data/datasource/topic_remote_dataso
 import 'package:forge_recall/features/topics/data/models/topic_model.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
-import 'package:rxdart/rxdart.dart';
 
 class TopicRepositoryImpl implements TopicRepository{
   final TopicRemoteDatasource repository;
@@ -27,27 +26,27 @@ class TopicRepositoryImpl implements TopicRepository{
     TopicQuery query,
   ) {
     return repository
-        .getTopics(query)
-        .switchMap((rawTopics) {
-          if (rawTopics.isEmpty) {
-            return Stream.value(<TopicEntity>[]);
-          }
+        .getTopics(query);
+  //       .switchMap((rawTopics) {
+  //         if (rawTopics.isEmpty) {
+  //           return Stream.value(<TopicEntity>[]);
+  //         }
 
-          final topicStreams = rawTopics.map((topic) {
-            return questionRepository
-                .getQuestions(
-                  projectId: topic.projectId,
-                  topicId: topic.id,
-                )
-                .map((questions) {
-                  return topic.copyWith(
-                    questionCount: questions.length,
-                  );
-                });
-          }).toList();
+  //         final topicStreams = rawTopics.map((topic) {
+  //           return questionRepository
+  //               .getQuestions(
+  //                 projectId: topic.projectId,
+  //                 topicId: topic.id,
+  //               )
+  //               .map((questions) {
+  //                 return topic.copyWith(
+  //                   questionCount: questions.length,
+  //                 );
+  //               });
+  //         }).toList();
 
-          return Rx.combineLatestList(topicStreams);
-        });
+  //         return Rx.combineLatestList(topicStreams);
+  //       });
   }
 
   @override

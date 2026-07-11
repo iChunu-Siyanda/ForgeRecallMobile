@@ -12,8 +12,7 @@ import 'package:forge_recall/features/questions/presentation/bloc/questionGenera
 import 'package:forge_recall/features/questions/presentation/widgets/edit_dialog.dart';
 import 'package:forge_recall/features/questions/presentation/widgets/question_card.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
-// Ensure your AppColours path is imported correctly here
-// import 'path_to_your_colors/app_colours.dart';
+
 
 class QuestionsPreviewPage extends StatefulWidget {
   final TopicEntity topic;

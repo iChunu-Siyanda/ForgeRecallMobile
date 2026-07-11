@@ -5,16 +5,6 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void registerProjectDetailModule() {
-  //Datasource
-  // getIt.registerLazySingleton<ProjectRemoteDataSource>(//
-  //   () => ProjectRemoteDataSourceImpl(getIt(),),
-  // );
-
-  // //Repository
-  // getIt.registerLazySingleton<ProjectRepository>(
-  //   () => ProjectRepositoryImpl(getIt(),),
-  // );
-
   //Usercase
   getIt.registerLazySingleton(
     () => FetchProjectById(getIt(),),

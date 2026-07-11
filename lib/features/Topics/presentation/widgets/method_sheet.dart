@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +16,7 @@ class MethodSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 5),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -50,7 +51,7 @@ class MethodSheet extends StatelessWidget {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 onTap: () {
                   Navigator.pop(context);
-                  context.go('/notesInput', extra: topic);
+                  context.push(AppRoutes.notesInput, extra: topic);
                 },
               ),
             ),

@@ -22,7 +22,7 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
 
   @override
   Future<TopicModel> fetchTopicById(
-    String topicId, 
+    String topicId,
     String projectId,
   ) async {
     final snapshot = await _topicsRef(projectId).doc(topicId).get();
@@ -30,8 +30,14 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
     if (!snapshot.exists || snapshot.data() == null) {
       throw Exception("Topic not found");
     }
-    
-    return TopicModel.fromJson(snapshot.data()!);
+
+    final data = Map<String, dynamic>.from(snapshot.data()!);
+
+    // Firestore adaptation
+    data['id'] = snapshot.id;
+    //debugPrint('fetchProjectById: ${snapshot.id}');
+
+    return TopicModel.fromJson(data);
   }
 
   @override
@@ -95,9 +101,9 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
           'id': doc.id,
           ...doc.data(),
         };
-
-        debugPrint('Topic: ${doc.id}');
-        debugPrint("$data");
+        // debugPrint('getTopics in TopicRemoteDatasounceImple:')
+        // debugPrint('Topic: ${doc.id}');
+        // debugPrint("$data");
 
         return TopicModel.fromJson(data);
       }).toList();
@@ -150,6 +156,8 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
   Future<void> updateTopicStats(
     TopicModel topic
   ) async {
+    debugPrint('Update Topic Stats Repo:');
+    //debugPrint(topic.toJson().toString());
     await _topicsRef(topic.projectId)
         .doc(topic.id)
         .update(

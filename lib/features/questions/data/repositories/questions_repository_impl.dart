@@ -3,9 +3,7 @@ import 'package:forge_recall/features/questions/domain/entities/question_entity.
 import 'package:forge_recall/features/questions/domain/repositories/questions_repository.dart';
 
 class QuestionsRepositoryImpl implements QuestionsRepository {
-
   final QuestionsRemoteDatasource remoteDatasource;
-
   QuestionsRepositoryImpl(this.remoteDatasource,);
 
   @override
@@ -29,6 +27,17 @@ class QuestionsRepositoryImpl implements QuestionsRepository {
       projectId: projectId,
       topicId: topicId,
       questions: questions,
+    );
+  }
+  
+  @override
+  Future<List<QuestionEntity>> getPrevQuestions({
+    required String projectId, 
+    required String topicId,
+  }) {
+    return remoteDatasource.getPrevQuestions(
+      projectId: projectId, 
+      topicId: topicId,
     );
   }
 }

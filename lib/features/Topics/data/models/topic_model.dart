@@ -18,18 +18,11 @@ class TopicModel extends TopicEntity {
     required super.lastStudiedAt,
   });
 
-  DateTime parseTimestamp(dynamic value) {
-    if (value is Timestamp) {
-      return value.toDate();
-    }
-    return DateTime.now();
-  }
-
   factory TopicModel.fromJson(
     Map<String, dynamic> data,
   ) {
     return TopicModel(
-      id: data['id'],
+      id: data['id'] ?? '',
       projectId: data['projectId'] ?? '',
       title: data['title'] ?? '',
       content: data['content'] ?? '',
