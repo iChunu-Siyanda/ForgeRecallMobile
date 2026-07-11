@@ -2,16 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/dashboard/presentation/widgets/section_title.dart';
-import 'package:forge_recall/features/today/presentation/widgets/continue_studying_placeholder.dart';
-import 'package:forge_recall/features/today/presentation/widgets/progress_card.dart';
+import 'package:forge_recall/features/today/presentation/widgets/due_review_list.dart';
+import 'package:forge_recall/features/today/presentation/widgets/recommeded_topic_list.dart';
+import 'package:forge_recall/features/today/presentation/widgets/resume_learning_card.dart';
 import 'package:forge_recall/features/today/presentation/widgets/today_hero_card.dart';
-import 'package:forge_recall/features/today/presentation/widgets/topic_placeholder_card.dart';
+import 'package:forge_recall/features/today/presentation/widgets/today_progress_card.dart';
+import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 class TodayPage extends StatelessWidget {
-  const TodayPage({super.key});
+  TodayPage({super.key});
+
+  final List<TopicEntity> topics = [];
+  void _topics(TopicEntity topic) => topic.content;
 
   @override
   Widget build(BuildContext context) {
+    final progress = 0;
+    
     return Scaffold(
       backgroundColor: AppColours.background,
       appBar: AppBar(
@@ -36,32 +43,28 @@ class TodayPage extends StatelessWidget {
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        children: const [
+        children: [
           TodayHeroCard(),
           SizedBox(height: 28),
           
           SectionTitle(title: 'Continue Studying'),
           SizedBox(height: 12),
-          ContinueStudyingPlaceholder(),
+          ResumeLearningCard(topic: null,),
           SizedBox(height: 28),
           
           SectionTitle(title: 'Due for Review'),
           SizedBox(height: 12),
-          TopicPlaceholderCard(),
-          SizedBox(height: 12),
-          TopicPlaceholderCard(),
+          DueReviewList(topics: topics, onTopicTap: _topics),
           SizedBox(height: 28),
           
           SectionTitle(title: 'Recommended For You'),
           SizedBox(height: 12),
-          TopicPlaceholderCard(),
-          SizedBox(height: 12),
-          TopicPlaceholderCard(),
+          RecommendedTopicsList(topics: topics, onTopicTap: _topics),
           SizedBox(height: 28),
           
           SectionTitle(title: "Today's Progress"),
           SizedBox(height: 12),
-          ProgressCard(),
+          TodayProgressCard(progress: progress),
           SizedBox(height: 32),
         ],
       ),
