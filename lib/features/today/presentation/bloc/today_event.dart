@@ -1,5 +1,7 @@
-sealed class TodayEvent {}
+sealed class TodayEvent {
+  const TodayEvent();
+}
 
-class LoadToday extends TodayEvent {}
-
-class RefreshToday extends TodayEvent {}
+class LoadToday extends TodayEvent {
+  const LoadToday();
+}
