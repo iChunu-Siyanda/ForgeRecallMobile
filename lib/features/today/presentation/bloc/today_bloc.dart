@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/today/domain/usecase/get_today_dashboard_use_case.dart';
 import 'package:forge_recall/features/today/presentation/bloc/today_event.dart';
@@ -19,8 +20,11 @@ class TodayBloc extends Bloc<TodayEvent, TodayState> {
     await emit.forEach(
       getTodayDashboard(),
       onData: (dashboard) => TodayLoaded(dashboard),
-      onError: (error, stackTrace) =>
-          TodayError(error.toString()),
+      onError: (e, stackTrace) {
+        debugPrint("LoadToday Error: $e");
+        debugPrint(stackTrace.toString());
+        return TodayError(e.toString());
+      }
     );
   }
 }

@@ -29,8 +29,6 @@ class _ProjectsState extends State<Projects> {
   
   late ScrollController _scrollController;
   bool _showCollapsedTitle = false;
-
-  // The scroll distance required before the header passes under the AppBar zone
   final double _scrollThreshold = 50.0;
 
   @override
@@ -89,13 +87,12 @@ class _ProjectsState extends State<Projects> {
           }
             
           if (state is ProjectsLoadedState) {
-            debugPrint("Project count: ${state.projects.length}");
+            //debugPrint("Project count: ${state.projects.length}");
             final projects = state.projects;
 
             return CustomScrollView(
               controller: _scrollController,
               slivers: [
-                // Frosted Glass / Blurry Pinned Navigation Bar
                 SliverAppBar(
                   pinned: true,
                   backgroundColor: Colors.transparent, // Keeps container bounds clear for the blur layer

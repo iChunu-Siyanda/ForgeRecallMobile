@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/shared/entites/topic_filter.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/core/widgets/bloc_error_widget.dart';
 import 'package:forge_recall/features/library/presentation/bloc/library_bloc.dart';
 import 'package:forge_recall/features/library/presentation/bloc/library_state.dart';
 import 'package:forge_recall/features/library/presentation/widgets/library_topic_card.dart';
@@ -110,46 +111,7 @@ class LibraryTopicsPage extends StatelessWidget {
           }
 
           if (state is LibraryError) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColours.crimson.withValues(alpha: 0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.error_outline_rounded,
-                        size: 40,
-                        color: AppColours.crimson,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Something went wrong',
-                      style: TextStyle(
-                        color: AppColours.textPrimary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      state.message,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColours.textSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return BlocErrorWidget(message: state.message,);
           }
 
           return const SizedBox.shrink();

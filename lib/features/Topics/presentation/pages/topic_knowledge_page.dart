@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/shared/registrations/register_projects_module.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/core/widgets/bloc_error_widget.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
@@ -151,20 +152,7 @@ class TopicKnowledgePage extends StatelessWidget {
           }
 
           if (state is QuestionsErrorState) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Text(
-                  state.message, 
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.redAccent,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            );
+            return BlocErrorWidget(message: state.message);
           }
 
           return const SizedBox.shrink();

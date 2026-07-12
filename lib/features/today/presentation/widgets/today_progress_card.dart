@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/today/domain/entities/progress_params.dart';
 
 class TodayProgressCard extends StatelessWidget {
-  final dynamic progress; // Replaced placeholder with your parent dashboard data map
+  final ProgressParams progress; 
 
   const TodayProgressCard({
     super.key,
@@ -11,13 +12,8 @@ class TodayProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Handle calculations safely to avoid dividing by zero if metrics are initialization blanks
-    final totalPlanned = progress.totalPlannedTasks ?? 1;
-    final totalCompleted = progress.completedTasksCount ?? 0;
-    
-    // Safely structure precision values mapped cleanly between 0.0 and 1.0
-    final percentCompleteFraction = (totalCompleted / totalPlanned).clamp(0.0, 1.0);
-    final percentCompleteDisplay = (percentCompleteFraction * 100).toStringAsFixed(0);
+    final percentCompleteFraction = progress.percentCompleteFraction;
+    final percentCompleteDisplay = progress.percentCompleteDisplay;
 
     return Container(
       decoration: BoxDecoration(
@@ -85,15 +81,15 @@ class TodayProgressCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _StatItem(
-                  value: '${progress.studiedTopicsCount ?? 0}',
+                  value: '${progress.topicsCompletedToday}',
                   label: 'Topics',
                 ),
                 _StatItem(
-                  value: '${progress.reviewedQuestionsCount ?? 0}',
+                  value: '${progress.questionsAnsweredToday}',
                   label: 'Questions',
                 ),
                 _StatItem(
-                  value: '${progress.totalStudyMinutes ?? 0}',
+                  value: '${progress.minutesStudiedToday}',
                   label: 'Minutes',
                 ),
               ],
