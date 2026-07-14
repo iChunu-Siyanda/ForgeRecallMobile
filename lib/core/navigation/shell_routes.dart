@@ -6,6 +6,7 @@ import 'package:forge_recall/features/library/presentation/pages/library_page.da
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
+import 'package:forge_recall/features/search/presentation/bloc/search_bloc.dart';
 import 'package:forge_recall/features/search/presentation/pages/search_page.dart';
 import 'package:forge_recall/features/today/presentation/bloc/today_bloc.dart';
 import 'package:forge_recall/features/today/presentation/bloc/today_event.dart';
@@ -19,7 +20,7 @@ class ShellRoutes {
       builder: (context, state) {
         return BlocProvider(
           create: (_) => getIt<ProjectBloc>(),
-          child: Projects(),
+          child: const Projects(),
         );
       },
     ),
@@ -27,7 +28,10 @@ class ShellRoutes {
     GoRoute(
       path: AppRoutes.search,
       builder: (context, state) {
-        return const SearchPage();
+        return BlocProvider(
+          create: (_) => getIt<SearchBloc>(),
+          child: const SearchPage(),
+        );
       },
     ),
 
@@ -36,7 +40,7 @@ class ShellRoutes {
       builder: (context,state) {
         return BlocProvider(
           create: (_) => getIt<TodayBloc>()..add(LoadToday()),
-          child: TodayPage(),
+          child: const TodayPage(),
         );
       },
     ),

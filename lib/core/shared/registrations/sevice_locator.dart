@@ -5,6 +5,7 @@ import 'package:forge_recall/core/shared/registrations/register_projects_module.
 import 'package:forge_recall/core/shared/registrations/register_question_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_questions_prev_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_recall_module.dart';
+import 'package:forge_recall/core/shared/registrations/register_search_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_today_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_topic_module.dart';
 
@@ -16,6 +17,7 @@ Future<void> setupLocator() async {
   registerProjectDetailModule();
   registerQuestionsPrevModule();
   registerTopicModule();
+  registerSearchModule();
   registerTodayModule();
   registerRecallModule();
 }

@@ -5,7 +5,6 @@ class RecallStatsCalculator {
     required double previousMastery,
     required double sessionMastery,
   }) {
-    // Weighted average so mastery changes gradually
     return (previousMastery * 0.8) + (sessionMastery * 0.2);
   }
 

@@ -107,6 +107,8 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
     UpdateTopicStats event,
     Emitter<TopicState> emit,
   ) async {
+    if (state is! TopicLoaded) return;
+    
     try {
       final calculator = recallStatCalculator;
       final mastery = calculator.calculateMastery(

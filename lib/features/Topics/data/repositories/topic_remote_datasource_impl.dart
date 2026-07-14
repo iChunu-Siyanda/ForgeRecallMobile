@@ -94,6 +94,18 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
       case null:
         break;
     }
+
+    if (query.search != null && query.search!.trim().isNotEmpty) {
+      final search = query.search!.trim().toLowerCase();
+      firestoreQuery = firestoreQuery.where(
+        'title',
+        isGreaterThanOrEqualTo: search,
+      )
+      .where(
+          'title',
+          isLessThan: '$search\uf8ff',
+      );
+    }
     
     return firestoreQuery.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
