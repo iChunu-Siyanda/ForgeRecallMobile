@@ -10,6 +10,6 @@ void registerSearchModule() {
   );
 
   getIt.registerFactory(
-    () => SearchBloc(searchTopic: getIt(),),
+    () => SearchBloc(searchTopic: getIt(), getProjects: getIt(),),
   );
 }

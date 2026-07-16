@@ -36,7 +36,7 @@ class _SearchPageState extends State<SearchPage> {
     // 4. Wait for 300ms of typing inactivity before dispatching to BLoC
     _debounce = Timer(const Duration(milliseconds: 300), () {
       if (mounted) {
-        context.read<SearchBloc>().add(SearchTopics(query));
+        context.read<SearchBloc>().add(SearchTextChanged(query: query));
       }
     });
   }
