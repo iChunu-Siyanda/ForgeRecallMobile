@@ -16,6 +16,7 @@ class CreateTopicUseCase {
       id: const Uuid().v4(),
       projectId: params.projectId,
       title: params.title,
+      titleLower: params.title.toLowerCase(),
       content: params.material,
       masteryScore: 0.0,        
       questionCount: 0,         

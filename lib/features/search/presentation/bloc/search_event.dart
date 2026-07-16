@@ -1,13 +1,18 @@
-sealed class SearchEvent {
-  const SearchEvent();
+//import 'package:flutter/foundation.dart';
+
+//@immutable
+abstract class SearchEvent {}
+
+/// Call this when entering the SearchPage to boot up the Firestore listeners
+class InitializeSearch extends SearchEvent {
+  final String userId;
+
+  InitializeSearch({required this.userId});
 }
 
-class SearchTopics extends SearchEvent {
+/// Call this on every keystroke change in your search text field
+class SearchTextChanged extends SearchEvent {
   final String query;
 
-  const SearchTopics(this.query);
-}
-
-class ClearSearch extends SearchEvent {
-  const ClearSearch();
+  SearchTextChanged({required this.query});
 }

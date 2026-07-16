@@ -1,3 +1,4 @@
+import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 sealed class SearchState {
@@ -14,8 +15,9 @@ class SearchLoading extends SearchState {
 
 class SearchLoaded extends SearchState {
     final List<TopicEntity> topics;
+    final List<ProjectEntity> projects;
 
-    const SearchLoaded(this.topics);
+    const SearchLoaded(this.topics, this.projects);
 }
 
 class SearchEmpty extends SearchState {

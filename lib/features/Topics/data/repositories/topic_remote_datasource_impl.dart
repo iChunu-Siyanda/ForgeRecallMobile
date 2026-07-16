@@ -45,7 +45,7 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
     TopicQuery query,
   ) {
     debugPrint(
-      'TopicQuery: '
+      'TopicQuery In Topic Repo: '
       'projectId=${query.projectId}, '
       'filter=${query.filter}, '
       'search=${query.search}',
@@ -97,12 +97,13 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
 
     if (query.search != null && query.search!.trim().isNotEmpty) {
       final search = query.search!.trim().toLowerCase();
+      debugPrint("Searching...");
       firestoreQuery = firestoreQuery.where(
-        'title',
+        'titleLower',
         isGreaterThanOrEqualTo: search,
       )
       .where(
-          'title',
+          'titleLower',
           isLessThan: '$search\uf8ff',
       );
     }
@@ -113,7 +114,7 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
           'id': doc.id,
           ...doc.data(),
         };
-        // debugPrint('getTopics in TopicRemoteDatasounceImple:')
+        debugPrint('getTopics in TopicRemoteDatasounceImple:');
         // debugPrint('Topic: ${doc.id}');
         // debugPrint("$data");
 

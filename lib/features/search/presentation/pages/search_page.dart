@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/core/widgets/bloc_error_widget.dart';
 import 'package:forge_recall/features/library/presentation/widgets/library_topic_card.dart';
 import 'package:forge_recall/features/search/presentation/bloc/search_bloc.dart';
 import 'package:forge_recall/features/search/presentation/bloc/search_event.dart';
 import 'package:forge_recall/features/search/presentation/bloc/search_state.dart';
-import 'package:forge_recall/features/search/presentation/widgets/searc_error_page.dart';
 import 'package:forge_recall/features/search/presentation/widgets/search_app_bar.dart';
 import 'package:forge_recall/features/search/presentation/widgets/search_initial_card.dart';
 import 'package:forge_recall/features/search/presentation/widgets/search_topic_loaded_list.dart';
@@ -148,8 +148,8 @@ class _SearchPageState extends State<SearchPage> {
                 }
 
                 if (state is SearchError) {
-                  final message = state.message;
-                  return SearchErrorPage(msg: message,);
+                  final msg = state.message;
+                  return BlocErrorWidget(message: msg);
                 }
 
                 return const SizedBox.shrink();
