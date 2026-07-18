@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/shared/registrations/register_firebase_module.dart';
@@ -7,6 +8,7 @@ import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/pages/projects.dart';
 import 'package:forge_recall/features/search/presentation/bloc/search_bloc.dart';
+import 'package:forge_recall/features/search/presentation/bloc/search_event.dart';
 import 'package:forge_recall/features/search/presentation/pages/search_page.dart';
 import 'package:forge_recall/features/today/presentation/bloc/today_bloc.dart';
 import 'package:forge_recall/features/today/presentation/bloc/today_event.dart';
@@ -14,6 +16,7 @@ import 'package:forge_recall/features/today/presentation/pages/today_page.dart';
 import 'package:go_router/go_router.dart';
 
 class ShellRoutes {
+  //final User? user = FirebaseAuth.instance.currentUser;
   static final routes = <RouteBase>[
     GoRoute(
       path: AppRoutes.projects,
@@ -29,7 +32,7 @@ class ShellRoutes {
       path: AppRoutes.search,
       builder: (context, state) {
         return BlocProvider(
-          create: (_) => getIt<SearchBloc>(),
+          create: (_) => getIt<SearchBloc>()..add(InitializeSearch(userId: FirebaseAuth.instance.currentUser!.uid)),
           child: const SearchPage(),
         );
       },

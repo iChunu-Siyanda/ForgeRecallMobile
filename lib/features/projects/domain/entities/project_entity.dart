@@ -1,3 +1,6 @@
+import 'dart:ui';
+import 'package:forge_recall/core/theme/app_colours.dart';
+
 class ProjectEntity{
   final String id;
   final String title;
@@ -20,4 +23,11 @@ class ProjectEntity{
     required this.totalTopics,
     required this.userId,
   });
+
+  Color get getProjectAccent {
+    if (masteryPercentage >= 80) return AppColours.emerald;
+    if (masteryPercentage >= 60) return AppColours.electricBlue;
+    if (masteryPercentage >= 40) return AppColours.amber;
+    return AppColours.crimson;
+  }
 }

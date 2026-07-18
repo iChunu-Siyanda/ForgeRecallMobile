@@ -7,10 +7,10 @@ class SearchTopicsUseCase {
   SearchTopicsUseCase(this.repository);
 
   Stream<List<TopicEntity>> call(String search) {
-      return repository.getTopics(
-          TopicQuery(
-              search: search,
-          ),
-      );
+    return repository.getTopics(
+        TopicQuery(
+            search: search,
+        ),
+    );
   }
 }

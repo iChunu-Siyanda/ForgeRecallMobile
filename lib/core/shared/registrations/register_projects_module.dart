@@ -39,7 +39,11 @@ void registerProjectsModule() {
 
   //final getProjects = GetProjects(projectRepository);
   getIt.registerLazySingleton(
-    () => GetProjects(getIt(),),
+    () => GetProjects(
+      projectRepository: getIt(), 
+      topicRepository: getIt(), 
+      projectStats: getIt(),
+    ),
   );
 
   //ProjectsBloc

@@ -1,5 +1,5 @@
 // States:
-import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_card_entity.dart';
 
 abstract class ProjectState {
   const ProjectState();
@@ -17,7 +17,7 @@ class ProjectsLoadingState extends ProjectState{
 
 // ProjectsLoaded
 class ProjectsLoadedState extends ProjectState{
-  final List<ProjectEntity> projects;
+  final List<ProjectCardEntity> projects;
   ProjectsLoadedState(this.projects);
 }
 

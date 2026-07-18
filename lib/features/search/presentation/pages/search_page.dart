@@ -68,7 +68,7 @@ class _SearchPageState extends State<SearchPage> {
                   fontSize: 16,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Search topics, terms, or tags...',
+                  hintText: 'Search topics, projects, or terms...',
                   hintStyle: const TextStyle(
                     color: AppColours.textMuted,
                     fontSize: 15,

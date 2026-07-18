@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_card_entity.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/projects/domain/usercases/get_projects.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
@@ -40,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     // Fetch the raw streams
     // We pass an empty string to load all topics initially for local search
     final Stream<List<TopicEntity>> topicsStream = searchTopic(''); 
-    final Stream<List<ProjectEntity>> projectsStream = getProjects(event.userId);
+    final Stream<List<ProjectCardEntity>> projectsStream = getProjects(event.userId);
 
     // Debounce query inputs to keep typing snappy and avoid redundant calculations
     final debouncedQueryStream = _queryController
@@ -48,11 +49,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         .distinct();
 
     // Combine all three streams (Topics, Projects, and Search Query)
-    _combinedSubscription = Rx.combineLatest3<List<TopicEntity>, List<ProjectEntity>, String, _SearchPayload>(
+    _combinedSubscription = Rx.combineLatest3<List<TopicEntity>, List<ProjectCardEntity>, String, _SearchPayload>(
       topicsStream,
       projectsStream,
       debouncedQueryStream,
-      (topics, projects, query) {
+      (topics, projectCards, query) {
+        final projects = projectCards.map((projectCard){
+          return projectCard.project;
+        }).toList();
         return _performFuzzySearch(topics, projects, query);
       },
     ).listen(

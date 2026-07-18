@@ -61,13 +61,6 @@ class _ProjectsState extends State<Projects> {
     }
   }
 
-  Color getProjectAccent(double mastery) {
-    if (mastery >= 80) return AppColours.emerald;
-    if (mastery >= 60) return AppColours.electricBlue;
-    if (mastery >= 40) return AppColours.amber;
-    return AppColours.crimson;
-  }
-
   @override
   Widget build(BuildContext context) {
     final projectBloc = context.read<ProjectBloc>();
@@ -88,14 +81,14 @@ class _ProjectsState extends State<Projects> {
             
           if (state is ProjectsLoadedState) {
             //debugPrint("Project count: ${state.projects.length}");
-            final projects = state.projects;
+            final projectCards = state.projects;
 
             return CustomScrollView(
               controller: _scrollController,
               slivers: [
                 SliverAppBar(
                   pinned: true,
-                  backgroundColor: Colors.transparent, // Keeps container bounds clear for the blur layer
+                  backgroundColor: Colors.transparent, 
                   elevation: 0,
                   scrolledUnderElevation: 0,
                   centerTitle: true,
@@ -153,7 +146,7 @@ class _ProjectsState extends State<Projects> {
                 ),
 
                 // Cards Matrix
-                if (projects.isEmpty)
+                if (projectCards.isEmpty)
                   SliverFillRemaining(
                     hasScrollBody: false,
                     child: Center(
@@ -192,27 +185,29 @@ class _ProjectsState extends State<Projects> {
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          final project = projects[index];
+                          final projectCard = projectCards[index];
 
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 14),
                             child: GestureDetector(
                               onTap: () {
-                                context.push(AppRoutes.projectDetail(TopicQuery(projectId: project.id).projectId!));
+                                context.push(
+                                  AppRoutes.projectDetail(TopicQuery(projectId: projectCard.project.id).projectId!),
+                                );
                               },
                               child: ProjectCard(
-                                title: project.title,
-                                mastery: project.masteryPercentage,
-                                topics: project.totalTopics,
-                                due: 5, 
-                                accentColor: getProjectAccent(project.masteryPercentage), 
-                                lastStudied: 'Not studied for 2 days', 
-                                daysSinceStudy: 2,
+                                title: projectCard.project.title,
+                                mastery: projectCard.project.masteryPercentage,
+                                topics: projectCard.project.totalTopics,
+                                accentColor: projectCard.project.getProjectAccent, 
+                                due: projectCard.dueTopics, 
+                                lastStudied: projectCard.lastStudied, 
+                                daysSinceStudy: projectCard.daysSinceStudy,
                               ),
                             ),
                           );
                         },
-                        childCount: projects.length,
+                        childCount: projectCards.length,
                       ),
                     ),
                   ),
