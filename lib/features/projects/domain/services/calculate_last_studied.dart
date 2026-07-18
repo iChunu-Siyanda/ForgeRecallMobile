@@ -1,4 +1,4 @@
-import 'package:forge_recall/features/projects/presentation/services/calculate_days_since_study.dart';
+import 'package:forge_recall/features/projects/domain/services/calculate_days_since_study.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 String calculateLastStudied(List<TopicEntity> topics) {

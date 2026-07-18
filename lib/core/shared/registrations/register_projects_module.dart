@@ -42,7 +42,6 @@ void registerProjectsModule() {
     () => GetProjects(
       projectRepository: getIt(), 
       topicRepository: getIt(), 
-      projectStats: getIt(),
     ),
   );
 
