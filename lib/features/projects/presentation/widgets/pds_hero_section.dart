@@ -7,10 +7,15 @@ import 'package:forge_recall/features/topics/presentation/widgets/topic_section_
 class PdsHeroSection extends StatelessWidget {
   const PdsHeroSection({
     super.key,
-    required this.project,
+    required this.project, 
+    required this.mastery, 
+    required this.totalTopics,
   });
 
   final ProjectEntity project;
+  final double mastery;
+  final int totalTopics;
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +26,9 @@ class PdsHeroSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 18),
-            ProjectDetailHeroSection(project: project),
+            ProjectDetailHeroSection(project: project, mastery: mastery, totalTopics: totalTopics,),
             const SizedBox(height: 26),
-            ProjectMasteryCard(project: project),
+            ProjectMasteryCard(mastery: mastery,),
             const SizedBox(height: 30),
             const TopicSectionHeader(),
             const SizedBox(height: 20),

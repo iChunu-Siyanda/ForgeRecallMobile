@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/details_hero_metric.dart';
-// import 'package:your_app/theme/app_colours.dart'; 
 
 class ProjectDetailHeroSection extends StatelessWidget {
-  const ProjectDetailHeroSection({super.key, required this.project});
+  const ProjectDetailHeroSection({
+    super.key, 
+    required this.project,
+    required this.mastery,
+    required this.totalTopics,
+  });
   final ProjectEntity project;
+  final double mastery;
+  final int totalTopics;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +94,7 @@ class ProjectDetailHeroSection extends StatelessWidget {
                       height: 64,
                       width: 64,
                       child: CircularProgressIndicator(
-                        value: project.masteryPercentage / 100,
+                        value: mastery / 100,
                         strokeWidth: 5,
                         backgroundColor: AppColours.surfaceSecondary,
                         valueColor: const AlwaysStoppedAnimation<Color>(
@@ -97,7 +103,7 @@ class ProjectDetailHeroSection extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${project.masteryPercentage.toInt()}%',
+                      '${mastery.toInt()}%',
                       style: const TextStyle(
                         color: AppColours.electricBlue,
                         fontWeight: FontWeight.w700,
@@ -132,7 +138,7 @@ class ProjectDetailHeroSection extends StatelessWidget {
               Expanded(
                 child: DetailsHeroMetric(
                   title: 'Topics',
-                  value: '${project.totalTopics}',
+                  value: '$totalTopics',
                 ),
               ),
               const SizedBox(width: 12),

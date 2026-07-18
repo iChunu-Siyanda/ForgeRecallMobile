@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_detail_stats.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_event.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectsBloc/project_state.dart';
@@ -192,14 +193,20 @@ class _ProjectsState extends State<Projects> {
                             child: GestureDetector(
                               onTap: () {
                                 context.push(
-                                  AppRoutes.projectDetail(TopicQuery(projectId: projectCard.project.id).projectId!),
+                                  AppRoutes.projectDetail(
+                                    TopicQuery(projectId: projectCard.project.id).projectId!,
+                                  ),
+                                  extra: ProjectDetailStats(
+                                    masteryScore: projectCard.masteryPercentage, 
+                                    totalTopics: projectCard.totalTopics,
+                                  ),
                                 );
                               },
                               child: ProjectCard(
                                 title: projectCard.project.title,
-                                mastery: projectCard.project.masteryPercentage,
-                                topics: projectCard.project.totalTopics,
-                                accentColor: projectCard.project.getProjectAccent, 
+                                accentColor: projectCard.getProjectAccent,
+                                mastery: projectCard.masteryPercentage,
+                                topics: projectCard.totalTopics, 
                                 due: projectCard.dueTopics, 
                                 lastStudied: projectCard.lastStudied, 
                                 daysSinceStudy: projectCard.daysSinceStudy,

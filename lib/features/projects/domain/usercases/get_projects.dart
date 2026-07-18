@@ -5,7 +5,6 @@ import 'package:forge_recall/features/projects/domain/repositories/project_repos
 import 'package:forge_recall/features/projects/presentation/services/calculate_project_stats.dart';
 import 'package:forge_recall/features/topics/domain/repositories/topic_repository.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/transformers.dart';
 
 class GetProjects {
   final ProjectRepository projectRepository;
@@ -29,9 +28,11 @@ class GetProjects {
 
           return ProjectCardEntity(
             project: project, 
+            masteryPercentage: stats.masteryPercentage, 
+            totalTopics: stats.totalTopics,
             dueTopics: stats.dueTopics, 
             daysSinceStudy: stats.daysSinceStudy, 
-            lastStudied: stats.lastStudied,
+            lastStudied: stats.lastStudied, 
           );
         });
       });

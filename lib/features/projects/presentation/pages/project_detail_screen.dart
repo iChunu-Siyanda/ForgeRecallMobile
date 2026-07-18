@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/projects/domain/entities/project_detail_stats.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_bloc.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_event.dart';
 import 'package:forge_recall/features/projects/presentation/bloc/projectDetailBloc/project_detail_state.dart';
@@ -17,10 +18,12 @@ import 'package:forge_recall/features/topics/presentation/widgets/topic_tile.dar
 class ProjectDetailScreen extends StatefulWidget {
   const ProjectDetailScreen({
     super.key,
-    required this.projectId,
+    required this.projectId, 
+    required this.stats, 
   });
 
   final String projectId;
+  final ProjectDetailStats stats;
 
   @override
   State<ProjectDetailScreen> createState() => _ProjectDetailScreenState();
@@ -55,7 +58,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 PdsSliverAppBar(project: project),
-                PdsHeroSection(project: project),
+                PdsHeroSection(
+                  project: project, 
+                  mastery: widget.stats.masteryScore, 
+                  totalTopics: widget.stats.totalTopics,
+                ),
                 SliverPadding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   sliver: BlocBuilder<TopicBloc, TopicState>(

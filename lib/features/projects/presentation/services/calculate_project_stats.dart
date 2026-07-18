@@ -6,15 +6,21 @@ import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 
 class CalculateProjectStats {
   static ProjectStats calculateStatistics(
-    List<TopicEntity> topic,
+    List<TopicEntity> topics,
   ) {
-    final due = calculateDue(topic);
-    final days = calculateDaysSinceStudy(topic);
+    final totalTopics = topics.length;
+    final double mastery = totalTopics == 0 
+                        ? 0 
+                        : topics.map((t) => t.masteryScore).reduce((a,b) => a + b);
+    final due = calculateDue(topics);
+    final days = calculateDaysSinceStudy(topics);
 
     return ProjectStats(
+      masteryPercentage: mastery, 
+      totalTopics: totalTopics,
       dueTopics: due,
       daysSinceStudy: days,
-      lastStudied: calculateLastStudied(topic),
+      lastStudied: calculateLastStudied(topics),
     );
   }
 }

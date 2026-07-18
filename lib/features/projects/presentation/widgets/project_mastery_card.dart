@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
-import 'package:forge_recall/features/projects/domain/entities/project_entity.dart';
-// import 'package:your_app/theme/app_colours.dart'; 
 
 class ProjectMasteryCard extends StatelessWidget {
-  final ProjectEntity project;
-  const ProjectMasteryCard({super.key, required this.project});
+  final double mastery;
+  const ProjectMasteryCard({super.key, required this.mastery});
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +52,14 @@ class ProjectMasteryCard extends StatelessWidget {
               Expanded(
                 child: _MasteryMetric(
                   title: 'Cognitive Strength',
-                  value: '${(project.masteryPercentage + 12).clamp(0, 100).toInt()}%',
+                  value: '${(mastery + 12).clamp(0, 100).toInt()}%',
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: _MasteryMetric(
                   title: 'Retention',
-                  value: '${(project.masteryPercentage - 8).clamp(0, 100).toInt()}%',
+                  value: '${(mastery - 8).clamp(0, 100).toInt()}%',
                 ),
               ),
               const SizedBox(width: 12),
