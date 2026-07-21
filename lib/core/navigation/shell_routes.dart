@@ -58,7 +58,11 @@ class ShellRoutes {
     GoRoute(
       path: AppRoutes.analytics,
       builder: (context, state) {
-        return const Analytics();
+        return const AnalyticsPage(
+          topics: [], 
+          projectCards: [], 
+          recallSessions: [],
+        );
       },
     ),
 
