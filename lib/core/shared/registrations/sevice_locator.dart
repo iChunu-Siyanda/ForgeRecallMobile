@@ -1,3 +1,4 @@
+import 'package:forge_recall/core/shared/registrations/register_analytics_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_firebase_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_library_module.dart';
 import 'package:forge_recall/core/shared/registrations/register_project_detail_module.dart';
@@ -13,6 +14,7 @@ Future<void> setupLocator() async {
   registerFirebaseModule();
   registerQuestionModule();
   registerProjectsModule();
+  registerAnalyticsModule();
   registerLibraryModule();
   registerProjectDetailModule();
   registerQuestionsPrevModule();

@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/shared/registrations/register_firebase_module.dart';
+import 'package:forge_recall/features/analytics/presentation/bloc/analytics_bloc.dart';
+import 'package:forge_recall/features/analytics/presentation/bloc/analytics_event.dart';
 import 'package:forge_recall/features/analytics/presentation/pages/analytics.dart';
 import 'package:forge_recall/features/library/presentation/pages/library_page.dart';
 import 'package:forge_recall/features/profile/presentation/pages/profile.dart';
@@ -16,7 +19,6 @@ import 'package:forge_recall/features/today/presentation/pages/today_page.dart';
 import 'package:go_router/go_router.dart';
 
 class ShellRoutes {
-  //final User? user = FirebaseAuth.instance.currentUser;
   static final routes = <RouteBase>[
     GoRoute(
       path: AppRoutes.projects,
@@ -58,10 +60,19 @@ class ShellRoutes {
     GoRoute(
       path: AppRoutes.analytics,
       builder: (context, state) {
-        return const AnalyticsPage(
-          topics: [], 
-          projectCards: [], 
-          recallSessions: [],
+        final userId = FirebaseAuth.instance.currentUser?.uid;
+
+        if (userId == null) {
+          // Option A: Redirect or show fallback if no user is logged in
+          return const Scaffold(
+            body: Center(
+              child: Text('Please log in to view analytics.'),
+            ),
+          );
+        }
+        return BlocProvider(
+          create: (_) => getIt<AnalyticsBloc>(param1: userId)..add(const FetchAnalyticsData()),
+          child: const AnalyticsPage(),
         );
       },
     ),

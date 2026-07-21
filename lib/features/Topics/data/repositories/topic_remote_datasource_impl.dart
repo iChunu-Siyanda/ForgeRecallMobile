@@ -114,7 +114,7 @@ class TopicRemoteDatasourceImpl implements TopicRemoteDatasource {
           'id': doc.id,
           ...doc.data(),
         };
-        debugPrint('getTopics in TopicRemoteDatasounceImple:');
+        //debugPrint('getTopics in TopicRemoteDatasounceImple:');
         // debugPrint('Topic: ${doc.id}');
         // debugPrint("$data");
 
