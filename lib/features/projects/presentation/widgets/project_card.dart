@@ -30,7 +30,7 @@ class ProjectCard extends StatelessWidget {
 
     if (daysSinceStudy <= 1) {
       studyColor = AppColours.emerald;
-      studyIcon = Icons.auto_awesome_rounded; // Gemini-style sparkle icon for active streaks
+      studyIcon = Icons.auto_awesome_rounded; 
     } else if (daysSinceStudy <= 3) {
       studyColor = AppColours.amber;
       studyIcon = Icons.schedule_rounded;

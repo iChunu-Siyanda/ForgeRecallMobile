@@ -125,12 +125,12 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
         lastStudiedAt: DateTime.now(),
       );
 
-      // debugPrint('''
-      //   Bloc Updating stats:
-      //   mastery: $mastery
-      //   difficulty: $difficulty
-      //   studyCount: ${event.topic.studyCount + 1}
-      // ''');
+      debugPrint('''
+        Bloc Updating stats:
+        mastery: $mastery
+        difficulty: $difficulty
+        studyCount: ${event.topic.studyCount + 1}
+      ''');
 
       //debugPrint(updateTopicStats.runtimeType.toString());
       await updateTopicStats(stats);

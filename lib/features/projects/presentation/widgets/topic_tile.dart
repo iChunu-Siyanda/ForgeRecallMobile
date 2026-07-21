@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:your_app/theme/app_colours.dart'; 
@@ -15,8 +18,13 @@ class TopicTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mastery = topic.masteryScore*100;
+    final cognitiveDifficulty = topic.cognitiveDifficulty*100;
     return GestureDetector(
-      onTap: () => context.push(AppRoutes.topicKnowledge, extra: topic),
+      onTap: (){
+        context.read<QuestionsBloc>().add(QuestionsLoadedEvent(topic.projectId,topic.id),);
+        context.push(AppRoutes.topicKnowledge, extra: topic);
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
@@ -44,14 +52,14 @@ class TopicTile extends StatelessWidget {
                   height: 40,
                   width: 40,
                   child: CircularProgressIndicator(
-                    value: topic.masteryScore / 100,
+                    value: mastery/ 100,
                     strokeWidth: 3.5,
                     backgroundColor: AppColours.surfaceSecondary,
                     valueColor: const AlwaysStoppedAnimation<Color>(AppColours.electricBlue),
                   ),
                 ),
                 Text(
-                  '${topic.masteryScore}%',
+                  '${mastery.round()}%',
                   style: const TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
@@ -89,7 +97,7 @@ class TopicTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          topic.cognitiveDifficulty.toString().split('.').last.toUpperCase(),
+                          (cognitiveDifficulty.round()).toString(),
                           style: const TextStyle(
                             color: AppColours.textSecondary,
                             fontWeight: FontWeight.bold,

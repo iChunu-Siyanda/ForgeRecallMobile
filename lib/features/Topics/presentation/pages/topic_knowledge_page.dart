@@ -5,7 +5,9 @@ import 'package:forge_recall/core/shared/registrations/register_projects_module.
 import 'package:forge_recall/core/theme/app_colours.dart';
 import 'package:forge_recall/core/widgets/bloc_error_widget.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
+import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
 import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_state.dart';
+import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/add_question_sheet.dart.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/custom_questions_card.dart';
@@ -136,6 +138,9 @@ class TopicKnowledgePage extends StatelessWidget {
                             context.push(AppRoutes.notesInput, extra: topic);
                           },
                           onPreviewQuestions: () {
+                            debugPrint('QUESTIONS BLOC Loading Questions');
+                            context.read<QuestionsBloc>().add(QuestionsLoadedEvent(topic.projectId,topic.id),);
+                            context.read<RecallLabBloc>();
                             context.push(AppRoutes.recallSession, extra: topic);
                           },
                         ),

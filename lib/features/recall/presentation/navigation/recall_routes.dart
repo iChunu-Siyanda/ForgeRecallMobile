@@ -1,15 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/navigation/app_routes.dart';
-import 'package:forge_recall/core/shared/registrations/register_firebase_module.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_bloc.dart';
-import 'package:forge_recall/features/questions/presentation/bloc/questionFetching/questions_event.dart';
-import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_bloc.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_state.dart';
 import 'package:forge_recall/features/recall/presentation/pages/recall_session_page.dart';
 import 'package:forge_recall/features/recall/presentation/pages/session_complete_page.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
-import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class RecallRoutes {
@@ -19,27 +12,7 @@ class RecallRoutes {
       builder: (context, state) {
         final topic = state.extra as TopicEntity;
         //debugPrint('TOPIC: ${topic.title}');
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (_){ 
-              debugPrint('CREATING QUESTIONS BLOC');
-              return getIt<QuestionsBloc>()..add(QuestionsLoadedEvent(topic.projectId,topic.id),);
-            }),
-            BlocProvider(
-              create: (_){
-              //debugPrint('CREATING RECALL BLOC');
-              return RecallLabBloc();
-            }),
-            BlocProvider(
-              create: (_){
-                return getIt<TopicBloc>();
-              },
-            )
-          ],
-
-          child: RecallSessionPage(topic: topic,),
-        );
+        return RecallSessionPage(topic: topic,);
       },
     ),
 

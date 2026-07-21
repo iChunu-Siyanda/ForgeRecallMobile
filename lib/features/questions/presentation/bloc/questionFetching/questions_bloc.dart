@@ -153,9 +153,8 @@ class QuestionsBloc extends Bloc<QuestionsEvent,QuestionsState>{
 
   @override
   Future<void> close() async {
-    debugPrint("Cancelling Firestore listener...");
-
     await _questionsSubscription?.cancel();
+    debugPrint("Cancelling Firestore listener...");
     return super.close();
   }
 }

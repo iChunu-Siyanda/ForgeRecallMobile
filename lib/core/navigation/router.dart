@@ -1,13 +1,11 @@
 import 'package:forge_recall/core/navigation/app_routes.dart';
+import 'package:forge_recall/core/navigation/project_study_shell.dart';
 import 'package:forge_recall/core/navigation/shell_routes.dart';
 import 'package:forge_recall/features/auth/presentation/navigation/auth_routes.dart';
 import 'package:forge_recall/features/library/presentation/navigation/library_routes.dart';
-import 'package:forge_recall/features/questions/presentation/navigation/questions_routes.dart';
-import 'package:forge_recall/features/recall/presentation/navigation/recall_routes.dart';
 import 'package:forge_recall/features/splash/presentation/pages/splash.dart';
 import 'package:forge_recall/core/navigation/main_navigation.dart';
 import 'package:forge_recall/features/today/presentation/navigation/today_routes.dart';
-import 'package:forge_recall/features/topics/presentation/navigation/topic_routes.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
@@ -19,13 +17,9 @@ class AppRouter {
   
       ...AuthRoutes.routes,
       
-      //PROJECTS
-      ...TopicRoutes.routes,
-
-      ...QuestionsRoutes.routes,
-
-      ...RecallRoutes.routes,
-
+      //Projects
+      ProjectStudyShell.studyShell,
+      
       //Library
       ...LibraryRoutes.routes,
 

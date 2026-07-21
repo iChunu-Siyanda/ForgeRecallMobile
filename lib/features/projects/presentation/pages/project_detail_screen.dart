@@ -9,11 +9,11 @@ import 'package:forge_recall/features/projects/presentation/widgets/pds_floating
 import 'package:forge_recall/features/projects/presentation/widgets/pds_hero_section.dart';
 import 'package:forge_recall/features/projects/presentation/widgets/pds_sliver_app_bar.dart';
 import 'package:forge_recall/core/shared/entites/topic_query.dart';
+import 'package:forge_recall/features/projects/presentation/widgets/topic_tile.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_bloc.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topic_event.dart';
 import 'package:forge_recall/features/topics/presentation/bloc/topics_state.dart';
 import 'package:forge_recall/features/topics/presentation/widgets/topic_empty_state.dart';
-import 'package:forge_recall/features/topics/presentation/widgets/topic_tile.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   const ProjectDetailScreen({
