@@ -6,6 +6,18 @@ abstract class RecallLabState {
 
 class RecallLabInitial extends RecallLabState {}
 
+class RecallLabStarted extends RecallLabState {
+  final String projectId;
+  final DateTime startedAt;
+
+  const RecallLabStarted({
+    required this.projectId,
+    required this.startedAt,
+  });
+
+  Duration get duration => DateTime.now().difference(startedAt);
+}
+
 class RecallLabLoaded extends RecallLabState {
   final List<QuestionEntity> questions;
   final int currentIndex;
@@ -20,12 +32,15 @@ class RecallLabLoaded extends RecallLabState {
     required this.answerRevealed,
     required this.forgotCount,
     required this.partialCount,
-    required this.easyCount,
+    required this.easyCount, 
   });
 
   QuestionEntity get currentQuestion => questions[currentIndex];
-
   bool get isLastQuestion => currentIndex == questions.length - 1;
+
+  int get totalQuestions => questions.length;
+  double get accuracy => (easyCount + partialCount * 0.5) / totalQuestions;
+  double get score => accuracy * 100;
 }
 
 class RecallLabCompleted extends RecallLabState {

@@ -5,12 +5,13 @@ abstract class RecallLabEvent {
   const RecallLabEvent();
 }
 
-class StartRecallSessionEvent
-    extends RecallLabEvent {
+class StartRecallSessionEvent extends RecallLabEvent {
   final List<QuestionEntity> questions;
+  final String projectId;
 
   StartRecallSessionEvent(
-    this.questions,
+    this.questions, 
+    this.projectId,
   );
 }
 
@@ -23,3 +24,5 @@ class RateRecallEvent extends RecallLabEvent{
 
   RateRecallEvent(this.rating);
 }
+
+class CompleteRecallSessionEvent extends RecallLabEvent {}

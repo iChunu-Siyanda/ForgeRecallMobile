@@ -40,7 +40,7 @@ class RecallSessionPage extends StatelessWidget {
       listener: (context, state) {
         if (state is QuestionsLoadedState) {
           debugPrint('Questions loaded: ${state.topicQuestions.length}');
-          context.read<RecallLabBloc>().add(StartRecallSessionEvent(state.topicQuestions));
+          context.read<RecallLabBloc>().add(StartRecallSessionEvent(state.topicQuestions, topic.projectId));
         }
       },
       child: Scaffold(

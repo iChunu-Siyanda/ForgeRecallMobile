@@ -1,21 +1,39 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/features/recall/domain/entities/recall_rating.dart';
+import 'package:forge_recall/features/recall/domain/entities/recall_session_entity.dart';
+import 'package:forge_recall/features/recall/domain/usercases/save_recall_session_use_case.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_event.dart';
 import 'package:forge_recall/features/recall/presentation/bloc/recall_lab_state.dart';
+import 'package:uuid/uuid.dart';
 
 class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
-  RecallLabBloc(): super(RecallLabInitial(),) {
+  final SaveRecallSessionUseCase saveRecallSessionUseCase;
+  final String userId;
+  DateTime? _startedAt;
+  String? _projectId;
+
+  RecallLabBloc({
+    required this.saveRecallSessionUseCase,
+    required this.userId
+  }
+  ): super(RecallLabInitial(),) {
     on<StartRecallSessionEvent>(_onStartSession,);
     on<RevealAnswerEvent>(_onRevealAnswer,);
     on<RateRecallEvent>(_onRateRecall,);
     on<NextQuestionEvent>(_onNextQuestion,);
+    on<CompleteRecallSessionEvent>(_onCompleteSession,);
   }
 
   void _onStartSession(
     StartRecallSessionEvent event,
     Emitter<RecallLabState> emit,
   ) {
+    
+    _projectId = event.projectId;
+    _startedAt = DateTime.now();
+
+
     if (event.questions.isEmpty) {
       debugPrint('event.questions. is empty');
       return;
@@ -27,7 +45,7 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
         answerRevealed: false,
         forgotCount: 0,
         partialCount: 0,
-        easyCount: 0,
+        easyCount: 0,  
       ),
     );
   }
@@ -36,7 +54,7 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
     RevealAnswerEvent event,
     Emitter<RecallLabState> emit,
   ) {
-    if (state is! RecallLabLoaded) {return;}
+    if (state is! RecallLabLoaded) return;
 
     final current = state as RecallLabLoaded;
 
@@ -83,19 +101,8 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
 
     final current = state as RecallLabLoaded;
 
-    if (current.isLastQuestion) {
-      emit(
-        RecallLabCompleted(
-          totalQuestions: current.questions.length,
-          easyCount: current.easyCount,
-          partialCount: current.partialCount,
-          forgotCount: current.forgotCount,
-        ),
-      );
-
-      return;
-    }
-
+    if (current.isLastQuestion) return;
+    
     emit(
       RecallLabLoaded(
         questions: current.questions,
@@ -103,7 +110,36 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
         answerRevealed: false,
         forgotCount: current.forgotCount,
         partialCount: current.partialCount,
+        easyCount: current.easyCount, 
+      ),
+    );
+  }
+
+  Future<void> _onCompleteSession(
+    CompleteRecallSessionEvent event,
+    Emitter<RecallLabState> emit,
+  ) async {
+    final current = state as RecallLabLoaded;
+   
+    final session = RecallSessionEntity(
+      id: const Uuid().v4(),
+      userId: userId,
+      projectId: _projectId!,
+      score: current.score,
+      accuracy: current.accuracy,
+      durationSeconds: _startedAt!.difference(DateTime.now()).inSeconds,
+      totalQuestions: current.totalQuestions,
+      completedAt: DateTime.now(), 
+    );
+
+    await saveRecallSessionUseCase(session);
+
+    emit(
+      RecallLabCompleted(
+        totalQuestions: current.questions.length,
         easyCount: current.easyCount,
+        partialCount: current.partialCount,
+        forgotCount: current.forgotCount,
       ),
     );
   }
