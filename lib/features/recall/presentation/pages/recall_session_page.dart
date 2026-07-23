@@ -166,7 +166,7 @@ class RecallSessionPage extends StatelessWidget {
                                     child: SizedBox(
                                       height: 48,
                                       child: ElevatedButton(
-                                        onPressed: () => _rateRecall(context, RecallRating.easy),
+                                        onPressed: () => _rateRecall(context, RecallRating.remembered),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: AppColours.emerald.withValues(alpha:0.12),
                                           foregroundColor: AppColours.emerald,

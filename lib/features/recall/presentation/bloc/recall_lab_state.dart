@@ -24,7 +24,7 @@ class RecallLabLoaded extends RecallLabState {
   final bool answerRevealed;
   final int forgotCount;
   final int partialCount;
-  final int easyCount;
+  final int rememberedCount;
 
   const RecallLabLoaded({
     required this.questions,
@@ -32,14 +32,14 @@ class RecallLabLoaded extends RecallLabState {
     required this.answerRevealed,
     required this.forgotCount,
     required this.partialCount,
-    required this.easyCount, 
+    required this.rememberedCount, 
   });
 
   QuestionEntity get currentQuestion => questions[currentIndex];
   bool get isLastQuestion => currentIndex == questions.length - 1;
 
   int get totalQuestions => questions.length;
-  double get accuracy => (easyCount + partialCount * 0.5) / totalQuestions;
+  double get accuracy => (rememberedCount + partialCount * 0.5) / totalQuestions;
   double get score => accuracy * 100;
 }
 

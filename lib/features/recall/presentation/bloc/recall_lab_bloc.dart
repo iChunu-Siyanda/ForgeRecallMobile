@@ -45,7 +45,7 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
         answerRevealed: false,
         forgotCount: 0,
         partialCount: 0,
-        easyCount: 0,  
+        rememberedCount: 0,  
       ),
     );
   }
@@ -65,7 +65,7 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
         answerRevealed: true,
         forgotCount: current.forgotCount,
         partialCount: current.partialCount,
-        easyCount: current.easyCount,
+        rememberedCount: current.rememberedCount,
       ),
     );
   }
@@ -87,8 +87,8 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
                 ? current.forgotCount + 1 : current.forgotCount,
         partialCount: event.rating == RecallRating.partial
                 ? current.partialCount + 1 : current.partialCount,
-        easyCount: event.rating ==RecallRating.easy
-                ? current.easyCount + 1 : current.easyCount,
+        rememberedCount: event.rating ==RecallRating.remembered
+                ? current.rememberedCount + 1 : current.rememberedCount,
       ),
     );
   }
@@ -110,7 +110,7 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
         answerRevealed: false,
         forgotCount: current.forgotCount,
         partialCount: current.partialCount,
-        easyCount: current.easyCount, 
+        rememberedCount: current.rememberedCount, 
       ),
     );
   }
@@ -130,6 +130,9 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
       durationSeconds: _startedAt!.difference(DateTime.now()).inSeconds,
       totalQuestions: current.totalQuestions,
       completedAt: DateTime.now(), 
+      remembered: current.rememberedCount, 
+      partial: current.partialCount, 
+      forgot: current.forgotCount, 
     );
 
     await saveRecallSessionUseCase(session);
@@ -137,7 +140,7 @@ class RecallLabBloc extends Bloc<RecallLabEvent,RecallLabState> {
     emit(
       RecallLabCompleted(
         totalQuestions: current.questions.length,
-        easyCount: current.easyCount,
+        easyCount: current.rememberedCount,
         partialCount: current.partialCount,
         forgotCount: current.forgotCount,
       ),

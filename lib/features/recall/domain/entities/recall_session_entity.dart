@@ -6,6 +6,10 @@ class RecallSessionEntity {
   final double score;
   final double accuracy;
 
+  final int remembered;
+  final int partial;
+  final int forgot;
+
   final int durationSeconds;
   final int totalQuestions;
 
@@ -19,6 +23,9 @@ class RecallSessionEntity {
     required this.accuracy,
     required this.durationSeconds,
     required this.totalQuestions,
-    required this.completedAt,
+    required this.completedAt, 
+    required this.remembered, 
+    required this.partial, 
+    required this.forgot,
   });
 }

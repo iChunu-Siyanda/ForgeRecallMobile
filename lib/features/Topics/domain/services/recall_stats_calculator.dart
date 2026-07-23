@@ -1,14 +1,16 @@
 class RecallStatsCalculator {
-  const RecallStatsCalculator();
+   const RecallStatsCalculator({
+    this.learningRate = 0.2,
+  });
+
+  final double learningRate;
 
   double calculateMastery({
     required double previousMastery,
     required double sessionMastery,
   }) {
-    return (previousMastery * 0.8) + (sessionMastery * 0.2);
+    return previousMastery + (sessionMastery - previousMastery) * learningRate;
   }
 
-  double calculateDifficulty(double mastery) {
-    return 1 - mastery;
-  }
+  double reviewPriority(double mastery) => 1 - mastery;
 }

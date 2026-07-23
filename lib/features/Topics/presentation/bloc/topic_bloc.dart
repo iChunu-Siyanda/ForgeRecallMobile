@@ -113,14 +113,14 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
       final calculator = recallStatCalculator;
       final mastery = calculator.calculateMastery(
         previousMastery: event.topic.masteryScore,
-        sessionMastery: event.result.mastery,
+        sessionMastery: event.result.recallScore,
       );
-      final difficulty = calculator.calculateDifficulty(mastery);
+      final priority = calculator.reviewPriority(mastery);
       final stats = UpdateStatsParams(
         topicId: event.topic.id,
         projectId: event.topic.projectId,
         masteryScore: mastery,
-        cognitiveDifficulty: difficulty,
+        cognitiveDifficulty: priority,
         studyCount: event.topic.studyCount + 1,
         lastStudiedAt: DateTime.now(),
       );
@@ -128,7 +128,7 @@ class TopicBloc extends Bloc<TopicEvent, TopicState>{
       debugPrint('''
         Bloc Updating stats:
         mastery: $mastery
-        difficulty: $difficulty
+        difficulty: $priority
         studyCount: ${event.topic.studyCount + 1}
       ''');
 

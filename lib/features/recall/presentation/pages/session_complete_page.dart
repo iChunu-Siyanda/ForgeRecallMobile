@@ -29,8 +29,8 @@ class SessionCompletePage extends StatelessWidget {
       forgot: forgotCount,
     );
     final accuracy = totalQuestions == 0 ? 0 : result.accuracy;
-    final performance = result.performance;
-    final performanceColor = result.performanceColor;
+    final performance = result.grade.label;
+    final performanceColor = result.grade.colour;
 
     return Scaffold(
       backgroundColor: AppColours.background,

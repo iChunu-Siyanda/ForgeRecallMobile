@@ -1,5 +1,4 @@
-import 'package:flutter/services.dart';
-import 'package:forge_recall/core/theme/app_colours.dart';
+import 'package:forge_recall/features/recall/domain/entities/recall_grade.dart';
 
 class CompleteRecallStats {
   final int totalQuestions;
@@ -14,20 +13,12 @@ class CompleteRecallStats {
     required this.forgot
   });
 
-  double get mastery => totalQuestions == 0 ? 0  : (easy + partial * 0.5) / totalQuestions;
-  int get accuracy => (mastery * 100).round();
+  double get recallScore => totalQuestions == 0 ? 0  : (easy + partial * 0.5) / totalQuestions;
+  int get accuracy => (recallScore * 100).round();
+  double get easyRate => easy / totalQuestions;
+  double get partialRate => partial / totalQuestions;
+  double get forgotRate => forgot / totalQuestions;
+  bool get passed => accuracy >= 70;
 
-  String get performance => switch (accuracy) {
-    >= 90 => 'Mastery',
-    >= 75 => 'Strong Recall',
-    >= 60 => 'Developing',
-    _ => 'Needs Reinforcement',
-  };
-
-  Color get performanceColor => switch (accuracy) {
-    >= 90 => AppColours.emerald,
-    >= 75 => AppColours.electricBlue,
-    >= 60 => AppColours.amber,
-    _ => AppColours.crimson,
-  };
+  RecallGrade get grade => RecallGrade.fromAccuracy(accuracy);
 }

@@ -12,6 +12,9 @@ class RecallSessionModel extends RecallSessionEntity {
     required super.durationSeconds,
     required super.totalQuestions,
     required super.completedAt, 
+    required super.remembered, 
+    required super.partial, 
+    required super.forgot, 
   });
 
   factory RecallSessionModel.fromMap(Map<String, dynamic> map) {
@@ -23,7 +26,10 @@ class RecallSessionModel extends RecallSessionEntity {
       accuracy: (map['accuracy'] as num).toDouble(),
       durationSeconds: map['durationSeconds'] ?? 0,
       totalQuestions: map['totalQuestions'] ?? 0,
-      completedAt: (map['completedAt'] as Timestamp).toDate(),
+      completedAt: (map['completedAt'] as Timestamp).toDate(), 
+      remembered: map['remembered'] ?? 0, 
+      partial: map['partial'] ?? 0, 
+      forgot: map['forgot'] ?? 0,
     );
   }
 
@@ -36,7 +42,10 @@ class RecallSessionModel extends RecallSessionEntity {
       accuracy: session.accuracy, 
       durationSeconds: session.durationSeconds, 
       totalQuestions: session.totalQuestions, 
-      completedAt: session.completedAt,
+      completedAt: session.completedAt, 
+      remembered: session.remembered, 
+      partial: session.partial, 
+      forgot: session.forgot,
     );
   }
 
@@ -50,6 +59,9 @@ class RecallSessionModel extends RecallSessionEntity {
       'durationSeconds': durationSeconds,
       'totalQuestions': totalQuestions,
       'completedAt': Timestamp.fromDate(completedAt),
+      'remembered': remembered,
+      'partial': partial,
+      'forgot': forgot,
     };
   }
 }

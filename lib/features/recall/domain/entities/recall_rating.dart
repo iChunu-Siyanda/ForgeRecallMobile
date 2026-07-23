@@ -1,5 +1,5 @@
 enum RecallRating {
   forgot,
   partial,
-  easy,
+  remembered,
 }

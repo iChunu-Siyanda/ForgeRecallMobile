@@ -9,4 +9,14 @@ class SaveRecallSessionUseCase {
   Future<void> call(RecallSessionEntity session) {
     return repository.saveSession(session);
   }
+
+//   double get questionsPerMinute =>
+//     durationSeconds == 0
+//         ? 0
+//         : totalQuestions / (durationSeconds / 60);
+
+// double get averageSecondsPerQuestion =>
+//     totalQuestions == 0
+//         ? 0
+//         : durationSeconds / totalQuestions;
 }
