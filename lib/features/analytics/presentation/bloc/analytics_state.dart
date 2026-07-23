@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:forge_recall/features/analytics/domain/entities/analytics_time_frame.dart';
 import 'package:forge_recall/features/projects/domain/entities/project_card_entity.dart';
+import 'package:forge_recall/features/recall/domain/entities/recall_session_entity.dart';
 import 'package:forge_recall/features/topics/domain/entities/topic_entity.dart';
-//import 'package:forge_recall/features/recall/domain/entities/recall_session_entity.dart'; // Adjust path as needed
 
 sealed class AnalyticsState extends Equatable {
   const AnalyticsState();
@@ -22,14 +22,14 @@ class AnalyticsLoading extends AnalyticsState {
 class AnalyticsLoaded extends AnalyticsState {
   final List<TopicEntity> topics;
   final List<ProjectCardEntity> projectCards;
-  //final List<RecallSessionEntity> sessions;
+  final List<RecallSessionEntity> sessions;
   final AnalyticsTimeframe selectedTimeframe;
   final bool isRefreshing;
 
   const AnalyticsLoaded({
     required this.topics,
     required this.projectCards,
-    //required this.sessions,
+    required this.sessions,
     this.selectedTimeframe = AnalyticsTimeframe.days7,
     this.isRefreshing = false,
   });
@@ -52,7 +52,7 @@ class AnalyticsLoaded extends AnalyticsState {
     (sum, item) => sum + item.questionCount,
   );
 
-  /// Low mastery topics (<65%) sorted ascending by mastery score
+  // Low mastery topics (<65%) sorted ascending by mastery score
   List<TopicEntity> get needsAttentionTopics =>
       topics.where((t) => t.masteryScore < 65.0).toList()
         ..sort((a, b) => a.masteryScore.compareTo(b.masteryScore));
@@ -60,14 +60,14 @@ class AnalyticsLoaded extends AnalyticsState {
   AnalyticsLoaded copyWith({
     List<TopicEntity>? topics,
     List<ProjectCardEntity>? projectCards,
-    //List<RecallSessionEntity>? sessions,
+    List<RecallSessionEntity>? sessions,
     AnalyticsTimeframe? selectedTimeframe,
     bool? isRefreshing,
   }) {
     return AnalyticsLoaded(
       topics: topics ?? this.topics,
       projectCards: projectCards ?? this.projectCards,
-      //sessions: sessions ?? this.sessions,
+      sessions: sessions ?? this.sessions,
       selectedTimeframe: selectedTimeframe ?? this.selectedTimeframe,
       isRefreshing: isRefreshing ?? this.isRefreshing,
     );

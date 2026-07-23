@@ -14,11 +14,9 @@ import 'package:forge_recall/features/analytics/presentation/widgets/project_mas
 import 'package:forge_recall/features/analytics/presentation/widgets/time_frame_picker.dart';
 
 class AnalyticsPage extends StatefulWidget {
-  //final List<RecallSessionEntity> recallSessions;
 
   const AnalyticsPage({
     super.key,
-    //required this.recallSessions,
   });
 
   @override
@@ -83,17 +81,18 @@ class _AnalyticsPageState extends State<AnalyticsPage> {
                   TimeframePicker(
                     selectedIndex: _selectedTimeframe,
                     onChanged: (index){
-                      context.read<AnalyticsBloc>().add(ChangeAnalyticsTimeframe(AnalyticsTimeframe.values[index]));
+                      context.read<AnalyticsBloc>().add(
+                        ChangeAnalyticsTimeframe(AnalyticsTimeframe.values[index]),
+                      );
                     },
                   ),
                   const SizedBox(height: 16),
               
                   // Hero Chart Card (Line/Bar Hybrid)
                   HeroChartCard(
-                    //sessions: widget.recallSessions,
+                    sessions: state.sessions,
                     isLineGraph: _showLineGraph,
-                    onToggleGraph: () =>
-                        setState(() => _showLineGraph = !_showLineGraph),
+                    onToggleGraph: () => setState(() => _showLineGraph = !_showLineGraph),
                   ),
                   const SizedBox(height: 20),
               

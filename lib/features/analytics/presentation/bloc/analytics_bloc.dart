@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:forge_recall/core/shared/entites/topic_filter.dart';
 import 'package:forge_recall/core/shared/entites/topic_query.dart';
 import 'package:forge_recall/features/analytics/domain/entities/analytics_time_frame.dart';
+import 'package:forge_recall/features/analytics/domain/usecases/fetch_recall_sessions.dart';
 import 'package:forge_recall/features/analytics/presentation/bloc/analytics_event.dart';
 import 'package:forge_recall/features/analytics/presentation/bloc/analytics_state.dart';
 import 'package:forge_recall/features/projects/domain/usercases/get_projects.dart';
@@ -10,11 +11,13 @@ import 'package:forge_recall/features/topics/domain/usercases/get_topics.dart';
 class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
   final GetTopicsUseCase getAllTopics;
   final GetProjects getAllProjects;
+  final FetchRecallSessions getAllSessions;
   final String userId;
 
   AnalyticsBloc({
     required this.getAllTopics, 
     required this.getAllProjects,
+    required this.getAllSessions,
     required this.userId,
   }) : super(const AnalyticsInitial()) {
     on<FetchAnalyticsData>(_onFetchAnalyticsData);
@@ -29,17 +32,15 @@ class AnalyticsBloc extends Bloc<AnalyticsEvent, AnalyticsState> {
     emit(const AnalyticsLoading());
 
     try {
-      await Future.delayed(const Duration(milliseconds: 600));
-
       final topics = await getAllTopics(TopicQuery(filter: TopicFilter.allTopics),).first;
       final projectCards = await getAllProjects(userId).first;
-      //final sessions = <RecallSessionEntity>[];
+      final sessions = await getAllSessions(userId,event.projectId!).first;
 
       emit(
         AnalyticsLoaded(
           topics: topics,
           projectCards: projectCards,
-          //sessions: sessions,
+          sessions: sessions,
           selectedTimeframe: AnalyticsTimeframe.days7,
         ),
       );
@@ -65,14 +66,14 @@ Future<void> _onRefreshAnalyticsData(
           TopicQuery(filter: TopicFilter.allTopics),
         ).first;
         final projectCards = await getAllProjects(userId).first;
-        //final sessions = <RecallSessionEntity>[]; // Add recall sessions fetch call when ready
+        final sessions = await getAllSessions(userId,event.projectId!).first;
 
         // 3. Emit updated state with new data, preserving selectedTimeframe, and setting isRefreshing back to false
         emit(
           currentState.copyWith(
             topics: topics,
             projectCards: projectCards,
-            //sessions: sessions,
+            sessions: sessions,
             isRefreshing: false,
           ),
         );
@@ -81,7 +82,6 @@ Future<void> _onRefreshAnalyticsData(
         emit(currentState.copyWith(isRefreshing: false));
       }
     } else {
-      // Fallback if refresh is triggered while in Initial or Error state
       add(const FetchAnalyticsData());
     }
   }

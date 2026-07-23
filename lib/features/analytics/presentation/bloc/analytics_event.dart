@@ -9,11 +9,15 @@ sealed class AnalyticsEvent extends Equatable {
 }
 
 class FetchAnalyticsData extends AnalyticsEvent {
-  const FetchAnalyticsData();
+  final String? projectId;
+
+  const FetchAnalyticsData({this.projectId});
 }
 
 class RefreshAnalyticsData extends AnalyticsEvent {
-  const RefreshAnalyticsData();
+  final String? projectId;
+
+  const RefreshAnalyticsData({this.projectId});
 }
 
 //When the user taps on '7 Days', '30 Days', or 'All Time'

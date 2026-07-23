@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:forge_recall/core/theme/app_colours.dart';
-//import 'package:forge_recall/features/recall/domain/entities/recall_session_entity.dart';
+import 'package:forge_recall/features/recall/domain/entities/recall_session_entity.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:forge_recall/features/analytics/presentation/widgets/build_line_chart.dart';
 
 class HeroChartCard extends StatelessWidget {
-  //final List<RecallSessionEntity> sessions;
+  final List<RecallSessionEntity> sessions;
   final bool isLineGraph;
   final VoidCallback onToggleGraph;
 
   const HeroChartCard({
     super.key, 
-    //required this.sessions,
+    required this.sessions,
     required this.isLineGraph,
     required this.onToggleGraph,
   });
